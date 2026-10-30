@@ -1,0 +1,26 @@
+{
+  "description": "Fig. 3a chip run replayed in simulation: Fig. 1(f) defect set in both circuits (8 + 8 stuck), 20 targets, 1500 counts, 160 rounds; sigma set per candidate.",
+  "experiment": {
+    "name": "defective_chip_emulation",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 20
+  },
+  "defects": {
+    "mode": "chip"
+  },
+  "noise": {
+    "phase_sigma_pi": 0.01,
+    "counts": 1500
+  },
+  "training": {
+    "rounds": 160
+  },
+  "evaluation": {
+    "eval_every": 40,
+    "noise_draws": 100,
+    "final_window": 10
+  }
+}

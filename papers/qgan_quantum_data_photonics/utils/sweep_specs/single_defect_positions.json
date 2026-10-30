@@ -1,0 +1,126 @@
+{
+  "sweep_id": "single_defect_positions",
+  "description": "Suppl. Sec. 6 per position: each generator phase shifter stuck in both circuits.",
+  "candidates": [
+    {
+      "name": "position_0",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "0"
+      ]
+    },
+    {
+      "name": "position_1",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "1"
+      ]
+    },
+    {
+      "name": "position_2",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "2"
+      ]
+    },
+    {
+      "name": "position_3",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "3"
+      ]
+    },
+    {
+      "name": "position_4",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "4"
+      ]
+    },
+    {
+      "name": "position_5",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "5"
+      ]
+    },
+    {
+      "name": "position_6",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "6"
+      ]
+    },
+    {
+      "name": "position_7",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "7"
+      ]
+    },
+    {
+      "name": "position_8",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "8"
+      ]
+    },
+    {
+      "name": "position_9",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "9"
+      ]
+    },
+    {
+      "name": "position_10",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "10"
+      ]
+    },
+    {
+      "name": "position_11",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "11"
+      ]
+    },
+    {
+      "name": "position_12",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "12"
+      ]
+    },
+    {
+      "name": "position_13",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "13"
+      ]
+    },
+    {
+      "name": "position_14",
+      "config": "configs/single_defect_position_original.json",
+      "args": [
+        "--defect-position",
+        "14"
+      ]
+    }
+  ]
+}

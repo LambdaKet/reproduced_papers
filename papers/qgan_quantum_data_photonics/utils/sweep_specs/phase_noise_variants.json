@@ -1,0 +1,76 @@
+{
+  "sweep_id": "phase_noise_variants",
+  "description": "Ambiguity checks of the Fig. 2c sweep: exact tr[M tau] at every sigma; one phase-noise draw per round at 0.02 and 0.04 pi.",
+  "candidates": [
+    {
+      "name": "exact_tau_sigma_0.01pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01",
+        "--tau-measurement",
+        "exact"
+      ]
+    },
+    {
+      "name": "exact_tau_sigma_0.02pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.02",
+        "--tau-measurement",
+        "exact"
+      ]
+    },
+    {
+      "name": "exact_tau_sigma_0.03pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.03",
+        "--tau-measurement",
+        "exact"
+      ]
+    },
+    {
+      "name": "exact_tau_sigma_0.04pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.04",
+        "--tau-measurement",
+        "exact"
+      ]
+    },
+    {
+      "name": "exact_tau_sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05",
+        "--tau-measurement",
+        "exact"
+      ]
+    },
+    {
+      "name": "round_redraw_sigma_0.02pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.02",
+        "--noise-redraw",
+        "round"
+      ]
+    },
+    {
+      "name": "round_redraw_sigma_0.04pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.04",
+        "--noise-redraw",
+        "round"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "description": "Calibration of the missing training settings on the Fig. 2c sigma = 0.01 pi condition: 20 calibration seeds (1000-1019), 1500 counts, 400 rounds. Grid in utils/sweep_specs/calibration.json.",
+  "experiment": {
+    "name": "calibration",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 1000,
+    "count": 20
+  },
+  "noise": {
+    "phase_sigma_pi": 0.01,
+    "counts": 1500
+  },
+  "training": {
+    "rounds": 400
+  },
+  "evaluation": {
+    "eval_every": 50,
+    "noise_draws": 100,
+    "final_window": 20
+  }
+}

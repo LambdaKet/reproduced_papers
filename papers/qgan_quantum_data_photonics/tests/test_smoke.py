@@ -9,7 +9,7 @@ import runtime_lib.runtime as runtime_module
 from runtime_lib import run_from_project
 
 
-def test_placeholder(monkeypatch, tmp_path):
+def test_runtime_wiring(monkeypatch, tmp_path):
     recorded: dict[str, Path] = {}
 
     def fake_import_callable(name: str):
@@ -28,7 +28,7 @@ def test_placeholder(monkeypatch, tmp_path):
     try:
         run_dir = run_from_project(
             PROJECT_DIR,
-            ["--epochs", "1", "--outdir", str(tmp_path)],
+            ["--rounds", "1", "--outdir", str(tmp_path)],
         )
     finally:
         os.chdir(original_cwd)

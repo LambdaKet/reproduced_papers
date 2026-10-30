@@ -1,0 +1,27 @@
+{
+  "description": "Per-position breakdown of Suppl. Sec. 6: the same phase-shifter position stuck in both circuits (set per candidate), 20 targets, Fig. 3b conditions.",
+  "experiment": {
+    "name": "single_defect_position",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 20
+  },
+  "defects": {
+    "mode": "single_position",
+    "position": 0
+  },
+  "noise": {
+    "phase_sigma_pi": 0.02,
+    "counts": 1500
+  },
+  "training": {
+    "rounds": 2000
+  },
+  "evaluation": {
+    "eval_every": 250,
+    "noise_draws": 100,
+    "final_window": 20
+  }
+}

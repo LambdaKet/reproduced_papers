@@ -1,0 +1,102 @@
+{
+  "sweep_id": "calibration",
+  "description": "Calibration grid (revised in phase 02, before any calibration run): learning rate x steps per turn x generator stop threshold; sigma = 0.01 pi, 1500 counts, calibration seeds 1000-1019, 400 rounds.",
+  "candidates": [
+    {
+      "name": "lr_0.3pi_steps_10_stop_0.03",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.3",
+        "--steps-per-turn",
+        "10",
+        "--generator-stop-d",
+        "0.03"
+      ]
+    },
+    {
+      "name": "lr_0.3pi_steps_10_stop_0.05",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.3",
+        "--steps-per-turn",
+        "10",
+        "--generator-stop-d",
+        "0.05"
+      ]
+    },
+    {
+      "name": "lr_0.3pi_steps_20_stop_0.03",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.3",
+        "--steps-per-turn",
+        "20",
+        "--generator-stop-d",
+        "0.03"
+      ]
+    },
+    {
+      "name": "lr_0.3pi_steps_20_stop_0.05",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.3",
+        "--steps-per-turn",
+        "20",
+        "--generator-stop-d",
+        "0.05"
+      ]
+    },
+    {
+      "name": "lr_0.5pi_steps_10_stop_0.03",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.5",
+        "--steps-per-turn",
+        "10",
+        "--generator-stop-d",
+        "0.03"
+      ]
+    },
+    {
+      "name": "lr_0.5pi_steps_10_stop_0.05",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.5",
+        "--steps-per-turn",
+        "10",
+        "--generator-stop-d",
+        "0.05"
+      ]
+    },
+    {
+      "name": "lr_0.5pi_steps_20_stop_0.03",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.5",
+        "--steps-per-turn",
+        "20",
+        "--generator-stop-d",
+        "0.03"
+      ]
+    },
+    {
+      "name": "lr_0.5pi_steps_20_stop_0.05",
+      "config": "configs/calibration_original.json",
+      "args": [
+        "--learning-rate-pi",
+        "0.5",
+        "--steps-per-turn",
+        "20",
+        "--generator-stop-d",
+        "0.05"
+      ]
+    }
+  ]
+}

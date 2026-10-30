@@ -1,0 +1,14 @@
+{
+  "description": "Our control: best reachable fidelity with the Fig. 1(f) chip defect set, for the 20 targets of the chip emulation.",
+  "experiment": {
+    "name": "oracle_ceiling_chip",
+    "kind": "oracle_ceiling"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 20
+  },
+  "defects": {
+    "mode": "chip"
+  }
+}

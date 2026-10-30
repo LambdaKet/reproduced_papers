@@ -1,0 +1,70 @@
+{
+  "sweep_id": "shot_noise_sweep",
+  "description": "Suppl. Fig. 9b: counts 100 to 2000, sigma = 0.",
+  "candidates": [
+    {
+      "name": "counts_100",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "100"
+      ]
+    },
+    {
+      "name": "counts_200",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "200"
+      ]
+    },
+    {
+      "name": "counts_300",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "300"
+      ]
+    },
+    {
+      "name": "counts_400",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "400"
+      ]
+    },
+    {
+      "name": "counts_500",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "500"
+      ]
+    },
+    {
+      "name": "counts_1000",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "1000"
+      ]
+    },
+    {
+      "name": "counts_1500",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "1500"
+      ]
+    },
+    {
+      "name": "counts_2000",
+      "config": "configs/shot_noise_sweep_original.json",
+      "args": [
+        "--counts",
+        "2000"
+      ]
+    }
+  ]
+}

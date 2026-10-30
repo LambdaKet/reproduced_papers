@@ -1,0 +1,23 @@
+{
+  "description": "Minimal learning run: 5 targets, noise-free (sigma = 0, exact probabilities), 400 rounds.",
+  "experiment": {
+    "name": "minimal_learning",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 5
+  },
+  "noise": {
+    "phase_sigma_pi": 0.0,
+    "counts": null
+  },
+  "training": {
+    "rounds": 400
+  },
+  "evaluation": {
+    "eval_every": 50,
+    "noise_draws": 100,
+    "final_window": 20
+  }
+}
