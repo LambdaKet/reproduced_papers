@@ -15,7 +15,7 @@
 - **The reproduction:** the proof of concept holds. Shot-by-shot simulations of the authors' circuits follow the swap-test law, distributed or centralised ([check](results/protocol_check.png)), and Table 1 is reproduced, with 12 of 15 cells within the paper's fold std ([Table 1](#table-1-paper-protocol-accuracy)).
 - **MerLin:** the swap test translates exactly to photonics (register-wise Hong–Ou–Mandel interference: same law, same accuracies within 2 σ); teleportation does not translate deterministically to linear optics ([MerLin results](#photonic-assessment-and-merlin-extension)).
 - **Limits:**
-  - "Comparable to classical" does not hold against a fair baseline: without the leaks of the authors' protocol, a tuned classical SVM is higher on every dataset, and on Framingham the quantum kernel only predicts the majority class ([Table 1 bis](#other-results)).
+  - "Comparable to classical" does not hold against a fair baseline: without the leaks of the authors' protocol, a tuned classical SVM is higher on every dataset, and on Framingham, with C chosen by accuracy as planned, the quantum kernel predicts the majority class ([Table 1 bis](#other-results)).
   - Security is argued, not tested: all parties run as one simulated circuit, and the server receives about 1,024 copies of each encoded state per kernel entry ([Limitations](#limitations)).
 
 ## Original Paper
@@ -230,7 +230,7 @@ Every result below is rerun or loaded in `notebook.ipynb`, against the stored sw
 
 - **Fig. 3** (paper protocol, noise; `results/fig3.png`): noise lowers accuracy in both, but less in ours: at 1 % the Parkinson's kernel SVM falls to 0.707, against 0.633 in the authors' logs. The size of the drop depends on whether state preparation is noisy, which the paper does not state; noise is not one of our messages.
 - **Fig. 4** (paper protocol, shots; `results/fig4.png`): our accuracy rises little with shots (0.760 at 128 shots, 0.788 at 1,024), less than the paper's (0.71 to 0.83); our steps are smaller than the seed spread at 128 shots.
-- **Table 1 bis** (corrected protocol, balanced accuracy; classical linear and RBF SVMs tuned by inner cross-validation; `results/table1_bis.md`): without the leaks of the authors' protocol, a classical SVM is higher beyond 2 σ of the seed spread on every dataset, and on Framingham the quantum kernel only predicts the majority class (balanced accuracy 0.50). Even with the authors' protocol, the linear SVM is higher beyond 2 σ in 4 of the 5 Table 1 cells. Full comparison: `results/fair_comparison.md`.
+- **Table 1 bis** (corrected protocol, balanced accuracy; classical linear and RBF SVMs tuned by inner cross-validation; `results/table1_bis.md`): without the leaks of the authors' protocol, a classical SVM is higher beyond 2 σ of the seed spread on every dataset, and on Framingham, with C chosen by accuracy as planned, the quantum kernel predicts the majority class (balanced accuracy 0.50; 0.595 with the paper's C = 1). Even with the authors' protocol, the linear SVM is higher beyond 2 σ in 4 of the 5 Table 1 cells. Full comparison: `results/fair_comparison.md`.
 
 ## Photonic Assessment and MerLin Extension
 
