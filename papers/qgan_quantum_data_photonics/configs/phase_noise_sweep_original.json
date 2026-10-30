@@ -1,0 +1,23 @@
+{
+  "description": "Fig. 2c: 100 targets, 1500 counts, 400 rounds; sigma set per sweep candidate (utils/sweep_specs/phase_noise_sweep.json).",
+  "experiment": {
+    "name": "phase_noise_sweep",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 100
+  },
+  "noise": {
+    "phase_sigma_pi": 0.01,
+    "counts": 1500
+  },
+  "training": {
+    "rounds": 400
+  },
+  "evaluation": {
+    "eval_every": 50,
+    "noise_draws": 100,
+    "final_window": 20
+  }
+}

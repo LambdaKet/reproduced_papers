@@ -1,0 +1,27 @@
+{
+  "description": "Suppl. Sec. 6: one stuck phase shifter per circuit (random position), 100 targets; conditions of Fig. 3b (sigma = 0.02 pi, 1500 counts, 2000 rounds), our inference.",
+  "experiment": {
+    "name": "single_defect",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 100
+  },
+  "defects": {
+    "mode": "random_per_circuit",
+    "count_per_circuit": 1
+  },
+  "noise": {
+    "phase_sigma_pi": 0.02,
+    "counts": 1500
+  },
+  "training": {
+    "rounds": 2000
+  },
+  "evaluation": {
+    "eval_every": 250,
+    "noise_draws": 100,
+    "final_window": 20
+  }
+}

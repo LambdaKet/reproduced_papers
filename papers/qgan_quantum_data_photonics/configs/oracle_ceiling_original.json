@@ -1,0 +1,15 @@
+{
+  "description": "Our control: best reachable fidelity with the same targets and stuck sets as the defect sweep (random stuck positions per circuit, set per candidate); noise-averaged at each Fig. 2c sigma.",
+  "experiment": {
+    "name": "oracle_ceiling",
+    "kind": "oracle_ceiling"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 100
+  },
+  "defects": {
+    "mode": "random_per_circuit",
+    "count_per_circuit": 0
+  }
+}

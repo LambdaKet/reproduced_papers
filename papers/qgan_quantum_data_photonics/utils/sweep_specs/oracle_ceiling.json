@@ -1,0 +1,116 @@
+{
+  "sweep_id": "oracle_ceiling",
+  "description": "Our control: best reachable fidelity for the defect-sweep targets and stuck sets.",
+  "require_training": true,
+  "candidates": [
+    {
+      "name": "ceiling_stuck_0_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "0"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_2_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "1"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_4_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "2"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_6_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "3"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_8_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "4"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_10_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "5"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_12_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "6"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_14_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "7"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_16_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "8"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_18_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "9"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_20_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "10"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_22_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "11"
+      ]
+    },
+    {
+      "name": "ceiling_stuck_24_of_30",
+      "config": "configs/oracle_ceiling_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "12"
+      ]
+    },
+    {
+      "name": "ceiling_chip_defect_set",
+      "config": "configs/oracle_ceiling_chip_original.json",
+      "args": []
+    }
+  ]
+}

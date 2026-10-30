@@ -1,0 +1,46 @@
+{
+  "sweep_id": "phase_noise_sweep",
+  "description": "Fig. 2c: sigma = 0.01 to 0.05 pi.",
+  "candidates": [
+    {
+      "name": "sigma_0.01pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01"
+      ]
+    },
+    {
+      "name": "sigma_0.02pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.02"
+      ]
+    },
+    {
+      "name": "sigma_0.03pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.03"
+      ]
+    },
+    {
+      "name": "sigma_0.04pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.04"
+      ]
+    },
+    {
+      "name": "sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05"
+      ]
+    }
+  ]
+}

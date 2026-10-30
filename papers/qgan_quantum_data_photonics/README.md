@@ -1,7 +1,7 @@
 # Quantum Generative Adversarial Learning in Photonics - Reproduction
 
-Status: scaffold only. The reproduction has not started; no results are
-available yet.
+Status: implementation ready and tested; no results yet (experiments run in
+the next phase).
 
 ## Reference and Attribution
 
@@ -30,38 +30,72 @@ defective phase shifters and to phase noise.
 
 ## Reproduction Scope
 
-To be defined in the planning phase.
+Everything is simulated: no photonic chip is available. The simulator follows
+the chip's circuits as drawn in the supplementary document (Suppl. Figs. 2(d)
+and 3): two 15-phase-shifter meshes for the generator and two 6-phase-shifter
+projection circuits for the discriminator, the cost d of Eq. 1, parameter-shift
+gradients (shift pi/4), Gaussian phase noise on every phase shifter, Poisson
+coincidence counts (1500 per measurement setting) and stuck phase shifters.
+Planned experiments: the phase-noise sweep (Fig. 2c), the defect-rate sweep
+(Fig. 3b), the shot-noise study (Suppl. Fig. 9), the single-defect study
+(Suppl. Sec. 6), the two chip runs replayed in simulation (Figs. 2a-b, 3a), and
+our control: the best fidelity each circuit can reach.
+
+Deviations and choices, stated because the paper does not give them:
+
+- Training settings: the paper gives no learning rate, number of steps per
+  turn or end-of-turn rule. With a fixed number of steps per turn, the game
+  oscillates and does not learn: the cost |a - b| has a kink at a = b, where
+  the generator keeps taking full-size steps. We let the generator end its turn
+  once the measured d falls below a threshold, as the turns of Fig. 2a suggest
+  (2-6 steps, ending with a gap of about 0.02-0.04); the step size, steps per
+  turn and threshold are calibrated on one condition of Fig. 2c.
+- Random choices not stated in the paper: Haar-random targets; uniform
+  discriminator starting phases and stuck values; the same number of stuck
+  phase shifters in each circuit; new phase noise at every circuit execution.
 
 ## Install and How to Run
 
 ### Install dependencies
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Command-line interface
-
-Main entry point: the repo-level `implementation.py`. The CLI is described in
-`cli.json`.
+### Quick smoke run
 
 ```bash
-# From inside papers/qgan_quantum_data_photonics
-python ../../implementation.py --help
-
-# From the repo root
-python implementation.py --paper qgan_quantum_data_photonics --help
+# From the repo root: 2 targets, 10 rounds, sigma = 0.01 pi, 1500 counts
+python implementation.py --paper qgan_quantum_data_photonics
 ```
 
-Global flags (`--config`, `--seed`, `--dtype`, `--device`, `--log-level`,
-`--outdir`) are injected by the shared runtime; paper-specific flags are listed
-in `cli.json`.
+### One experiment
+
+Each config in `configs/` runs one condition on a block of target seeds (one
+target per seed). Paper-specific flags are listed in `cli.json`; angles are in
+units of pi.
 
 ```bash
 # From the repo root
-python implementation.py --paper qgan_quantum_data_photonics --config configs/example.json
+python implementation.py --paper qgan_quantum_data_photonics \
+    --config configs/phase_noise_sweep_original.json --phase-noise-pi 0.04
+python implementation.py --paper qgan_quantum_data_photonics \
+    --config configs/defect_rate_sweep_original.json --defects-per-circuit 8
+```
+
+### Sweeps
+
+`utils/run_sweep.py` runs every candidate of a spec in `utils/sweep_specs/`
+one after the other, checks each run's evidence files with the logging
+validator given by `--validator`, and writes `sweep_status.json`, `sweep.log`
+and `sweep_summary.json` in the sweep folder.
+
+```bash
+# From the repo root
+python papers/qgan_quantum_data_photonics/utils/run_sweep.py \
+    papers/qgan_quantum_data_photonics/utils/sweep_specs/phase_noise_sweep.json \
+    --sweep-dir papers/qgan_quantum_data_photonics/outdir/sweep_phase_noise \
+    --validator <path to validate_logging.py>
 ```
 
 ### Output directory
@@ -71,16 +105,26 @@ Each run writes a timestamped folder under the base `outdir` (default:
 
 ```
 outdir/run_YYYYMMDD-HHMMSS/
-├── config_snapshot.json   # Resolved configuration used for the run
+├── config_snapshot.json   # Resolved configuration
 ├── run.log                # Run log
-└── done.txt               # Scaffold artifact, replaced by real outputs later
+├── run_status.json        # Status, code commit, dataset identity, artifact hashes
+├── metrics.json           # Summary metrics (root fidelity, convergence round, d)
+└── trajectories.npz       # Per-round, per-seed fidelity and d (ceiling.npz for the ceiling)
 ```
 
 ## Configuration
 
-- `configs/defaults.json`: default parameter values.
-- `configs/example.json`: example overlay merged over the defaults.
+- `configs/defaults.json`: smoke settings and every key, with the provisional
+  training settings (step 0.3 pi, up to 20 steps per turn, generator stop at
+  d <= 0.05) until the calibration fixes them.
+- `configs/<experiment>_original.json`: one overlay per planned experiment
+  (`phase_noise_sweep`, `defect_rate_sweep`, `shot_noise_sweep`,
+  `single_defect`, `single_defect_position`, `intact_chip_emulation`,
+  `defective_chip_emulation`, `oracle_ceiling`, `oracle_ceiling_chip`,
+  `fixed_discriminator`, `calibration`, `minimal_learning`,
+  `minimal_learning_noisy`, `shot_noise_tvd`).
 - `cli.json`: paper-specific CLI arguments and the config keys they change.
+- The simulator runs on CPU only (`--device cpu`).
 
 ## Data
 

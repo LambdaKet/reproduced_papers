@@ -1,0 +1,24 @@
+{
+  "description": "Our ablation: random product projectors redrawn every round, no discriminator updates; 100 targets, sigma = 0.02 pi, 1500 counts, 400 rounds.",
+  "experiment": {
+    "name": "fixed_discriminator",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 100
+  },
+  "noise": {
+    "phase_sigma_pi": 0.02,
+    "counts": 1500
+  },
+  "training": {
+    "rounds": 400,
+    "discriminator": "random_fixed"
+  },
+  "evaluation": {
+    "eval_every": 50,
+    "noise_draws": 100,
+    "final_window": 20
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "sweep_id": "chip_emulations",
+  "description": "Fig. 2a-b and Fig. 3a chip runs replayed in simulation at sigma = 0.01 and 0.02 pi.",
+  "candidates": [
+    {
+      "name": "intact_chip_emulation_sigma_0.01pi",
+      "config": "configs/intact_chip_emulation_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01"
+      ]
+    },
+    {
+      "name": "intact_chip_emulation_sigma_0.02pi",
+      "config": "configs/intact_chip_emulation_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.02"
+      ]
+    },
+    {
+      "name": "defective_chip_emulation_sigma_0.01pi",
+      "config": "configs/defective_chip_emulation_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01"
+      ]
+    },
+    {
+      "name": "defective_chip_emulation_sigma_0.02pi",
+      "config": "configs/defective_chip_emulation_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.02"
+      ]
+    }
+  ]
+}

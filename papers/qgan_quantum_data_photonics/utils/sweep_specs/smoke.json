@@ -1,0 +1,22 @@
+{
+  "sweep_id": "smoke",
+  "description": "Two tiny runs to check the coordinator.",
+  "candidates": [
+    {
+      "name": "smoke_sigma_0p01pi",
+      "config": "configs/defaults.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01"
+      ]
+    },
+    {
+      "name": "smoke_sigma_0p02pi",
+      "config": "configs/defaults.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.02"
+      ]
+    }
+  ]
+}

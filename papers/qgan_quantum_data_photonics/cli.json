@@ -1,26 +1,173 @@
 {
-  "description": "Quantum generative adversarial learning in photonics (Wang et al., Optics Letters 2023) reproduction runner",
+  "description": "Quantum generative adversarial learning in photonics (Wang et al., Optics Letters 2023): one condition on a block of seeds",
   "arguments": [
     {
-      "flags": ["--epochs"],
-      "help": "Override number of training epochs",
+      "flags": [
+        "--rounds"
+      ],
+      "help": "Number of QGAN rounds",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "training.epochs"}
+      "apply": {
+        "kind": "config_path",
+        "path": "training.rounds"
+      }
     },
     {
-      "flags": ["--batch-size"],
-      "help": "Override dataset batch size",
+      "flags": [
+        "--steps-per-turn"
+      ],
+      "help": "Gradient steps per player and round (maximum for the generator when it stops at --generator-stop-d)",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+      "apply": {
+        "kind": "config_path",
+        "path": "training.steps_per_turn"
+      }
     },
     {
-      "flags": ["--lr"],
-      "help": "Override learning rate",
+      "flags": [
+        "--learning-rate-pi"
+      ],
+      "help": "Gradient step size, in units of pi radians",
       "type": "float",
       "default": null,
-      "apply": {"kind": "config_path", "path": "training.lr"}
+      "apply": {
+        "kind": "config_path",
+        "path": "training.learning_rate_pi"
+      }
+    },
+    {
+      "flags": [
+        "--generator-stop-d"
+      ],
+      "help": "The generator ends its turn once the measured d is at or below this value",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.generator_stop_d"
+      }
+    },
+    {
+      "flags": [
+        "--discriminator"
+      ],
+      "help": "Adversarial discriminator (paper) or random projectors redrawn each round (ablation)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.discriminator"
+      },
+      "choices": [
+        "adversarial",
+        "random_fixed"
+      ]
+    },
+    {
+      "flags": [
+        "--phase-noise-pi"
+      ],
+      "help": "Standard deviation of the phase noise, in units of pi radians",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "noise.phase_sigma_pi"
+      }
+    },
+    {
+      "flags": [
+        "--counts"
+      ],
+      "help": "Mean total coincidences per measurement setting; 0 gives exact probabilities",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "noise.counts"
+      }
+    },
+    {
+      "flags": [
+        "--noise-redraw"
+      ],
+      "help": "Draw phase noise at every execution or once per round",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "noise.redraw"
+      },
+      "choices": [
+        "execution",
+        "round"
+      ]
+    },
+    {
+      "flags": [
+        "--tau-measurement"
+      ],
+      "help": "Measure tr[M tau] with the same noise as tr[M rho], or compute it exactly",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "noise.tau_measurement"
+      },
+      "choices": [
+        "noisy",
+        "exact"
+      ]
+    },
+    {
+      "flags": [
+        "--defects-per-circuit"
+      ],
+      "help": "Stuck phase shifters per generator circuit (defects.mode random_per_circuit)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "defects.count_per_circuit"
+      }
+    },
+    {
+      "flags": [
+        "--defect-position"
+      ],
+      "help": "Phase-shifter index (0-14) stuck in both circuits (defects.mode single_position)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "defects.position"
+      }
+    },
+    {
+      "flags": [
+        "--seed-start"
+      ],
+      "help": "First target seed of the block",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "seeds.start"
+      }
+    },
+    {
+      "flags": [
+        "--seed-count"
+      ],
+      "help": "Number of target seeds in the block",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "seeds.count"
+      }
     }
   ]
 }

@@ -1,0 +1,11 @@
+{
+  "description": "Suppl. Fig. 9a: TVD of a uniform 16-outcome distribution sampled with 100-10,000 counts, 1000 repeats per level.",
+  "experiment": {
+    "name": "shot_noise_tvd",
+    "kind": "shot_noise_tvd"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 1
+  }
+}
