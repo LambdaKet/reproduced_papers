@@ -1,0 +1,30 @@
+{
+  "description" : "Scaffold example overlay for the qgan_quantum_data_photonics reproduction (replaced during implementation)",
+
+  "seed": 42,
+  "outdir": "results",
+  "device": "cpu",
+  "dataset": {
+    "name": "random_maximally_entangled_ququart_pair",
+    "root": "data",
+    "split": "train",
+    "batch_size": 32
+  },
+  "model": {
+    "name": "photonic_qgan",
+    "params": {
+      "hidden_dim": 128,
+      "layers": 2
+    }
+  },
+  "training": {
+    "epochs": 10,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}
