@@ -1,0 +1,46 @@
+{
+  "sweep_id": "defect_rate_sweep_low",
+  "description": "Fig. 3b, part of the defect-rate sweep: k = 0..4 stuck phase shifters per circuit (run in parallel with the other parts).",
+  "candidates": [
+    {
+      "name": "stuck_0_of_30",
+      "config": "configs/defect_rate_sweep_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "0"
+      ]
+    },
+    {
+      "name": "stuck_2_of_30",
+      "config": "configs/defect_rate_sweep_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "1"
+      ]
+    },
+    {
+      "name": "stuck_4_of_30",
+      "config": "configs/defect_rate_sweep_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "2"
+      ]
+    },
+    {
+      "name": "stuck_6_of_30",
+      "config": "configs/defect_rate_sweep_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "3"
+      ]
+    },
+    {
+      "name": "stuck_8_of_30",
+      "config": "configs/defect_rate_sweep_original.json",
+      "args": [
+        "--defects-per-circuit",
+        "4"
+      ]
+    }
+  ]
+}

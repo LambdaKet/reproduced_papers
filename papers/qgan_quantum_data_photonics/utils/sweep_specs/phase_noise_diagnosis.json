@@ -1,0 +1,126 @@
+{
+  "sweep_id": "phase_noise_diagnosis",
+  "description": "Gap diagnosis for Fig. 2c at high sigma: one training-protocol component changed at a time (generator stop threshold, step size, steps per turn) on targets 0-19.",
+  "candidates": [
+    {
+      "name": "stop_0.01_sigma_0.01pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01",
+        "--generator-stop-d",
+        "0.01",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "stop_0.01_sigma_0.03pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.03",
+        "--generator-stop-d",
+        "0.01",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "stop_0.01_sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05",
+        "--generator-stop-d",
+        "0.01",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "stop_0.03_sigma_0.01pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01",
+        "--generator-stop-d",
+        "0.03",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "stop_0.03_sigma_0.03pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.03",
+        "--generator-stop-d",
+        "0.03",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "stop_0.03_sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05",
+        "--generator-stop-d",
+        "0.03",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "step_0.5pi_sigma_0.03pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.03",
+        "--learning-rate-pi",
+        "0.5",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "step_0.5pi_sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05",
+        "--learning-rate-pi",
+        "0.5",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "steps_10_sigma_0.03pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.03",
+        "--steps-per-turn",
+        "10",
+        "--seed-count",
+        "20"
+      ]
+    },
+    {
+      "name": "steps_10_sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_original.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05",
+        "--steps-per-turn",
+        "10",
+        "--seed-count",
+        "20"
+      ]
+    }
+  ]
+}
