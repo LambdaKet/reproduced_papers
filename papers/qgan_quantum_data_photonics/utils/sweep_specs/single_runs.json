@@ -1,0 +1,16 @@
+{
+  "sweep_id": "single_runs",
+  "description": "Single-condition runs: Suppl. Sec. 6 (one stuck phase shifter per circuit) and our fixed-discriminator ablation.",
+  "candidates": [
+    {
+      "name": "single_defect",
+      "config": "configs/single_defect_original.json",
+      "args": []
+    },
+    {
+      "name": "fixed_discriminator",
+      "config": "configs/fixed_discriminator_original.json",
+      "args": []
+    }
+  ]
+}

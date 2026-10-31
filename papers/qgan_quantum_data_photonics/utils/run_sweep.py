@@ -11,7 +11,10 @@ The spec lists candidates (a config plus CLI flags). Each candidate is one run
 of the shared runtime over its whole block of target seeds, in its own output
 folder with its own ``run.log``; only this coordinator writes ``sweep.log`` and
 ``sweep_status.json``. A failed or invalid run gets one second attempt; after
-that it stays ``FAILED`` and the sweep ends ``PARTIAL``. When all runs end,
+that it stays ``FAILED`` and the sweep ends ``PARTIAL``. ``--resume`` continues
+a sweep whose coordinator stopped: completed runs are kept, a run left
+``RUNNING`` is recorded as a failed attempt (coordinator stopped) and gets its
+remaining attempt, planned runs start normally. When all runs end,
 ``summarize_sweep.py`` builds the summary from the ``metrics.json`` files.
 Pattern adapted from ``papers/QuaRK/utils/run_sweep.py``.
 """
@@ -80,55 +83,109 @@ def main() -> int:
     parser.add_argument(
         "--validator", required=True, help="Path to validate_logging.py"
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Continue the sweep recorded in --sweep-dir after its coordinator stopped",
+    )
     args = parser.parse_args()
 
     spec = json.loads(args.spec.read_text())
     sweep_dir = args.sweep_dir.resolve()
     sweep_dir.mkdir(parents=True, exist_ok=True)
     configure_logging(sweep_dir / "sweep.log")
-    (sweep_dir / "sweep_spec.json").write_text(json.dumps(spec, indent=2))
     require_training = bool(spec.get("require_training", True))
     seed = int(spec.get("seed", 0))
+    first_attempt = {}
 
-    status = {
-        "schema_version": 1,
-        "sweep_id": spec["sweep_id"],
-        "status": "RUNNING",
-        "started_at": utc_now(),
-        "completed_at": None,
-        "code": git_state(PROJECT_DIR),
-        "expected_runs": len(spec["candidates"]),
-        "runs": [
-            {
-                "run_id": candidate["name"],
-                "candidate": candidate,
-                "seed": seed,
-                "repetition": 0,
-                "status": "PLANNED",
-                "attempt": 0,
-                "attempts": [],
-                "run_dir": None,
-                "run_log": None,
-                "run_status": None,
-                "config_path": None,
-                "metrics_path": None,
-            }
-            for candidate in spec["candidates"]
-        ],
-        "summary_path": None,
-        "selected_candidates": [],
-        "error": None,
-    }
-    write_json(sweep_dir / "sweep_status.json", status)
-    logger.info(
-        "SWEEP_STARTED | sweep_id=%s | expected_runs=%d",
-        spec["sweep_id"],
-        status["expected_runs"],
-    )
+    if args.resume:
+        status = json.loads((sweep_dir / "sweep_status.json").read_text())
+        recorded = json.loads((sweep_dir / "sweep_spec.json").read_text())
+        if recorded != spec:
+            raise ValueError("--resume needs the same spec as the original launch")
+        status["status"] = "RUNNING"
+        logger.info(
+            "SWEEP_RESUMED | sweep_id=%s | code=%s",
+            spec["sweep_id"],
+            git_state(PROJECT_DIR),
+        )
+        for entry in status["runs"]:
+            if entry["status"] == "RUNNING":
+                stopped = _run_dir_of(
+                    sweep_dir / entry["run_id"] / f"attempt{entry['attempt']}"
+                )
+                entry["attempts"].append(
+                    {
+                        "attempt": entry["attempt"],
+                        "command": None,
+                        "exit_code": None,
+                        "run_dir": None
+                        if stopped is None
+                        else str(stopped.relative_to(sweep_dir)),
+                        "validation": "interrupted: the coordinator stopped with the session",
+                    }
+                )
+                logger.error(
+                    "CANDIDATE_ATTEMPT_FAILED | run_id=%s | attempt=%d | reason=coordinator stopped",
+                    entry["run_id"],
+                    entry["attempt"],
+                )
+                first_attempt[entry["run_id"]] = entry["attempt"] + 1
+            elif entry["status"] == "PLANNED":
+                first_attempt[entry["run_id"]] = 1
+        write_json(sweep_dir / "sweep_status.json", status)
+    else:
+        (sweep_dir / "sweep_spec.json").write_text(json.dumps(spec, indent=2))
+        status = {
+            "schema_version": 1,
+            "sweep_id": spec["sweep_id"],
+            "status": "RUNNING",
+            "started_at": utc_now(),
+            "completed_at": None,
+            "code": git_state(PROJECT_DIR),
+            "expected_runs": len(spec["candidates"]),
+            "runs": [
+                {
+                    "run_id": candidate["name"],
+                    "candidate": candidate,
+                    "seed": seed,
+                    "repetition": 0,
+                    "status": "PLANNED",
+                    "attempt": 0,
+                    "attempts": [],
+                    "run_dir": None,
+                    "run_log": None,
+                    "run_status": None,
+                    "config_path": None,
+                    "metrics_path": None,
+                }
+                for candidate in spec["candidates"]
+            ],
+            "summary_path": None,
+            "selected_candidates": [],
+            "error": None,
+        }
+        first_attempt = {c["name"]: 1 for c in spec["candidates"]}
+        write_json(sweep_dir / "sweep_status.json", status)
+        logger.info(
+            "SWEEP_STARTED | sweep_id=%s | expected_runs=%d",
+            spec["sweep_id"],
+            status["expected_runs"],
+        )
 
     for entry in status["runs"]:
         candidate = entry["candidate"]
-        for attempt in range(1, MAX_ATTEMPTS + 1):
+        start = first_attempt.get(entry["run_id"])
+        if start is None:
+            continue
+        if start > MAX_ATTEMPTS:
+            entry["status"] = "FAILED"
+            write_json(sweep_dir / "sweep_status.json", status)
+            logger.error(
+                "CANDIDATE_FAILED | run_id=%s | attempts exhausted", entry["run_id"]
+            )
+            continue
+        for attempt in range(start, MAX_ATTEMPTS + 1):
             base = sweep_dir / entry["run_id"] / f"attempt{attempt}"
             overlay = _overlay_config(
                 candidate, spec["sweep_id"], entry["run_id"], base

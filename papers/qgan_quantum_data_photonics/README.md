@@ -1,7 +1,6 @@
 # Quantum Generative Adversarial Learning in Photonics - Reproduction
 
-Status: implementation ready and tested; no results yet (experiments run in
-the next phase).
+Status: experiments done (simulation); comparison with the paper below.
 
 ## Reference and Attribution
 
@@ -143,11 +142,87 @@ obtained later, they go under
 
 ## Results Obtained and Comparison with the Paper
 
-No results yet.
+Scope: simulation only. Each point averages 100 random targets (seeds 0–99) with
+1500 coincidence counts per measurement setting unless stated (the chip
+replays and the per-position defect check use 20 targets). Metric: root
+fidelity |⟨g|τ⟩|, the paper's F, averaged over the last 20 rounds of a run;
+values are mean ± standard deviation over targets. Training settings (step
+0.3π, up to 20 steps per turn, generator stops at a measured d ≤ 0.05) were
+calibrated on one point of Fig. 2c (20 separate targets) because the paper
+gives none. Paper values
+are read from its figures (about ±0.01–0.02) or quoted from its text.
+Generated tables: [results/comparison_with_paper.md](results/comparison_with_paper.md).
+
+### Defects: the fidelity stays above 90 % up to about half of the generator phase shifters stuck
+
+![Final fidelity against the number of stuck phase shifters](results/defect_rate.png)
+
+The reproduced curve follows Fig. 3b (σ = 0.02π) within 0.025, except at 20
+and 22 stuck phase shifters, where ours is 0.064 and 0.114 lower. The ceiling, the best
+fidelity the defective circuit can reach (our control, found by direct
+optimization with knowledge of τ), stays far above the QGAN beyond 12 stuck
+phase shifters: the decline comes from learning, not from what the circuit can
+express.
+
+| Stuck / 30 | Ours | Paper (read) | Ceiling |
+|---:|---:|---:|---:|
+| 0 | 0.985 ± 0.007 | 0.985 | 1.000 |
+| 2 | 0.987 ± 0.006 | 0.979 | 1.000 |
+| 4 | 0.988 ± 0.005 | 0.980 | 1.000 |
+| 6 | 0.988 ± 0.006 | 0.969 | 1.000 |
+| 8 | 0.989 ± 0.008 | 0.970 | 1.000 |
+| 10 | 0.982 ± 0.063 | 0.958 | 0.998 |
+| 12 | 0.965 ± 0.104 | 0.944 | 0.994 |
+| 14 | 0.913 ± 0.192 | 0.913 | 0.986 |
+| 16 | 0.877 ± 0.209 | 0.867 | 0.975 |
+| 18 | 0.810 ± 0.204 | 0.799 | 0.953 |
+| 20 | 0.645 ± 0.225 | 0.709 | 0.893 |
+| 22 | 0.534 ± 0.203 | 0.648 | 0.820 |
+| 24 | 0.460 ± 0.203 | 0.456 | 0.711 |
+
+### Phase noise: above 90 % for σ < 0.04π, but our QGAN does not show the paper's drop at 0.05π
+
+![Fidelity against phase noise](results/phase_noise.png)
+
+Up to σ = 0.03π the final values match Fig. 2c within about 0.01, but our QGAN
+reaches 0.9 sooner (64 and 63 rounds against ≈79 and ≈159 at 0.02π and 0.03π).
+At 0.04π and 0.05π it is also more robust than the paper's. Neither computing tr[Mτ] exactly nor drawing
+the noise once per round changes this (≤ 0.006). Changing the unpublished
+training settings does: a generator that stops only at d ≤ 0.01 drops to 0.827
+at 0.05π (0.782 averaged over noise draws, the paper's value) but is slower and
+lower at small σ. No tested setting reproduces the whole curve.
+
+| σ | Ours | Ours, noise-averaged | Paper (read) | Round the mean reaches 0.9 (ours / paper) |
+|---|---:|---:|---:|---:|
+| 0.01π | 0.993 ± 0.004 | 0.990 | 1.00 | 57 / 59 |
+| 0.02π | 0.984 ± 0.007 | 0.974 | 0.99 | 64 / 79 |
+| 0.03π | 0.980 ± 0.011 | 0.955 | 0.97 | 63 / 159 |
+| 0.04π | 0.969 ± 0.014 | 0.926 | 0.92 | 71 / 245 |
+| 0.05π | 0.962 ± 0.018 | 0.896 | 0.78 | 88 / never |
+
+The σ = 0.01π speed was used for the calibration, so it is not independent
+evidence. "Ours" uses the phases the generator intends to set; "noise-averaged"
+averages the fidelity over 100 phase-noise draws.
+
+### Shot noise and the other checks
+
+![Fidelity against counts, and sampling error](results/shot_noise.png)
+
+| Counts | 100 | 200 | 300 | 500 | 1000 | 2000 |
+|---|---:|---:|---:|---:|---:|---:|
+| Ours (σ = 0) | 0.961 | 0.980 | 0.986 | 0.992 | 0.997 | 0.998 |
+| Paper (read) | 0.921 | 0.987 | 0.990 | 0.989 | 0.986 | 0.990 |
+
+- Sampling error (Suppl. Fig. 9a): total variation distance 0.155 at 100 counts and 0.0155 at 10,000 (paper ≈0.155 and ≈0.016).
+- Chip runs replayed in simulation (20 targets): intact circuits 0.989 ± 0.004 (σ = 0.01π) and 0.982 ± 0.009 (0.02π) after 150 rounds, against 96.02 % on the chip; with the 16 stuck phase shifters of Fig. 1(f), 0.940 ± 0.091 and 0.902 ± 0.127 after 160 rounds, against 92.11 %.
+- One stuck phase shifter per circuit (Suppl. Sec. 6): 0.987 ± 0.006 (paper 98.33 ± 7.00 %); each of the 15 positions alone (20 targets per position) gives 0.981–0.990, so none is critical.
+- Discriminator ablation (ours): replacing the trained discriminator with random projectors lowers the final fidelity by 0.191 (95 % interval 0.152–0.232, 100 paired targets, σ = 0.02π).
 
 ## Limitations
 
-To be written once results are available.
+- Simulation only: the chip results (Figs. 2a–b, 3a) are replayed in simulation with an unknown chip noise level.
+- The training protocol is ours (calibrated): the paper gives no step size, steps per turn or end-of-turn rule, and the high-noise results depend on them.
+- The paper's "convergence round" is undefined; our rule is not comparable on long runs, so convergence speed is compared through the round at which the mean fidelity reaches 0.9.
 
 ## Tests
 
