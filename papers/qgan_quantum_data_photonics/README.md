@@ -1,6 +1,7 @@
 # Quantum Generative Adversarial Learning in Photonics - Reproduction
 
-Status: experiments done (simulation); comparison with the paper below.
+Status: experiments and MerLin adaptation done (simulation); comparison with the
+paper below.
 
 ## Reference and Attribution
 
@@ -53,6 +54,11 @@ Deviations and choices, stated because the paper does not give them:
   discriminator starting phases and stuck values; the same number of stuck
   phase shifters in each circuit; new phase noise at every circuit execution.
 
+MerLin adaptation (our addition): the same chip built as a MerLin layer
+(`lib/qgan_merlin.py`) replaces the numpy simulator inside the unchanged
+training game; see
+[MerLin](#merlin-the-chip-as-a-merlin-layer-gives-the-same-results).
+
 ## Install and How to Run
 
 ### Install dependencies
@@ -80,6 +86,10 @@ python implementation.py --paper qgan_quantum_data_photonics \
     --config configs/phase_noise_sweep_original.json --phase-noise-pi 0.04
 python implementation.py --paper qgan_quantum_data_photonics \
     --config configs/defect_rate_sweep_original.json --defects-per-circuit 8
+# The same chip as a MerLin layer, with MerLin's phase-noise model
+python implementation.py --paper qgan_quantum_data_photonics \
+    --config configs/phase_noise_sweep_merlin.json --phase-noise-pi 0.04 \
+    --merlin-noise phase_error
 ```
 
 ### Sweeps
@@ -113,15 +123,19 @@ outdir/run_YYYYMMDD-HHMMSS/
 
 ## Configuration
 
-- `configs/defaults.json`: smoke settings and every key, with the provisional
-  training settings (step 0.3 pi, up to 20 steps per turn, generator stop at
-  d <= 0.05) until the calibration fixes them.
+- `configs/defaults.json`: smoke settings and every key, with the calibrated
+  training settings (step 0.3π, up to 20 steps per turn, generator stop at
+  d ≤ 0.05) and the numpy chip simulator.
 - `configs/<experiment>_original.json`: one overlay per planned experiment
   (`phase_noise_sweep`, `defect_rate_sweep`, `shot_noise_sweep`,
   `single_defect`, `single_defect_position`, `intact_chip_emulation`,
   `defective_chip_emulation`, `oracle_ceiling`, `oracle_ceiling_chip`,
   `fixed_discriminator`, `calibration`, `minimal_learning`,
   `minimal_learning_noisy`, `shot_noise_tvd`).
+- `configs/<experiment>_merlin.json` (`smoke`, `phase_noise_sweep`,
+  `defect_rate_sweep`): the chip as a MerLin layer (`--backend merlin`);
+  `--merlin-noise injected` reuses the numpy simulator's noise draws,
+  `phase_error` uses MerLin's phase-noise model.
 - `cli.json`: paper-specific CLI arguments and the config keys they change.
 - The simulator runs on CPU only (`--device cpu`).
 
@@ -218,11 +232,47 @@ averages the fidelity over 100 phase-noise draws.
 - One stuck phase shifter per circuit (Suppl. Sec. 6): 0.987 ± 0.006 (paper 98.33 ± 7.00 %); each of the 15 positions alone (20 targets per position) gives 0.981–0.990, so none is critical.
 - Discriminator ablation (ours): replacing the trained discriminator with random projectors lowers the final fidelity by 0.191 (95 % interval 0.152–0.232, 100 paired targets, σ = 0.02π).
 
+### MerLin: the chip as a MerLin layer gives the same results
+
+![Final fidelity on the MerLin chip against the numpy chip](results/merlin_comparison.png)
+
+The paper is already linear optics, so MerLin carries its chip element for
+element (translation status: MerLin implementation, `MERLIN_IMPLEMENTATION`).
+One MerLin layer holds the 8 modes and the 2 photons of the entangled input
+state; the 42 phase shifters are inputs set at every execution; detection is
+threshold detection in MerLin's `UNBUNCHED` space, exact here because each
+4-mode block holds one photon. The training game, the parameter-shift
+gradients, the 1500 Poisson counts (drawn from MerLin's probabilities), the
+stuck phase shifters and the targets are unchanged, so the role the adaptation
+must preserve, the game on an imperfect chip and its robustness, can be tested
+directly.
+
+- Same noise draws as the numpy simulator (σ = 0.01π and 0.05π, and 16 of 30
+  stuck): every target ends with the identical fidelity.
+- MerLin's own phase noise (uniform, same standard deviation as the paper's
+  Gaussian, also on the chip's preparation of the target that the discriminator
+  measures): the fidelity stays above 90 % for σ < 0.04π and up to 14 of 30
+  stuck phase shifters, as with numpy (top panels). The bottom panels show
+  MerLin minus numpy over the same 100 targets with its 95 % interval; the grey
+  band is the ±0.02 tolerance set before the runs. MerLin is 0.015 lower at
+  0.05π; at 16 and 20 stuck the differences (+0.021, −0.022) come from single
+  targets whose runs end far apart, where the spread over targets is large
+  (std ≈ 0.2).
+
+Rejected mappings: a generic MerLin interferometer (it loses the paper's
+stuck-phase-shifter positions) and training by automatic differentiation (it
+removes the count and phase noise from the gradients that the robustness claims
+are about). Confidence: high for the equivalence; medium for MerLin's noise
+model (one run per point, and the noise distribution and the noisy target
+preparation change together). Tables:
+[results/merlin_comparison.md](results/merlin_comparison.md).
+
 ## Limitations
 
 - Simulation only: the chip results (Figs. 2a–b, 3a) are replayed in simulation with an unknown chip noise level.
 - The training protocol is ours (calibrated): the paper gives no step size, steps per turn or end-of-turn rule, and the high-noise results depend on them.
 - The paper's "convergence round" is undefined; our rule is not comparable on long runs, so convergence speed is compared through the round at which the mean fidelity reaches 0.9.
+- The MerLin adaptation simulates the same ideal chip (lossless, ideal detectors, pure input state); it is not a hardware validation. It covers Fig. 2c and 5 of the 13 defect rates of Fig. 3b.
 
 ## Tests
 

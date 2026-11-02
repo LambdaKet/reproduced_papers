@@ -87,7 +87,20 @@ def _run_qgan(cfg: dict, inputs: SeedInputs, run_dir: Path) -> dict:
     settings = qgan_settings(cfg)
     evaluation = cfg["evaluation"]
     window = int(evaluation["final_window"])
-    result = train_qgan(inputs, settings)
+    backend = cfg["backend"]
+    hardware, hardware_fields = None, {"simulator": "numpy (lib/circuits.py)"}
+    if backend["name"] == "merlin":
+        # Imported here so the numpy reproduction does not depend on MerLin at import time.
+        from .qgan_merlin import MerlinHardware
+
+        hardware = MerlinHardware(inputs, settings, backend["merlin_noise"])
+        hardware_fields = hardware.hardware_fields(settings.counts)
+        logger.info("BACKEND_READY | merlin | noise=%s", backend["merlin_noise"])
+    elif backend["name"] != "numpy":
+        raise ValueError(
+            f"backend.name must be 'numpy' or 'merlin', got {backend['name']!r}"
+        )
+    result = train_qgan(inputs, settings, hardware)
     fidelity = result.fidelity
     final = final_fidelity(fidelity, window)
     convergence = convergence_round(
@@ -125,6 +138,8 @@ def _run_qgan(cfg: dict, inputs: SeedInputs, run_dir: Path) -> dict:
             "discriminator": settings.discriminator,
             "generator_stop_d": settings.generator_stop_d,
         },
+        "backend": backend,
+        "hardware": hardware_fields,
         "fidelity_metric": "root fidelity |<g|tau>| with the intended generator phases",
         "initial_fidelity": summarize(fidelity[0]),
         "final_fidelity": summarize(final),

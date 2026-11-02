@@ -1,0 +1,56 @@
+{
+  "sweep_id": "merlin_native_phase_noise",
+  "description": "Phase 04: Fig. 2c with MerLin's phase_error noise model (Uniform, same std as the paper's sigma).",
+  "candidates": [
+    {
+      "name": "merlin_phase_error_sigma_0.01pi",
+      "config": "configs/phase_noise_sweep_merlin.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_sigma_0.02pi",
+      "config": "configs/phase_noise_sweep_merlin.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.02",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_sigma_0.03pi",
+      "config": "configs/phase_noise_sweep_merlin.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.03",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_sigma_0.04pi",
+      "config": "configs/phase_noise_sweep_merlin.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.04",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_merlin.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    }
+  ]
+}

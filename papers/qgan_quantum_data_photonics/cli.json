@@ -168,6 +168,38 @@
         "kind": "config_path",
         "path": "seeds.count"
       }
+    },
+    {
+      "flags": [
+        "--backend"
+      ],
+      "help": "Chip simulator: numpy (reproduction) or merlin (phase-04 adaptation)",
+      "type": "str",
+      "default": null,
+      "choices": [
+        "numpy",
+        "merlin"
+      ],
+      "apply": {
+        "kind": "config_path",
+        "path": "backend.name"
+      }
+    },
+    {
+      "flags": [
+        "--merlin-noise"
+      ],
+      "help": "MerLin backend noise: injected (phase-03 model) or phase_error (MerLin's uniform model, same std)",
+      "type": "str",
+      "default": null,
+      "choices": [
+        "injected",
+        "phase_error"
+      ],
+      "apply": {
+        "kind": "config_path",
+        "path": "backend.merlin_noise"
+      }
     }
   ]
 }

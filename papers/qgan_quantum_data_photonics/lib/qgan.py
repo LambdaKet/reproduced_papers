@@ -209,14 +209,7 @@ class _Hardware:
             g = g + g_noise
             d = d + d_noise
         g_flat, d_flat = g.reshape(r * e, G_SIZE), d.reshape(r * e, D_SIZE)
-        amplitudes = generated_amplitudes(
-            g_flat[:, :GENERATOR_NUM_PHASES], g_flat[:, GENERATOR_NUM_PHASES:]
-        )
-        probabilities = output_distribution(
-            amplitudes,
-            d_flat[:, :DISCRIMINATOR_NUM_PHASES],
-            d_flat[:, DISCRIMINATOR_NUM_PHASES:],
-        )
+        probabilities = self._generated_probabilities(g_flat, d_flat)
         return self._estimate(rows, probabilities.reshape(r, e, 4, 4))
 
     def measure_target(
@@ -231,15 +224,46 @@ class _Hardware:
             if d_noise is not None:
                 d = d + d_noise
         d_flat = d.reshape(r * e, D_SIZE)
-        amplitudes = np.repeat(self.targets[rows], e, axis=0)
-        probabilities = output_distribution(
-            amplitudes,
-            d_flat[:, :DISCRIMINATOR_NUM_PHASES],
-            d_flat[:, DISCRIMINATOR_NUM_PHASES:],
-        ).reshape(r, e, 4, 4)
+        probabilities = self._target_probabilities(rows, e, d_flat, exact).reshape(
+            r, e, 4, 4
+        )
         if exact:
             return probabilities[..., DETECTION_PORT, DETECTION_PORT]
         return self._estimate(rows, probabilities)
+
+    def _generated_probabilities(
+        self, g_flat: np.ndarray, d_flat: np.ndarray
+    ) -> np.ndarray:
+        """Coincidence probabilities ``(N, 4, 4)`` of the generated state.
+
+        ``g_flat`` and ``d_flat`` are the (already noisy) phases of N executions,
+        shapes ``(N, 30)`` and ``(N, 12)``. Override to simulate the chip
+        another way (``lib/qgan_merlin.py``).
+        """
+        amplitudes = generated_amplitudes(
+            g_flat[:, :GENERATOR_NUM_PHASES], g_flat[:, GENERATOR_NUM_PHASES:]
+        )
+        return output_distribution(
+            amplitudes,
+            d_flat[:, :DISCRIMINATOR_NUM_PHASES],
+            d_flat[:, DISCRIMINATOR_NUM_PHASES:],
+        )
+
+    def _target_probabilities(
+        self, rows: np.ndarray, e: int, d_flat: np.ndarray, exact: bool
+    ) -> np.ndarray:
+        """Coincidence probabilities ``(len(rows) * e, 4, 4)`` of the targets.
+
+        ``exact`` is True when tr[M tau] is computed rather than measured;
+        this simulator ignores it, the MerLin chip uses a noiseless layer then.
+        """
+        del exact
+        amplitudes = np.repeat(self.targets[rows], e, axis=0)
+        return output_distribution(
+            amplitudes,
+            d_flat[:, :DISCRIMINATOR_NUM_PHASES],
+            d_flat[:, DISCRIMINATOR_NUM_PHASES:],
+        )
 
 
 def _shifted(params: np.ndarray, shift: float) -> np.ndarray:
@@ -364,7 +388,9 @@ def noise_averaged_fidelity(
     return root_fidelity(amplitudes, targets[:, None]).mean(axis=1)
 
 
-def train_qgan(inputs: SeedInputs, settings: QganSettings) -> QganResult:
+def train_qgan(
+    inputs: SeedInputs, settings: QganSettings, hardware: _Hardware | None = None
+) -> QganResult:
     """Play the QGAN game for every seed of ``inputs``.
 
     Parameters
@@ -373,13 +399,17 @@ def train_qgan(inputs: SeedInputs, settings: QganSettings) -> QganResult:
         Targets, discriminator start and stuck sets.
     settings : QganSettings
         Training and hardware settings.
+    hardware : _Hardware | None
+        Simulated chip. If omitted, the numpy simulator of ``lib.circuits``
+        is used; ``lib.qgan_merlin.MerlinHardware`` runs the same game on a
+        MerLin layer. Default value is None.
 
     Returns
     -------
     QganResult
     """
     s = len(inputs.seeds)
-    hardware = _Hardware(inputs, settings)
+    hardware = _Hardware(inputs, settings) if hardware is None else hardware
     stuck = inputs.stuck_mask.reshape(s, G_SIZE)
     free = (~stuck).astype(float)
     g = np.tile(np.concatenate([generator_identity_phases()] * 2), (s, 1))

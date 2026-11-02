@@ -1,0 +1,56 @@
+{
+  "sweep_id": "merlin_native_defects",
+  "description": "Phase 04: Fig. 3b at 5 predeclared rates with MerLin's phase_error noise model, sigma = 0.02 pi.",
+  "candidates": [
+    {
+      "name": "merlin_phase_error_stuck_0_of_30",
+      "config": "configs/defect_rate_sweep_merlin.json",
+      "args": [
+        "--defects-per-circuit",
+        "0",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_stuck_8_of_30",
+      "config": "configs/defect_rate_sweep_merlin.json",
+      "args": [
+        "--defects-per-circuit",
+        "4",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_stuck_14_of_30",
+      "config": "configs/defect_rate_sweep_merlin.json",
+      "args": [
+        "--defects-per-circuit",
+        "7",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_stuck_16_of_30",
+      "config": "configs/defect_rate_sweep_merlin.json",
+      "args": [
+        "--defects-per-circuit",
+        "8",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    },
+    {
+      "name": "merlin_phase_error_stuck_20_of_30",
+      "config": "configs/defect_rate_sweep_merlin.json",
+      "args": [
+        "--defects-per-circuit",
+        "10",
+        "--merlin-noise",
+        "phase_error"
+      ]
+    }
+  ]
+}
