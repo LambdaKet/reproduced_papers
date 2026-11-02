@@ -1,7 +1,7 @@
 # Quantum Generative Adversarial Learning in Photonics - Reproduction
 
-Status: experiments and MerLin adaptation done (simulation); comparison with the
-paper below.
+Status: experiments, MerLin adaptation and comparison with baselines done
+(simulation); comparison with the paper below.
 
 ## Reference and Attribution
 
@@ -130,8 +130,8 @@ outdir/run_YYYYMMDD-HHMMSS/
   (`phase_noise_sweep`, `defect_rate_sweep`, `shot_noise_sweep`,
   `single_defect`, `single_defect_position`, `intact_chip_emulation`,
   `defective_chip_emulation`, `oracle_ceiling`, `oracle_ceiling_chip`,
-  `fixed_discriminator`, `calibration`, `minimal_learning`,
-  `minimal_learning_noisy`, `shot_noise_tvd`).
+  `fixed_discriminator`, `noise_free_reference`, `calibration`,
+  `minimal_learning`, `minimal_learning_noisy`, `shot_noise_tvd`).
 - `configs/<experiment>_merlin.json` (`smoke`, `phase_noise_sweep`,
   `defect_rate_sweep`): the chip as a MerLin layer (`--backend merlin`);
   `--merlin-noise injected` reuses the numpy simulator's noise draws,
@@ -230,7 +230,35 @@ averages the fidelity over 100 phase-noise draws.
 - Sampling error (Suppl. Fig. 9a): total variation distance 0.155 at 100 counts and 0.0155 at 10,000 (paper ≈0.155 and ≈0.016).
 - Chip runs replayed in simulation (20 targets): intact circuits 0.989 ± 0.004 (σ = 0.01π) and 0.982 ± 0.009 (0.02π) after 150 rounds, against 96.02 % on the chip; with the 16 stuck phase shifters of Fig. 1(f), 0.940 ± 0.091 and 0.902 ± 0.127 after 160 rounds, against 92.11 %.
 - One stuck phase shifter per circuit (Suppl. Sec. 6): 0.987 ± 0.006 (paper 98.33 ± 7.00 %); each of the 15 positions alone (20 targets per position) gives 0.981–0.990, so none is critical.
-- Discriminator ablation (ours): replacing the trained discriminator with random projectors lowers the final fidelity by 0.191 (95 % interval 0.152–0.232, 100 paired targets, σ = 0.02π).
+
+### Baselines: up to 10 stuck phase shifters and σ = 0.02π, the QGAN reaches what the chip allows
+
+The paper claims robustness, not an advantage over another method, and it
+compares the QGAN only with itself under weaker noise. No classical generative
+model outputs a two-photon state. We therefore compare the QGAN with other ways
+of setting the same chip, on the same 100 targets. Two results count as tied
+when their mean paired difference is at most 0.02, the tolerance of our earlier
+rules.
+
+- **Ceiling** (the best fidelity the chip can reach, found knowing τ):
+  - The QGAN is tied with it up to 10 of 30 stuck phase shifters and, averaged
+    over the noise, up to σ = 0.02π.
+  - Beyond that, the QGAN is clearly lower: −0.028 at 12 stuck, −0.099 at 16,
+    and −0.021 to −0.037 from σ = 0.03π. Learning, not the circuit, sets the
+    limit.
+- **Noise-free QGAN** (σ = 0, exact probabilities):
+  - It reaches 0.990 ± 0.003 after 400 rounds.
+  - Phase noise costs at most 0.010 up to σ = 0.03π, then 0.021 at 0.04π and
+    0.028 at 0.05π.
+  - 100 counts cost 0.030; 200 counts or more cost at most 0.011.
+  - Without any noise, the game ends at d = 0.044, just under the generator's
+    stop threshold (0.05). This is why slightly noisy runs end higher, for
+    example 0.998 with 1500 counts and σ = 0.
+- **Random projectors** in place of the trained discriminator: the final
+  fidelity is 0.191 lower (95 % interval 0.152–0.232, σ = 0.02π).
+
+No quantum advantage is claimed or tested. Tables and run times:
+[results/baseline_comparison.md](results/baseline_comparison.md).
 
 ### MerLin: the chip as a MerLin layer gives the same results
 
