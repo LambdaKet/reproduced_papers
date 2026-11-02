@@ -1,0 +1,301 @@
+{
+  "equivalence": {
+    "rows": [
+      {
+        "condition": "merlin_injected_sigma_0.01pi",
+        "targets": 100,
+        "share_within_1e-6": 1.0,
+        "mean_difference": 0.0,
+        "max_trajectory_difference": 0.0,
+        "holds": true
+      },
+      {
+        "condition": "merlin_injected_sigma_0.05pi",
+        "targets": 100,
+        "share_within_1e-6": 1.0,
+        "mean_difference": 0.0,
+        "max_trajectory_difference": 0.0,
+        "holds": true
+      },
+      {
+        "condition": "merlin_injected_stuck_16_of_30",
+        "targets": 100,
+        "share_within_1e-6": 1.0,
+        "mean_difference": 0.0,
+        "max_trajectory_difference": 0.0,
+        "holds": true
+      }
+    ],
+    "holds": true
+  },
+  "native_phase_noise": {
+    "rows": [
+      {
+        "condition": "sigma_0.01pi",
+        "numpy_mean": 0.9925930229421484,
+        "numpy_std": 0.004333662721807177,
+        "merlin_mean": 0.9917302520321407,
+        "merlin_std": 0.005032932569110827,
+        "merlin_minus_numpy": {
+          "mean": -0.0008627709100074099,
+          "ci95": [
+            -0.0021704793526160656,
+            0.00042110225517498067
+          ],
+          "median": -0.0007978774189028592,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 0,
+          "their_share_of_the_mean": 0.0
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 240.43709908399978,
+        "numpy_seconds": 147.06393712499994,
+        "sigma_pi": 0.01,
+        "paper": 1.0
+      },
+      {
+        "condition": "sigma_0.02pi",
+        "numpy_mean": 0.9843733766592677,
+        "numpy_std": 0.006971299865744329,
+        "merlin_mean": 0.9848282358815574,
+        "merlin_std": 0.007036323017737407,
+        "merlin_minus_numpy": {
+          "mean": 0.00045485922228979405,
+          "ci95": [
+            -0.0015099798169420533,
+            0.0024440692944780345
+          ],
+          "median": 2.7998369722559424e-05,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 0,
+          "their_share_of_the_mean": 0.0
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 245.85877616600192,
+        "numpy_seconds": 133.83457433299918,
+        "sigma_pi": 0.02,
+        "paper": 0.99
+      },
+      {
+        "condition": "sigma_0.03pi",
+        "numpy_mean": 0.9802711470393397,
+        "numpy_std": 0.01062071782692396,
+        "merlin_mean": 0.977604002319786,
+        "merlin_std": 0.010442211618997868,
+        "merlin_minus_numpy": {
+          "mean": -0.0026671447195538724,
+          "ci95": [
+            -0.00569248295681011,
+            0.00035382407152526193
+          ],
+          "median": -0.002306458410050616,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 0,
+          "their_share_of_the_mean": 0.0
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 242.036869167001,
+        "numpy_seconds": 137.23637012499967,
+        "sigma_pi": 0.03,
+        "paper": 0.97
+      },
+      {
+        "condition": "sigma_0.04pi",
+        "numpy_mean": 0.9690016255903092,
+        "numpy_std": 0.014269608410443472,
+        "merlin_mean": 0.9664126512070204,
+        "merlin_std": 0.01658931823167852,
+        "merlin_minus_numpy": {
+          "mean": -0.0025889743832887657,
+          "ci95": [
+            -0.006845244469509865,
+            0.001593928819491846
+          ],
+          "median": -0.0005296029401797298,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 0,
+          "their_share_of_the_mean": 0.0
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 242.5590059999995,
+        "numpy_seconds": 136.86268970799574,
+        "sigma_pi": 0.04,
+        "paper": 0.92
+      },
+      {
+        "condition": "sigma_0.05pi",
+        "numpy_mean": 0.9622750226572185,
+        "numpy_std": 0.018025073485536655,
+        "merlin_mean": 0.9474649031843565,
+        "merlin_std": 0.026254730644649477,
+        "merlin_minus_numpy": {
+          "mean": -0.014810119472861972,
+          "ci95": [
+            -0.021013991479411163,
+            -0.0086234127133198
+          ],
+          "median": -0.012372888834208173,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 2,
+          "their_share_of_the_mean": -0.0022924975986892116
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 242.8361765840018,
+        "numpy_seconds": 126.80262558400136,
+        "sigma_pi": 0.05,
+        "paper": 0.78
+      }
+    ],
+    "claim_rule": {
+      "statement": "mean \u2265 0.90 for \u03c3 \u2264 0.03\u03c0",
+      "numpy_holds": true,
+      "merlin_holds": true,
+      "same_outcome": true
+    },
+    "conditions_within_tolerance": 5
+  },
+  "native_defects": {
+    "rows": [
+      {
+        "condition": "stuck_0_of_30",
+        "numpy_mean": 0.985048347747134,
+        "numpy_std": 0.00670358289923075,
+        "merlin_mean": 0.9836476887089429,
+        "merlin_std": 0.008611994474102186,
+        "merlin_minus_numpy": {
+          "mean": -0.0014006590381910788,
+          "ci95": [
+            -0.0035046675886000705,
+            0.000641888038686356
+          ],
+          "median": -0.00023122038966227887,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 0,
+          "their_share_of_the_mean": 0.0
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 1169.5786245000018,
+        "numpy_seconds": 662.3496757500034,
+        "stuck_of_30": 0,
+        "paper": 0.985
+      },
+      {
+        "condition": "stuck_8_of_30",
+        "numpy_mean": 0.9887254525951605,
+        "numpy_std": 0.008469780002474486,
+        "merlin_mean": 0.9877850659310726,
+        "merlin_std": 0.01185063238576308,
+        "merlin_minus_numpy": {
+          "mean": -0.0009403866640878977,
+          "ci95": [
+            -0.0025471338112848458,
+            0.0006059789025547268
+          ],
+          "median": 0.0006181857469196861,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 0,
+          "their_share_of_the_mean": 0.0
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 1078.9842665840006,
+        "numpy_seconds": 415.42542449999746,
+        "stuck_of_30": 8,
+        "paper": 0.97
+      },
+      {
+        "condition": "stuck_14_of_30",
+        "numpy_mean": 0.913366100214954,
+        "numpy_std": 0.19216163040023193,
+        "merlin_mean": 0.9145909660399046,
+        "merlin_std": 0.19138156450570393,
+        "merlin_minus_numpy": {
+          "mean": 0.0012248658249508582,
+          "ci95": [
+            -0.013035657437794359,
+            0.016541643445083267
+          ],
+          "median": -0.0015671779681984965,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 9,
+          "their_share_of_the_mean": 0.0019374826557482067
+        },
+        "within_tolerance": true,
+        "merlin_seconds": 1168.4292094580014,
+        "numpy_seconds": 547.744956167,
+        "stuck_of_30": 14,
+        "paper": 0.913
+      },
+      {
+        "condition": "stuck_16_of_30",
+        "numpy_mean": 0.8765832360205696,
+        "numpy_std": 0.20918450952794182,
+        "merlin_mean": 0.8971653683314638,
+        "merlin_std": 0.17705599163884583,
+        "merlin_minus_numpy": {
+          "mean": 0.020582132310894084,
+          "ci95": [
+            0.0007342291087022774,
+            0.04185711549152613
+          ],
+          "median": 0.004477614816858044,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 15,
+          "their_share_of_the_mean": 0.016730957954373727
+        },
+        "within_tolerance": false,
+        "merlin_seconds": 1257.0089857500025,
+        "numpy_seconds": 544.6267435410045,
+        "stuck_of_30": 16,
+        "paper": 0.867
+      },
+      {
+        "condition": "stuck_20_of_30",
+        "numpy_mean": 0.6451830949437776,
+        "numpy_std": 0.22493630864828243,
+        "merlin_mean": 0.6229901153105228,
+        "merlin_std": 0.2260723729308794,
+        "merlin_minus_numpy": {
+          "mean": -0.022192979633254818,
+          "ci95": [
+            -0.057663661616528694,
+            0.013350359834065467
+          ],
+          "median": -0.008280162242219502,
+          "n": 100,
+          "targets_differing_by_more_than_0.1": 50,
+          "their_share_of_the_mean": -0.021834884832663503
+        },
+        "within_tolerance": false,
+        "merlin_seconds": 1715.3356499589972,
+        "numpy_seconds": 902.4433227080008,
+        "stuck_of_30": 20,
+        "paper": 0.709
+      }
+    ],
+    "claim_rule": {
+      "statement": "mean \u2265 0.90 up to 14/30 stuck",
+      "numpy_holds": true,
+      "merlin_holds": true,
+      "same_outcome": true
+    },
+    "conditions_within_tolerance": 3
+  },
+  "tolerance": 0.02,
+  "hardware": {
+    "computation_space": "UNBUNCHED",
+    "detector_model": "threshold (at most one photon per 4-mode block, so equal to number resolution here)",
+    "encoding": "42 phase shifters as per-call input parameters (30 generator, 12 discriminator)",
+    "framework": "merlin 0.4.1, perceval 1.3.1",
+    "gradient": "parameter shift (pi/4), each shifted term a separate noisy execution",
+    "input_state": "1/2 (|10001000> + |01000100> + |00100010> + |00010001>) (signal modes 0-3, idler 4-7)",
+    "measurement_strategy": "MeasurementStrategy.probs(computation_space=UNBUNCHED); tr[M rho] = P(signal port 2, idler port 2)",
+    "merlin_phase_error_half_width_rad": 0.05441398092702653,
+    "noise_mode": "phase_error",
+    "number_of_modes": 8,
+    "photon_number": 2,
+    "postselection": "one photon per block; no probability leaves the 16 coincidence patterns (block-diagonal circuit)",
+    "shot_count": 1500,
+    "simulator": "MerLin CPU analytic simulator (float64); counts drawn from its exact probabilities",
+    "tau_measurement": "tau prepared on the chip by the generator meshes (phases solved by least squares)"
+  }
+}

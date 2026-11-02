@@ -1,0 +1,11 @@
+{
+  "description": "MerLin smoke run (phase 04): defaults with the chip simulated by a MerLin layer.",
+  "experiment": {
+    "name": "smoke_merlin",
+    "kind": "qgan"
+  },
+  "backend": {
+    "name": "merlin",
+    "merlin_noise": "injected"
+  }
+}

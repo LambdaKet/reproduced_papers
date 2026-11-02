@@ -1,0 +1,27 @@
+{
+  "description": "MerLin adaptation of Fig. 2c (phase 04): the chip simulated by a MerLin layer; noise mode set per sweep candidate (--merlin-noise).",
+  "experiment": {
+    "name": "phase_noise_sweep_merlin",
+    "kind": "qgan"
+  },
+  "seeds": {
+    "start": 0,
+    "count": 100
+  },
+  "noise": {
+    "phase_sigma_pi": 0.01,
+    "counts": 1500
+  },
+  "training": {
+    "rounds": 400
+  },
+  "evaluation": {
+    "eval_every": 50,
+    "noise_draws": 100,
+    "final_window": 20
+  },
+  "backend": {
+    "name": "merlin",
+    "merlin_noise": "injected"
+  }
+}

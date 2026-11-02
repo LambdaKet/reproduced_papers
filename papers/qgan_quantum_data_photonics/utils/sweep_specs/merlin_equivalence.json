@@ -1,0 +1,36 @@
+{
+  "sweep_id": "merlin_equivalence",
+  "description": "Phase 04: MerLin chip with the phase-03 noise model, against the phase-03 numpy runs on the same 100 targets.",
+  "candidates": [
+    {
+      "name": "merlin_injected_sigma_0.01pi",
+      "config": "configs/phase_noise_sweep_merlin.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.01",
+        "--merlin-noise",
+        "injected"
+      ]
+    },
+    {
+      "name": "merlin_injected_sigma_0.05pi",
+      "config": "configs/phase_noise_sweep_merlin.json",
+      "args": [
+        "--phase-noise-pi",
+        "0.05",
+        "--merlin-noise",
+        "injected"
+      ]
+    },
+    {
+      "name": "merlin_injected_stuck_16_of_30",
+      "config": "configs/defect_rate_sweep_merlin.json",
+      "args": [
+        "--defects-per-circuit",
+        "8",
+        "--merlin-noise",
+        "injected"
+      ]
+    }
+  ]
+}
