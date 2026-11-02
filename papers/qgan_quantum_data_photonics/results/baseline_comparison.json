@@ -1,0 +1,1050 @@
+{
+  "rule": {
+    "tolerance": 0.02,
+    "interval": "95 % percentile bootstrap over targets, 10,000 resamples, seed 0"
+  },
+  "systems": [
+    {
+      "system": "QGAN, our reproduction",
+      "role": "reproduced method (numpy chip simulator)",
+      "provenance": "local runs, phase 03",
+      "resources": "30 generator + 12 discriminator phases; parameter shift; 1500 counts per setting (Suppl. Fig. 9b: 100-2000)",
+      "status": "reference",
+      "successful_runs": 27,
+      "expected_runs": 27,
+      "targets_per_run": 100,
+      "wall_clock_minutes": {
+        "400 rounds": [
+          2.1133770930666893,
+          2.451065618749999
+        ],
+        "2000 rounds": [
+          6.9237570749999575,
+          15.497590884716677
+        ],
+        "2500 rounds": [
+          6.659724713899959,
+          13.318991747916638
+        ]
+      },
+      "concurrency": "up to 10 runs at once"
+    },
+    {
+      "system": "Noise-free QGAN",
+      "role": "baseline: cost of noise (phase-01 plan)",
+      "provenance": "local runs, phase 05",
+      "resources": "same phases and settings; sigma = 0, exact probabilities",
+      "status": "COMMENSURABLE",
+      "successful_runs": 2,
+      "expected_runs": 2,
+      "targets_per_run": 100,
+      "wall_clock_minutes": {
+        "400 rounds": [
+          0.6915683368166355,
+          0.6915683368166355
+        ],
+        "2500 rounds": [
+          4.208236590283317,
+          4.208236590283317
+        ]
+      },
+      "concurrency": "1 run at a time"
+    },
+    {
+      "system": "Oracle ceiling",
+      "role": "control: best fidelity the chip can reach (knows the target)",
+      "provenance": "local runs, phase 03",
+      "resources": "30 generator phases minus stuck ones; exact gradients; 20 restarts x 2000 Adam iterations; 1000 noise draws per sigma",
+      "status": "COMMENSURABLE (upper bound by design)",
+      "successful_runs": 13,
+      "expected_runs": 13,
+      "targets_per_run": 100,
+      "wall_clock_minutes": {
+        "optimization": [
+          0.4637279756832868,
+          0.5932507020833631
+        ]
+      },
+      "concurrency": "up to 10 runs at once"
+    },
+    {
+      "system": "Fixed discriminator",
+      "role": "ablation: random projectors redrawn every round",
+      "provenance": "local run, phase 03",
+      "resources": "30 generator phases; no discriminator training",
+      "status": "COMMENSURABLE",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "targets_per_run": 100,
+      "wall_clock_minutes": {
+        "400 rounds": [
+          0.2943157437500001,
+          0.2943157437500001
+        ]
+      },
+      "concurrency": "up to 10 runs at once"
+    },
+    {
+      "system": "MerLin adaptation, MerLin noise",
+      "role": "photonic adaptation (MerLin QuantumLayer, 8 modes, 2 photons)",
+      "provenance": "local runs, phase 04 (simulation)",
+      "resources": "same as the QGAN; MerLin phase_error noise (uniform, same standard deviation)",
+      "status": "PARTIALLY_COMMENSURABLE (noise distribution; target prepared on the chip)",
+      "successful_runs": 10,
+      "expected_runs": 10,
+      "targets_per_run": 100,
+      "wall_clock_minutes": {
+        "400 rounds": [
+          4.00728498473333,
+          4.0976462694333655
+        ],
+        "2000 rounds": [
+          17.98307110973334,
+          28.588927499316622
+        ]
+      },
+      "concurrency": "3 runs at once"
+    }
+  ],
+  "comparisons": [
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.01pi",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 1.0,
+      "system_mean": 0.9925930229421484,
+      "system_std": 0.004333662721807177,
+      "control_mean": 0.9903254323126441,
+      "control_std": 0.0030955195324456793,
+      "difference": {
+        "mean": 0.002267590629504028,
+        "ci95": [
+          0.0012452486219905656,
+          0.0032930409862145216
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.01pi",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "noise-averaged root fidelity (QGAN at round 400, 100 draws; ceiling at its optimum, 1000 draws)",
+      "status": "COMMENSURABLE",
+      "system_mean": 0.9897616338771528,
+      "system_std": 0.005328314447484516,
+      "control_mean": 0.9972315900359423,
+      "control_std": 3.766900925236015e-05,
+      "difference": {
+        "mean": -0.007469956158789706,
+        "ci95": [
+          -0.008549020995888711,
+          -0.006463006880103032
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.01pi",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.9917302520321407,
+      "system_std": 0.005032932569110827,
+      "control_mean": 0.9925930229421484,
+      "control_std": 0.004333662721807177,
+      "difference": {
+        "mean": -0.0008627709100074099,
+        "ci95": [
+          -0.0021704793526160656,
+          0.00042110225517498067
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.02pi",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.99,
+      "system_mean": 0.9843733766592677,
+      "system_std": 0.006971299865744329,
+      "control_mean": 0.9903254323126441,
+      "control_std": 0.0030955195324456793,
+      "difference": {
+        "mean": -0.005952055653376584,
+        "ci95": [
+          -0.007477434880500699,
+          -0.004448045685787486
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.02pi",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "noise-averaged root fidelity (QGAN at round 400, 100 draws; ceiling at its optimum, 1000 draws)",
+      "status": "COMMENSURABLE",
+      "system_mean": 0.973785244559926,
+      "system_std": 0.009427546812999132,
+      "control_mean": 0.988954451114069,
+      "control_std": 0.00017333865020662242,
+      "difference": {
+        "mean": -0.015169206554143005,
+        "ci95": [
+          -0.017091366294976717,
+          -0.013425394219827922
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.02pi",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.9848282358815574,
+      "system_std": 0.007036323017737407,
+      "control_mean": 0.9843733766592677,
+      "control_std": 0.006971299865744329,
+      "difference": {
+        "mean": 0.00045485922228979405,
+        "ci95": [
+          -0.0015099798169420533,
+          0.0024440692944780345
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.03pi",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.97,
+      "system_mean": 0.9802711470393397,
+      "system_std": 0.01062071782692396,
+      "control_mean": 0.9903254323126441,
+      "control_std": 0.0030955195324456793,
+      "difference": {
+        "mean": -0.010054285273304311,
+        "ci95": [
+          -0.012170567487323368,
+          -0.008117905074857346
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.03pi",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "noise-averaged root fidelity (QGAN at round 400, 100 draws; ceiling at its optimum, 1000 draws)",
+      "status": "COMMENSURABLE",
+      "system_mean": 0.9547898251807979,
+      "system_std": 0.013848532815023514,
+      "control_mean": 0.97534855160191,
+      "control_std": 0.00037799159156697004,
+      "difference": {
+        "mean": -0.020558726421112335,
+        "ci95": [
+          -0.023377372466218217,
+          -0.01795751191785247
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.03pi",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.977604002319786,
+      "system_std": 0.010442211618997868,
+      "control_mean": 0.9802711470393397,
+      "control_std": 0.01062071782692396,
+      "difference": {
+        "mean": -0.0026671447195538724,
+        "ci95": [
+          -0.00569248295681011,
+          0.00035382407152526193
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.04pi",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.92,
+      "system_mean": 0.9690016255903092,
+      "system_std": 0.014269608410443472,
+      "control_mean": 0.9903254323126441,
+      "control_std": 0.0030955195324456793,
+      "difference": {
+        "mean": -0.021323806722335092,
+        "ci95": [
+          -0.02429594892622054,
+          -0.018543266662028754
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.04pi",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "noise-averaged root fidelity (QGAN at round 400, 100 draws; ceiling at its optimum, 1000 draws)",
+      "status": "COMMENSURABLE",
+      "system_mean": 0.9263665509917536,
+      "system_std": 0.016680981531497257,
+      "control_mean": 0.9565157467138679,
+      "control_std": 0.0007314179745638835,
+      "difference": {
+        "mean": -0.030149195722114122,
+        "ci95": [
+          -0.03340048872724133,
+          -0.02695820794831369
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.04pi",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.9664126512070204,
+      "system_std": 0.01658931823167852,
+      "control_mean": 0.9690016255903092,
+      "control_std": 0.014269608410443472,
+      "difference": {
+        "mean": -0.0025889743832887657,
+        "ci95": [
+          -0.006845244469509865,
+          0.001593928819491846
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.05pi",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.78,
+      "system_mean": 0.9622750226572185,
+      "system_std": 0.018025073485536655,
+      "control_mean": 0.9903254323126441,
+      "control_std": 0.0030955195324456793,
+      "difference": {
+        "mean": -0.028050409655425667,
+        "ci95": [
+          -0.03179712467873792,
+          -0.02462595042419496
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.05pi",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "noise-averaged root fidelity (QGAN at round 400, 100 draws; ceiling at its optimum, 1000 draws)",
+      "status": "COMMENSURABLE",
+      "system_mean": 0.8964996021137733,
+      "system_std": 0.019736151772332032,
+      "control_mean": 0.9330615789995674,
+      "control_std": 0.0009737630614951503,
+      "difference": {
+        "mean": -0.03656197688579397,
+        "ci95": [
+          -0.040465495076366376,
+          -0.0328546103116104
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "phase-noise-robustness",
+      "condition": "sigma = 0.05pi",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.9474649031843565,
+      "system_std": 0.026254730644649477,
+      "control_mean": 0.9622750226572185,
+      "control_std": 0.018025073485536655,
+      "difference": {
+        "mean": -0.014810119472861972,
+        "ci95": [
+          -0.021013991479411163,
+          -0.0086234127133198
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "0/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.985,
+      "system_mean": 0.985048347747134,
+      "system_std": 0.00670358289923075,
+      "control_mean": 1.0,
+      "control_std": 2.5074848721578664e-16,
+      "difference": {
+        "mean": -0.014951652252866116,
+        "ci95": [
+          -0.0163028744728596,
+          -0.01366046443106804
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "0/30 stuck",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.9836476887089429,
+      "system_std": 0.008611994474102186,
+      "control_mean": 1.0,
+      "control_std": 2.5074848721578664e-16,
+      "difference": {
+        "mean": -0.016352311291057194,
+        "ci95": [
+          -0.01808888192994708,
+          -0.014734952382490759
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "2/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.979,
+      "system_mean": 0.9869609128019942,
+      "system_std": 0.006290572646531983,
+      "control_mean": 0.9999492123231687,
+      "control_std": 0.0005039260672426727,
+      "difference": {
+        "mean": -0.012988299521174551,
+        "ci95": [
+          -0.014224454557991054,
+          -0.011788988853268076
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "4/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.98,
+      "system_mean": 0.9875153877407301,
+      "system_std": 0.005380449744261661,
+      "control_mean": 0.9999491623701693,
+      "control_std": 0.00050392516091944,
+      "difference": {
+        "mean": -0.012433774629439207,
+        "ci95": [
+          -0.013535649203004749,
+          -0.01137146388117308
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "6/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.969,
+      "system_mean": 0.9881775661712483,
+      "system_std": 0.006440420253392426,
+      "control_mean": 0.9999423116556286,
+      "control_std": 0.0005730880491395796,
+      "difference": {
+        "mean": -0.011764745484380622,
+        "ci95": [
+          -0.01301294292173671,
+          -0.010560244353363085
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "8/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.97,
+      "system_mean": 0.9887254525951605,
+      "system_std": 0.008469780002474486,
+      "control_mean": 0.9996856857079404,
+      "control_std": 0.0019173355317585587,
+      "difference": {
+        "mean": -0.010960233112779763,
+        "ci95": [
+          -0.012435547037553339,
+          -0.009733707150908301
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "8/30 stuck",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.9877850659310726,
+      "system_std": 0.01185063238576308,
+      "control_mean": 0.9996856857079404,
+      "control_std": 0.0019173355317585587,
+      "difference": {
+        "mean": -0.011900619776867658,
+        "ci95": [
+          -0.014149329849711668,
+          -0.010163134622602085
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "10/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.958,
+      "system_mean": 0.9820973826719349,
+      "system_std": 0.06332451248881248,
+      "control_mean": 0.9979318658120045,
+      "control_std": 0.015058755459603865,
+      "difference": {
+        "mean": -0.01583448314006979,
+        "ci95": [
+          -0.027018065732180782,
+          -0.008980378473210676
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "12/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.944,
+      "system_mean": 0.965314382141941,
+      "system_std": 0.10403858978210441,
+      "control_mean": 0.9936096943039939,
+      "control_std": 0.0278233423694917,
+      "difference": {
+        "mean": -0.028295312162053065,
+        "ci95": [
+          -0.045854427108947424,
+          -0.014520368953960678
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "14/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.913,
+      "system_mean": 0.913366100214954,
+      "system_std": 0.19216163040023193,
+      "control_mean": 0.9863221686937657,
+      "control_std": 0.03986176717092027,
+      "difference": {
+        "mean": -0.0729560684788115,
+        "ci95": [
+          -0.10511548290778554,
+          -0.043387352549623066
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "14/30 stuck",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.9145909660399046,
+      "system_std": 0.19138156450570393,
+      "control_mean": 0.9863221686937657,
+      "control_std": 0.03986176717092027,
+      "difference": {
+        "mean": -0.07173120265386065,
+        "ci95": [
+          -0.10375620772888304,
+          -0.04342920513964676
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "16/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.867,
+      "system_mean": 0.8765832360205696,
+      "system_std": 0.20918450952794182,
+      "control_mean": 0.975454105515493,
+      "control_std": 0.0493605218483646,
+      "difference": {
+        "mean": -0.09887086949492348,
+        "ci95": [
+          -0.13301219684407248,
+          -0.06713283377051583
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "16/30 stuck",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.8971653683314638,
+      "system_std": 0.17705599163884583,
+      "control_mean": 0.975454105515493,
+      "control_std": 0.0493605218483646,
+      "difference": {
+        "mean": -0.07828873718402941,
+        "ci95": [
+          -0.10691039613685391,
+          -0.05246273187295852
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "18/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.799,
+      "system_mean": 0.8096049570142718,
+      "system_std": 0.2038124796675249,
+      "control_mean": 0.9528278820076587,
+      "control_std": 0.056944810687982864,
+      "difference": {
+        "mean": -0.1432229249933866,
+        "ci95": [
+          -0.17594021034227264,
+          -0.1135948254194361
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "20/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.709,
+      "system_mean": 0.6451830949437776,
+      "system_std": 0.22493630864828243,
+      "control_mean": 0.892734014151479,
+      "control_std": 0.07753996681527071,
+      "difference": {
+        "mean": -0.2475509192077013,
+        "ci95": [
+          -0.28415325634099775,
+          -0.212173424343837
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "20/30 stuck",
+      "system": "MerLin adaptation, MerLin noise",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "system_mean": 0.6229901153105228,
+      "system_std": 0.2260723729308794,
+      "control_mean": 0.892734014151479,
+      "control_std": 0.07753996681527071,
+      "difference": {
+        "mean": -0.2697438988409562,
+        "ci95": [
+          -0.30662705129673157,
+          -0.23468451876139593
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "22/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.648,
+      "system_mean": 0.5340865817452086,
+      "system_std": 0.20250849898849627,
+      "control_mean": 0.8204321112251666,
+      "control_std": 0.08749744444931348,
+      "difference": {
+        "mean": -0.286345529479958,
+        "ci95": [
+          -0.31927686399826893,
+          -0.25429066632640634
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "defect-tolerance",
+      "condition": "24/30 stuck",
+      "system": "QGAN",
+      "control": "Oracle ceiling",
+      "metric": "final root fidelity, intended phases (ceiling: best)",
+      "status": "COMMENSURABLE",
+      "paper": 0.456,
+      "system_mean": 0.46035027371366544,
+      "system_std": 0.2029127933768366,
+      "control_mean": 0.710976384285376,
+      "control_std": 0.10092106173197048,
+      "difference": {
+        "mean": -0.2506261105717108,
+        "ci95": [
+          -0.280570851823524,
+          -0.22163190072645197
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "no-crucial-phase-shifter",
+      "condition": "one stuck per circuit against none, sigma = 0.02pi",
+      "system": "QGAN, one defect",
+      "control": "QGAN, intact",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": {
+        "one defect": [
+          0.9833,
+          0.07
+        ],
+        "none": [
+          0.9914,
+          0.0123
+        ]
+      },
+      "system_mean": 0.9869609128019942,
+      "system_std": 0.006290572646531983,
+      "control_mean": 0.985048347747134,
+      "control_std": 0.00670358289923075,
+      "difference": {
+        "mean": 0.0019125650548601082,
+        "ci95": [
+          0.00016106315482166558,
+          0.0037126835625351973
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "100 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.921,
+      "system_mean": 0.960557366686282,
+      "system_std": 0.016217885448617454,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": -0.030184311740079312,
+        "ci95": [
+          -0.033515310687260956,
+          -0.0270504583281429
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "200 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.987,
+      "system_mean": 0.9797175453430821,
+      "system_std": 0.009413287794972169,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": -0.011024133083279302,
+        "ci95": [
+          -0.013027094165595741,
+          -0.009220255425172286
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "300 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.99,
+      "system_mean": 0.9863798685684985,
+      "system_std": 0.005913097697978068,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": -0.004361809857862929,
+        "ci95": [
+          -0.005559121876361489,
+          -0.0031763563344245006
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "400 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.989,
+      "system_mean": 0.9885237594606668,
+      "system_std": 0.0054937765078011905,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": -0.002217918965694431,
+        "ci95": [
+          -0.0033383813495372417,
+          -0.0011516563193714482
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "500 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.989,
+      "system_mean": 0.9918588749284208,
+      "system_std": 0.004111963237542049,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": 0.001117196502059391,
+        "ci95": [
+          0.0002592556038152879,
+          0.001964245905496119
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "1000 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.986,
+      "system_mean": 0.997113576592217,
+      "system_std": 0.002261193155841853,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": 0.006371898165855424,
+        "ci95": [
+          0.005782176548584167,
+          0.006944181520615346
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "1500 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.989,
+      "system_mean": 0.9982118431745173,
+      "system_std": 0.0013822702336707465,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": 0.007470164748155851,
+        "ci95": [
+          0.007003122857444863,
+          0.007918703572239148
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "shot-noise-degradation",
+      "condition": "2000 counts",
+      "system": "QGAN",
+      "control": "Noise-free QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "paper": 0.99,
+      "system_mean": 0.9981944965490979,
+      "system_std": 0.00114302868965176,
+      "control_mean": 0.9907416784263613,
+      "control_std": 0.0019134409302182316,
+      "difference": {
+        "mean": 0.007452818122736492,
+        "ci95": [
+          0.007016221684111709,
+          0.00787851896721425
+        ]
+      },
+      "n": 100,
+      "outcome": "tied"
+    },
+    {
+      "claim": "role of the discriminator (not a paper claim)",
+      "condition": "sigma = 0.02pi, intact, 400 rounds",
+      "system": "Fixed discriminator",
+      "control": "QGAN",
+      "metric": "final root fidelity, intended phases",
+      "status": "COMMENSURABLE",
+      "system_mean": 0.7931705641241318,
+      "system_std": 0.2092834971883361,
+      "control_mean": 0.9843733766592677,
+      "control_std": 0.006971299865744329,
+      "difference": {
+        "mean": -0.19120281253513582,
+        "ci95": [
+          -0.23192521999815544,
+          -0.15156564848053247
+        ]
+      },
+      "n": 100,
+      "outcome": "clearly lower"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "sweep_id": "noise_free_reference",
+  "description": "Phase 05: noise-free QGAN at the run lengths of Fig. 2c (400 rounds) and Suppl. Fig. 9b (2500 rounds).",
+  "candidates": [
+    {
+      "name": "noise_free_400_rounds",
+      "config": "configs/noise_free_reference_original.json",
+      "args": []
+    },
+    {
+      "name": "noise_free_2500_rounds",
+      "config": "configs/noise_free_reference_original.json",
+      "args": [
+        "--rounds",
+        "2500"
+      ]
+    }
+  ]
+}
