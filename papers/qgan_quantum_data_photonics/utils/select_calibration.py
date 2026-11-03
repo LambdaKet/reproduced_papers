@@ -4,7 +4,7 @@ Usage (from the repository root)::
 
     python papers/qgan_quantum_data_photonics/utils/select_calibration.py <sweep_dir>
 
-Rule (LOG, Implementation decisions, predeclared 2026-10-30): keep the
+Rule (set on 2026-10-30, before any calibration run): keep the
 candidates whose mean final fidelity is at least 0.98; pick the one whose mean
 fidelity first reaches 0.9 closest to round 59 (the paper's Fig. 2c value at
 sigma = 0.01 pi); candidates within 5 rounds of the closest count as tied; among

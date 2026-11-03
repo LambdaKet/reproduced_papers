@@ -11,8 +11,17 @@ under ``outdir/sweep_*``. Writes ``comparison_with_paper.json`` and
 ``comparison_with_paper.md`` to ``--out`` and prints the Markdown. Paired
 differences use the same target seeds in both arms (the inputs of a seed do not
 depend on the condition); their 95 % intervals are percentile bootstraps over
-seeds (10,000 resamples, generator seed 0). Decision rules: LOG, "Decision rules
-(predeclared, 2026-10-28)".
+seeds (10,000 resamples, generator seed 0). Decision rules, set before the
+runs:
+
+- phase noise: quantitatively reproduced if every level is within 0.03 of the
+  paper; trend reproduced if the mean falls with sigma and crosses 0.90
+  between 0.03 pi and 0.05 pi; unsupported if the mean is below 0.90 at some
+  sigma <= 0.03 pi;
+- defects: supported if the mean is at least 0.90 up to 14/30 stuck;
+  unsupported if it is below 0.90 at 10/30 or fewer; the decline is called a
+  property of the circuit only if the QGAN stays within 0.02 of the ceiling
+  at every rate.
 """
 
 from __future__ import annotations
