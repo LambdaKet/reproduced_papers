@@ -1,7 +1,7 @@
 # Quantum Generative Adversarial Learning in Photonics - Reproduction
 
-Status: experiments, MerLin adaptation and comparison with baselines done
-(simulation); comparison with the paper below.
+Status: experiments, MerLin adaptation, comparison with baselines and notebook
+done (simulation); comparison with the paper below.
 
 ## Reference and Attribution
 
@@ -87,6 +87,7 @@ training game; see
 
 ```
 papers/qgan_quantum_data_photonics/
+├── notebook.ipynb  # walkthrough of the claims and the evidence
 ├── lib/        # circuits.py (numpy chip), data.py (per-seed inputs), qgan.py (game),
 │               # ceiling.py, metrics.py, qgan_merlin.py (MerLin chip), runner.py
 ├── configs/    # defaults.json and one overlay per experiment
@@ -109,6 +110,17 @@ pip install -r requirements.txt
 ```bash
 # From the repo root: 2 targets, 10 rounds, sigma = 0.01 pi, 1500 counts
 python implementation.py --paper qgan_quantum_data_photonics
+```
+
+### Notebook
+
+`notebook.ipynb` walks through the claims, reruns one full point of Fig. 2c
+live, and reads the paper-scale results from `results/per_target_results.json`.
+It runs in about 1.5 minutes on a CPU.
+
+```bash
+cd papers/qgan_quantum_data_photonics
+jupyter execute --inplace --timeout=1200 notebook.ipynb
 ```
 
 ### One experiment
@@ -140,7 +152,7 @@ and `sweep_summary.json` in the sweep folder.
 # From the repo root
 python papers/qgan_quantum_data_photonics/utils/run_sweep.py \
     papers/qgan_quantum_data_photonics/utils/sweep_specs/phase_noise_sweep.json \
-    --sweep-dir papers/qgan_quantum_data_photonics/outdir/sweep_phase_noise \
+    --sweep-dir papers/qgan_quantum_data_photonics/outdir/sweep_phase_noise_sweep \
     --validator <path to validate_logging.py>
 ```
 
@@ -205,6 +217,11 @@ obtained later, they go under
 `data/qgan_quantum_data_photonics/authors_measured_data/`.
 
 ## Results Obtained and Comparison with the Paper
+
+**Verdict: partially reproduced in simulation.** The QGAN keeps the paper's
+robustness at its 90 % thresholds (phase noise σ < 0.04π, up to 14 of 30 stuck
+phase shifters), but it does not show the paper's drop to 0.78 at σ = 0.05π,
+which depends on the unpublished training protocol.
 
 Scope: simulation only. Each point averages 100 random targets (seeds 0–99) with
 1500 coincidence counts per measurement setting unless stated (the chip
