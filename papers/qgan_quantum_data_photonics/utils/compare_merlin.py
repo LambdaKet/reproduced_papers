@@ -8,7 +8,7 @@ Usage (from the repository root)::
 
 Reads the ``metrics.json`` and ``trajectories.npz`` files listed by the
 ``sweep_status.json`` of the phase-03 sweeps and of the three MerLin sweeps,
-never logs. Applies the tolerances of the Phase 4 Adaptation Plan (LOG):
+never logs. Applies the tolerances set before the MerLin runs:
 
 - equivalence: >= 90 % of targets with a final fidelity within 1e-6 of
   phase 03 and condition means within 0.005;

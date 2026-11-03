@@ -1,6 +1,6 @@
 """Oracle ceiling: the best fidelity the (possibly defective) generator can reach.
 
-Not in the paper (our control, see the Fair Baseline Plan in the LOG). It
+Not in the paper (our control, planned before the experiments). It
 maximizes the true root fidelity |<g|tau>| directly over the free generator
 phases, with full knowledge of tau, from random restarts. Stuck phase shifters
 keep their fixed values. It bounds what any learner could reach with the same

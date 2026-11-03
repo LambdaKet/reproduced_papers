@@ -1,4 +1,4 @@
-"""Summary metrics with the rules predeclared in the LOG (phase 01).
+"""Summary metrics, with rules fixed before the experiments.
 
 - Final fidelity of a seed: mean over the last ``window`` rounds.
 - Convergence round of a seed: first round after which the trailing

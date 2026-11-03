@@ -1,9 +1,9 @@
 """Per-seed inputs of a run: targets, discriminator start, stuck phase shifters.
 
 The paper has no external dataset: its learning target is a "randomly
-generated" maximally entangled two-ququart state (main text). Following the
-Phase 2 data-generation specification in the LOG, every input is drawn from
-``numpy.random.SeedSequence(seed)`` with one independent stream per role, so
+generated" maximally entangled two-ququart state (main text). Every input is
+drawn from ``numpy.random.SeedSequence(seed)`` with one independent stream per
+role, so
 the target, the discriminator start and the stuck set of a seed do not depend
 on the noise level, the count budget or the other seeds of the run (paired
 design across conditions).

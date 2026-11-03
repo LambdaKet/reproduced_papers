@@ -106,7 +106,7 @@ SYSTEMS = {
         "prepared on the chip)",
     },
 }
-# Runs at once on the laptop CPU, one thread each (LOG: Sweep Records).
+# Runs sharing the laptop CPU at the same time, one thread each.
 CONCURRENCY = {
     "local runs, phase 03": "up to 10 runs at once",
     "local run, phase 03": "up to 10 runs at once",

@@ -1,4 +1,4 @@
-"""The 7 tests of the Phase 2 data-generation specification (LOG, Data Acquisition Log)."""
+"""The 7 tests of the data-generation specification (targets, streams, defects, noise, counts)."""
 
 from __future__ import annotations
 
