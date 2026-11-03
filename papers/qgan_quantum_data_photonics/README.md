@@ -217,7 +217,8 @@ calibrated on one point of Fig. 2c (20 separate targets) because the paper
 gives none. Paper values
 are read from its figures (about ±0.01–0.02) or quoted from its text.
 Generated tables: [results/comparison_with_paper.md](results/comparison_with_paper.md);
-every candidate of every sweep: [results/sweep_tables.md](results/sweep_tables.md).
+every candidate of every sweep: [results/sweep_tables.md](results/sweep_tables.md);
+per-target values used by `notebook.ipynb`: `results/per_target_results.json`.
 
 Summary (final root fidelity; "within" means |difference| ≤ 0.03, the tolerance
 set before the runs for Fig. 2c and used here for every item):
