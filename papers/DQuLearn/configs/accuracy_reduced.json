@@ -1,0 +1,51 @@
+{
+  "description": "Smoke size of accuracy_original: QuClassi's first 1,000 training images (150 training samples of 3/6), 3 epochs at lr 0.1, exact probabilities through the co-Manager on 2 workers.",
+  "experiment": {
+    "kind": "accuracy"
+  },
+  "data": {
+    "pair": [
+      3,
+      6
+    ],
+    "subsample": {
+      "mode": "first",
+      "size": 1000
+    },
+    "validation_fraction": 0.2
+  },
+  "model": {
+    "qubits": 5,
+    "layers": 1,
+    "init_range": "pi"
+  },
+  "training": {
+    "epochs": 3,
+    "lr": 0.1,
+    "update_rule": "simultaneous",
+    "shift_schedule": "fixed",
+    "dispatch_unit": "sample",
+    "circuits_per_epoch": "all"
+  },
+  "execution": {
+    "backend": "manager",
+    "workers": 2,
+    "worker_qubits": null,
+    "cpu_slots": 1,
+    "shots": 10000,
+    "exact": true,
+    "compile_mode": "per_circuit",
+    "policy": "least_cpu",
+    "tenancy": "multi"
+  },
+  "evaluation": {
+    "each_epoch": [
+      "validation"
+    ],
+    "final": [
+      "train",
+      "validation",
+      "test"
+    ]
+  }
+}

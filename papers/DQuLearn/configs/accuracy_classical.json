@@ -1,0 +1,7 @@
+{
+  "description": "Context baseline for accuracy-parity (not a claim of the paper): logistic regression on the same 4 PCA features and split as accuracy_original, C chosen on the validation split.",
+  "experiment": {"kind": "classical"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "random", "size": 1000}, "validation_fraction": 0.2},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi"},
+  "classical": {"c_grid": [0.01, 0.1, 1.0, 10.0]}
+}

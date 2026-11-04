@@ -1,0 +1,9 @@
+{
+  "description": "Non-distributed reference for accuracy-parity: QuClassi's released code settings (sequential update, shift pi/(2 sqrt(epoch+1)), weights in [0, 2 pi), lr 0.01, 25 epochs), run locally with exact probabilities, same data as accuracy_original.",
+  "experiment": {"kind": "accuracy"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "random", "size": 1000}, "validation_fraction": 0.2},
+  "model": {"qubits": 5, "layers": 1, "init_range": "two_pi"},
+  "training": {"epochs": 25, "lr": 0.01, "update_rule": "sequential", "shift_schedule": "shrinking", "dispatch_unit": "sample", "circuits_per_epoch": "all"},
+  "execution": {"backend": "local", "workers": 1, "worker_qubits": null, "cpu_slots": 1, "shots": 10000, "exact": true, "compile_mode": "per_circuit"},
+  "evaluation": {"each_epoch": ["validation"], "final": ["train", "validation", "test"]}
+}

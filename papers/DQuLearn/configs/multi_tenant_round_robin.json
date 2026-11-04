@@ -1,0 +1,9 @@
+{
+  "description": "Added baseline for multi-tenant-gain: multi_tenant_original with round-robin worker selection instead of the lowest-CPU rule, to separate the co-Manager policy from concurrency itself.",
+  "experiment": {"kind": "multi_tenant"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 3000}, "validation_fraction": 0.0},
+  "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},
+  "model": {"init_range": "pi"},
+  "execution": {"backend": "manager", "worker_qubits": [5, 10, 15, 20], "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit", "policy": "round_robin"},
+  "multi_tenant": {"mode": "multi", "shuffle_order": true}
+}

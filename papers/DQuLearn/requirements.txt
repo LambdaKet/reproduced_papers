@@ -1,0 +1,16 @@
+# Versions installed in the repository's .venv (Python 3.14.2) on 2026-11-04.
+# Quantum workload and distributed system
+qiskit==2.5.2
+qiskit-aer==0.17.2
+rpyc==6.0.2
+plumbum==2.0.2  # installed with rpyc
+psutil==7.2.2
+# Data and classical baseline
+numpy==2.5.4
+scikit-learn==1.9.1
+# Imported by the shared runtime (runtime_lib)
+torch==2.12.1
+merlinquantum==0.4.2
+perceval-quandela==1.3.1
+# Tests
+pytest==9.1.1

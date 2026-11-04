@@ -1,0 +1,8 @@
+{
+  "description": "Worker scaling (Sec. IV-C2, Fig. 5; claim worker-scaling): one client trains one QuClassi epoch through the co-Manager with the paper's circuit count (1,440 x layers at 5 qubits, 2,016 x layers at 7). Each worker has the circuits' width and one simulation slot. Sweep with --workers 1,2,4, --layers 1,2,3 and --qubits 5,7.",
+  "experiment": {"kind": "runtime"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 3000}, "validation_fraction": 0.0},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi"},
+  "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},
+  "execution": {"backend": "manager", "workers": 1, "worker_qubits": null, "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit", "policy": "least_cpu", "tenancy": "multi"}
+}

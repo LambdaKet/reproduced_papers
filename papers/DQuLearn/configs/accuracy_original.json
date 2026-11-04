@@ -1,0 +1,9 @@
+{
+  "description": "Accuracy with DQuLearn (Sec. IV-B; claim accuracy-parity): QuClassi single layer, 5 qubits (4 PCA features), DQuLearn's Algorithm 1 settings (simultaneous update, shift pi/2, weights in [0, pi]), trained through the co-Manager on 2 workers with exact probabilities, 25 epochs (QuClassi). Learning rate chosen on the validation split among 1e-4, 1e-3, 1e-2 (sweep --lr). Sweep --pair and --seed.",
+  "experiment": {"kind": "accuracy"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "random", "size": 1000}, "validation_fraction": 0.2},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi"},
+  "training": {"epochs": 25, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "all"},
+  "execution": {"backend": "manager", "workers": 2, "worker_qubits": null, "cpu_slots": 1, "shots": 10000, "exact": true, "compile_mode": "per_circuit", "policy": "least_cpu", "tenancy": "multi"},
+  "evaluation": {"each_epoch": ["validation"], "final": ["train", "validation", "test"]}
+}

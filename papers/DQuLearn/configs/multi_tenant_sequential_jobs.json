@@ -1,0 +1,9 @@
+{
+  "description": "Variant of the single-tenant reference: the four jobs of multi_tenant_original run one after another, each alone on all four workers.",
+  "experiment": {"kind": "multi_tenant"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 3000}, "validation_fraction": 0.0},
+  "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},
+  "model": {"init_range": "pi"},
+  "execution": {"backend": "manager", "worker_qubits": [5, 10, 15, 20], "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit", "policy": "least_cpu"},
+  "multi_tenant": {"mode": "sequential", "shuffle_order": true}
+}

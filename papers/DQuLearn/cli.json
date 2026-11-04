@@ -1,0 +1,31 @@
+{
+  "description": "DQuLearn reproduction runner",
+  "arguments": [
+    {"flags": ["--qubits"], "help": "Circuit width (5 or 7 in the paper)", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "model.qubits"}},
+    {"flags": ["--layers"], "help": "QuClassi layers: 1 Single, 2 Dual, 3 Controlled-Dual", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "model.layers"}},
+    {"flags": ["--init-range"], "help": "Initial parameters uniform in [0, pi] or [0, 2 pi)", "type": "str", "choices": ["pi", "two_pi"], "default": null, "apply": {"kind": "config_path", "path": "model.init_range"}},
+    {"flags": ["--epochs"], "help": "Training epochs", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "training.epochs"}},
+    {"flags": ["--lr"], "help": "Learning rate", "type": "float", "default": null, "apply": {"kind": "config_path", "path": "training.lr"}},
+    {"flags": ["--update-rule"], "help": "simultaneous (DQuLearn circuit bank) or sequential (QuClassi code)", "type": "str", "choices": ["simultaneous", "sequential"], "default": null, "apply": {"kind": "config_path", "path": "training.update_rule"}},
+    {"flags": ["--shift-schedule"], "help": "fixed pi/2 (DQuLearn) or shrinking pi/(2 sqrt(epoch+1)) (QuClassi code)", "type": "str", "choices": ["fixed", "shrinking"], "default": null, "apply": {"kind": "config_path", "path": "training.shift_schedule"}},
+    {"flags": ["--dispatch-unit"], "help": "Circuit bank per sample (Algorithm 1) or per epoch", "type": "str", "choices": ["sample", "epoch"], "default": null, "apply": {"kind": "config_path", "path": "training.dispatch_unit"}},
+    {"flags": ["--circuits-per-epoch"], "help": "Circuit budget per epoch: 'paper', 'all' or a number", "type": "str", "default": null, "apply": {"kind": "config_path", "path": "training.circuits_per_epoch"}},
+    {"flags": ["--backend"], "help": "manager (DQuLearn), local, pool or batched", "type": "str", "choices": ["manager", "local", "pool", "batched"], "default": null, "apply": {"kind": "config_path", "path": "execution.backend"}},
+    {"flags": ["--workers"], "help": "Number of workers or pool processes", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "execution.workers"}},
+    {"flags": ["--worker-qubits"], "help": "Maximum qubits of each worker, comma-separated", "type": "csv_int_list", "default": null, "apply": {"kind": "config_path", "path": "execution.worker_qubits"}},
+    {"flags": ["--cpu-slots"], "help": "Circuits a worker simulates at the same time", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "execution.cpu_slots"}},
+    {"flags": ["--shots"], "help": "Shots per circuit", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "execution.shots"}},
+    {"flags": ["--exact"], "help": "Exact ancilla probabilities instead of shots (true/false)", "type": "bool", "default": null, "apply": {"kind": "config_path", "path": "execution.exact"}},
+    {"flags": ["--compile-mode"], "help": "per_circuit (as qiskit.execute) or cached compiler", "type": "str", "choices": ["per_circuit", "cached"], "default": null, "apply": {"kind": "config_path", "path": "execution.compile_mode"}},
+    {"flags": ["--policy"], "help": "Worker selection: least_cpu (Algorithm 2) or round_robin", "type": "str", "choices": ["least_cpu", "round_robin"], "default": null, "apply": {"kind": "config_path", "path": "execution.policy"}},
+    {"flags": ["--tenancy"], "help": "multi (circuits share a worker) or single (one circuit per worker)", "type": "str", "choices": ["multi", "single"], "default": null, "apply": {"kind": "config_path", "path": "execution.tenancy"}},
+    {"flags": ["--mode"], "help": "Multi-tenant experiment: multi, single or sequential jobs", "type": "str", "choices": ["multi", "single", "sequential"], "default": null, "apply": {"kind": "config_path", "path": "multi_tenant.mode"}},
+    {"flags": ["--pair"], "help": "MNIST digits of the binary task, e.g. 3,6", "type": "csv_int_list", "default": null, "apply": {"kind": "config_path", "path": "data.pair"}},
+    {"flags": ["--subsample-mode"], "help": "first (QuClassi code) or random training images", "type": "str", "choices": ["first", "random"], "default": null, "apply": {"kind": "config_path", "path": "data.subsample.mode"}},
+    {"flags": ["--subsample-size"], "help": "Training images kept before selecting the pair", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "data.subsample.size"}},
+    {"flags": ["--batch-size"], "help": "Loader batch size", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "data.batch_size"}},
+    {"flags": ["--run-id"], "help": "Run ID recorded in run_status.json (set by sweep launchers)", "type": "str", "default": null, "apply": {"kind": "config_path", "path": "run_id"}},
+    {"flags": ["--sweep-id"], "help": "Sweep ID recorded in run_status.json", "type": "str", "default": null, "apply": {"kind": "config_path", "path": "sweep_id"}},
+    {"flags": ["--repetition"], "help": "Repetition index recorded in run_status.json", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "repetition"}}
+  ]
+}

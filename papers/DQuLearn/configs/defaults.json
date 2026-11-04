@@ -1,0 +1,50 @@
+{
+  "description": "Lightweight default (smoke size): one QuClassi epoch through the co-Manager and 2 local workers, 5 qubits, 1 layer, 80 circuits. The named configs set the paper's sizes.",
+  "seed": 0,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "experiment": {"kind": "runtime"},
+  "data": {
+    "name": "MNIST",
+    "pair": [3, 6],
+    "subsample": {"mode": "first", "size": 1000},
+    "validation_fraction": 0.0,
+    "batch_size": 1
+  },
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi"},
+  "training": {
+    "epochs": 1,
+    "lr": 0.001,
+    "update_rule": "simultaneous",
+    "shift_schedule": "fixed",
+    "dispatch_unit": "sample",
+    "circuits_per_epoch": 80
+  },
+  "execution": {
+    "backend": "manager",
+    "workers": 2,
+    "worker_qubits": null,
+    "cpu_slots": 1,
+    "shots": 10000,
+    "exact": false,
+    "compile_mode": "per_circuit",
+    "policy": "least_cpu",
+    "tenancy": "multi",
+    "heartbeat_seconds": 5.0,
+    "missed_heartbeat_limit": 3
+  },
+  "evaluation": {"each_epoch": [], "final": []},
+  "multi_tenant": {
+    "mode": "multi",
+    "shuffle_order": true,
+    "jobs": [
+      {"name": "5Q/1L", "qubits": 5, "layers": 1, "circuits": "paper"},
+      {"name": "5Q/2L", "qubits": 5, "layers": 2, "circuits": "paper"},
+      {"name": "7Q/1L", "qubits": 7, "layers": 1, "circuits": "paper"},
+      {"name": "7Q/2L", "qubits": 7, "layers": 2, "circuits": "paper"}
+    ]
+  },
+  "classical": {"c_grid": [0.01, 0.1, 1.0, 10.0]},
+  "logging": {"level": "info"}
+}

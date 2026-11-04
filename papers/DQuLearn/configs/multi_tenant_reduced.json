@@ -1,0 +1,18 @@
+{
+  "description": "Smoke size of multi_tenant_original: the same four clients and workers, 40 circuits per job.",
+  "experiment": {"kind": "multi_tenant"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 1000}, "validation_fraction": 0.0},
+  "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},
+  "model": {"init_range": "pi"},
+  "execution": {"backend": "manager", "worker_qubits": [5, 10, 15, 20], "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit", "policy": "least_cpu"},
+  "multi_tenant": {
+    "mode": "multi",
+    "shuffle_order": true,
+    "jobs": [
+      {"name": "5Q/1L", "qubits": 5, "layers": 1, "circuits": 40},
+      {"name": "5Q/2L", "qubits": 5, "layers": 2, "circuits": 40},
+      {"name": "7Q/1L", "qubits": 7, "layers": 1, "circuits": 40},
+      {"name": "7Q/2L", "qubits": 7, "layers": 2, "circuits": 40}
+    ]
+  }
+}

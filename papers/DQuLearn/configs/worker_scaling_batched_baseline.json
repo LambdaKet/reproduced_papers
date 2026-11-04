@@ -1,0 +1,8 @@
+{
+  "description": "Added fair baseline for worker-scaling: the same circuits as worker_scaling_original, each sample's circuit bank compiled once and run as one Aer job in a single process (--dispatch-unit epoch runs the whole epoch as one job).",
+  "experiment": {"kind": "runtime"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 3000}, "validation_fraction": 0.0},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi"},
+  "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},
+  "execution": {"backend": "batched", "workers": 1, "worker_qubits": null, "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit"}
+}

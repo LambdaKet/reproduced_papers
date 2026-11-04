@@ -1,0 +1,9 @@
+{
+  "description": "Shot-noise variant of accuracy_original (RED tier, reduced): 10,000 shots per circuit instead of exact probabilities, through the co-Manager on 2 workers; planned for pair 3/6 and one seed.",
+  "experiment": {"kind": "accuracy"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "random", "size": 1000}, "validation_fraction": 0.2},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi"},
+  "training": {"epochs": 25, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "all"},
+  "execution": {"backend": "manager", "workers": 2, "worker_qubits": null, "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit", "policy": "least_cpu", "tenancy": "multi"},
+  "evaluation": {"each_epoch": ["validation"], "final": ["train", "validation", "test"]}
+}
