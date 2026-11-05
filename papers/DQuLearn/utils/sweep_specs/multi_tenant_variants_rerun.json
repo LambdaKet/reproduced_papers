@@ -1,0 +1,306 @@
+{
+  "sweep_id": "multi_tenant_variants_rerun",
+  "purpose": "Rerun of multi_tenant_variants, which a system sleep interrupted (LOG.md): both variants of two open multi-tenant ambiguities, circuits a worker runs at once (one slot vs four) and the size of the 7-qubit jobs (Sec. IV-C1 text vs Fig. 6)",
+  "order": "interleaved",
+  "order_seed": 300,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "single_least_cpu",
+      "config": "configs/multi_tenant_single_tenant.json",
+      "args": [],
+      "labels": {
+        "mode": "single",
+        "slots": 1,
+        "job_sizes": "text"
+      }
+    },
+    {
+      "name": "multi_least_cpu",
+      "config": "configs/multi_tenant_original.json",
+      "args": [],
+      "labels": {
+        "mode": "multi",
+        "slots": 1,
+        "job_sizes": "text"
+      }
+    },
+    {
+      "name": "multi_four_slots",
+      "config": "configs/multi_tenant_original.json",
+      "args": [
+        "--cpu-slots",
+        "4"
+      ],
+      "labels": {
+        "mode": "multi",
+        "slots": 4,
+        "job_sizes": "text"
+      }
+    },
+    {
+      "name": "multi_fig6_sizes",
+      "config": "configs/multi_tenant_fig6_job_sizes.json",
+      "args": [],
+      "labels": {
+        "mode": "multi",
+        "slots": 1,
+        "job_sizes": "fig6"
+      }
+    },
+    {
+      "name": "single_fig6_sizes",
+      "config": "configs/multi_tenant_fig6_job_sizes.json",
+      "args": [
+        "--mode",
+        "single"
+      ],
+      "labels": {
+        "mode": "single",
+        "slots": 1,
+        "job_sizes": "fig6"
+      }
+    }
+  ],
+  "metrics": {
+    "makespan_seconds": [
+      [
+        "makespan_seconds"
+      ]
+    ],
+    "system_circuits_per_second": [
+      [
+        "system_circuits_per_second"
+      ]
+    ],
+    "completion_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "circuits_per_second"
+      ]
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "multi_vs_single_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_circuits_per_second_5Q_1L",
+      "metric": "circuits_per_second_5Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_single_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_four_slots",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_single_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_four_slots",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_single_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_four_slots",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_single_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_four_slots",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_single_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_four_slots",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_single_circuits_per_second_5Q_1L",
+      "metric": "circuits_per_second_5Q_1L",
+      "candidate": "multi_four_slots",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "fig6_multi_vs_single_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_fig6_sizes",
+      "reference": "single_fig6_sizes"
+    },
+    {
+      "name": "fig6_multi_vs_single_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_fig6_sizes",
+      "reference": "single_fig6_sizes"
+    },
+    {
+      "name": "fig6_multi_vs_single_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_fig6_sizes",
+      "reference": "single_fig6_sizes"
+    },
+    {
+      "name": "fig6_multi_vs_single_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_fig6_sizes",
+      "reference": "single_fig6_sizes"
+    },
+    {
+      "name": "fig6_multi_vs_single_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_fig6_sizes",
+      "reference": "single_fig6_sizes"
+    },
+    {
+      "name": "fig6_multi_vs_single_circuits_per_second_5Q_1L",
+      "metric": "circuits_per_second_5Q_1L",
+      "candidate": "multi_fig6_sizes",
+      "reference": "single_fig6_sizes"
+    },
+    {
+      "name": "four_slots_vs_one_slot_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_four_slots",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_one_slot_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_four_slots",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_one_slot_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_four_slots",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_one_slot_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_four_slots",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "four_slots_vs_one_slot_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_four_slots",
+      "reference": "multi_least_cpu"
+    }
+  ],
+  "selection": null
+}

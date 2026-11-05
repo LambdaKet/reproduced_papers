@@ -1,0 +1,231 @@
+{
+  "sweep_id": "multi_tenant_latency",
+  "purpose": "Gap diagnosis for multi-tenant-gain: multi vs single tenancy with workers that compute (no latency) and with workers that mostly wait (0.3 s per circuit), jobs at one tenth of Fig. 6's sizes",
+  "order": "interleaved",
+  "order_seed": 400,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "single_no_latency",
+      "config": "configs/multi_tenant_latency_bound.json",
+      "args": [
+        "--mode",
+        "single",
+        "--latency-seconds",
+        "0"
+      ],
+      "labels": {
+        "mode": "single",
+        "latency_seconds": 0.0
+      }
+    },
+    {
+      "name": "multi_no_latency",
+      "config": "configs/multi_tenant_latency_bound.json",
+      "args": [
+        "--latency-seconds",
+        "0"
+      ],
+      "labels": {
+        "mode": "multi",
+        "latency_seconds": 0.0
+      }
+    },
+    {
+      "name": "single_latency",
+      "config": "configs/multi_tenant_latency_bound.json",
+      "args": [
+        "--mode",
+        "single"
+      ],
+      "labels": {
+        "mode": "single",
+        "latency_seconds": 0.3
+      }
+    },
+    {
+      "name": "multi_latency",
+      "config": "configs/multi_tenant_latency_bound.json",
+      "args": [],
+      "labels": {
+        "mode": "multi",
+        "latency_seconds": 0.3
+      }
+    }
+  ],
+  "metrics": {
+    "makespan_seconds": [
+      [
+        "makespan_seconds"
+      ]
+    ],
+    "system_circuits_per_second": [
+      [
+        "system_circuits_per_second"
+      ]
+    ],
+    "completion_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "circuits_per_second"
+      ]
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "no_latency_multi_vs_single_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_no_latency",
+      "reference": "single_no_latency"
+    },
+    {
+      "name": "no_latency_multi_vs_single_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_no_latency",
+      "reference": "single_no_latency"
+    },
+    {
+      "name": "no_latency_multi_vs_single_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_no_latency",
+      "reference": "single_no_latency"
+    },
+    {
+      "name": "no_latency_multi_vs_single_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_no_latency",
+      "reference": "single_no_latency"
+    },
+    {
+      "name": "no_latency_multi_vs_single_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_no_latency",
+      "reference": "single_no_latency"
+    },
+    {
+      "name": "no_latency_multi_vs_single_circuits_per_second_5Q_1L",
+      "metric": "circuits_per_second_5Q_1L",
+      "candidate": "multi_no_latency",
+      "reference": "single_no_latency"
+    },
+    {
+      "name": "latency_multi_vs_single_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_latency",
+      "reference": "single_latency"
+    },
+    {
+      "name": "latency_multi_vs_single_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_latency",
+      "reference": "single_latency"
+    },
+    {
+      "name": "latency_multi_vs_single_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_latency",
+      "reference": "single_latency"
+    },
+    {
+      "name": "latency_multi_vs_single_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_latency",
+      "reference": "single_latency"
+    },
+    {
+      "name": "latency_multi_vs_single_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_latency",
+      "reference": "single_latency"
+    },
+    {
+      "name": "latency_multi_vs_single_circuits_per_second_5Q_1L",
+      "metric": "circuits_per_second_5Q_1L",
+      "candidate": "multi_latency",
+      "reference": "single_latency"
+    }
+  ],
+  "selection": null
+}

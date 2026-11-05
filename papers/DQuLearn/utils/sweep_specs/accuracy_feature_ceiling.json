@@ -1,0 +1,474 @@
+{
+  "sweep_id": "accuracy_feature_ceiling",
+  "purpose": "Gap diagnosis for the accuracy level: logistic regression on the accuracy runs' preprocessing with 4 to 64 PCA features, and with every training image at 4 features",
+  "order": "candidate_major",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "logistic_f4_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9",
+        "--qubits",
+        "5"
+      ],
+      "labels": {
+        "pair": "3/9",
+        "features": 4,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f6_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9",
+        "--qubits",
+        "7"
+      ],
+      "labels": {
+        "pair": "3/9",
+        "features": 6,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f8_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9",
+        "--qubits",
+        "9"
+      ],
+      "labels": {
+        "pair": "3/9",
+        "features": 8,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f16_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9",
+        "--qubits",
+        "17"
+      ],
+      "labels": {
+        "pair": "3/9",
+        "features": 16,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f32_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9",
+        "--qubits",
+        "33"
+      ],
+      "labels": {
+        "pair": "3/9",
+        "features": 32,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f64_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9",
+        "--qubits",
+        "65"
+      ],
+      "labels": {
+        "pair": "3/9",
+        "features": 64,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f4_all_images_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9",
+        "--qubits",
+        "5",
+        "--subsample-size",
+        "60000"
+      ],
+      "labels": {
+        "pair": "3/9",
+        "features": 4,
+        "subsample": 60000
+      }
+    },
+    {
+      "name": "logistic_f4_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8",
+        "--qubits",
+        "5"
+      ],
+      "labels": {
+        "pair": "3/8",
+        "features": 4,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f6_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8",
+        "--qubits",
+        "7"
+      ],
+      "labels": {
+        "pair": "3/8",
+        "features": 6,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f8_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8",
+        "--qubits",
+        "9"
+      ],
+      "labels": {
+        "pair": "3/8",
+        "features": 8,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f16_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8",
+        "--qubits",
+        "17"
+      ],
+      "labels": {
+        "pair": "3/8",
+        "features": 16,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f32_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8",
+        "--qubits",
+        "33"
+      ],
+      "labels": {
+        "pair": "3/8",
+        "features": 32,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f64_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8",
+        "--qubits",
+        "65"
+      ],
+      "labels": {
+        "pair": "3/8",
+        "features": 64,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f4_all_images_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8",
+        "--qubits",
+        "5",
+        "--subsample-size",
+        "60000"
+      ],
+      "labels": {
+        "pair": "3/8",
+        "features": 4,
+        "subsample": 60000
+      }
+    },
+    {
+      "name": "logistic_f4_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6",
+        "--qubits",
+        "5"
+      ],
+      "labels": {
+        "pair": "3/6",
+        "features": 4,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f6_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6",
+        "--qubits",
+        "7"
+      ],
+      "labels": {
+        "pair": "3/6",
+        "features": 6,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f8_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6",
+        "--qubits",
+        "9"
+      ],
+      "labels": {
+        "pair": "3/6",
+        "features": 8,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f16_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6",
+        "--qubits",
+        "17"
+      ],
+      "labels": {
+        "pair": "3/6",
+        "features": 16,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f32_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6",
+        "--qubits",
+        "33"
+      ],
+      "labels": {
+        "pair": "3/6",
+        "features": 32,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f64_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6",
+        "--qubits",
+        "65"
+      ],
+      "labels": {
+        "pair": "3/6",
+        "features": 64,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f4_all_images_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6",
+        "--qubits",
+        "5",
+        "--subsample-size",
+        "60000"
+      ],
+      "labels": {
+        "pair": "3/6",
+        "features": 4,
+        "subsample": 60000
+      }
+    },
+    {
+      "name": "logistic_f4_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5",
+        "--qubits",
+        "5"
+      ],
+      "labels": {
+        "pair": "1/5",
+        "features": 4,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f6_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5",
+        "--qubits",
+        "7"
+      ],
+      "labels": {
+        "pair": "1/5",
+        "features": 6,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f8_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5",
+        "--qubits",
+        "9"
+      ],
+      "labels": {
+        "pair": "1/5",
+        "features": 8,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f16_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5",
+        "--qubits",
+        "17"
+      ],
+      "labels": {
+        "pair": "1/5",
+        "features": 16,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f32_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5",
+        "--qubits",
+        "33"
+      ],
+      "labels": {
+        "pair": "1/5",
+        "features": 32,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f64_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5",
+        "--qubits",
+        "65"
+      ],
+      "labels": {
+        "pair": "1/5",
+        "features": 64,
+        "subsample": 1000
+      }
+    },
+    {
+      "name": "logistic_f4_all_images_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5",
+        "--qubits",
+        "5",
+        "--subsample-size",
+        "60000"
+      ],
+      "labels": {
+        "pair": "1/5",
+        "features": 4,
+        "subsample": 60000
+      }
+    }
+  ],
+  "metrics": {
+    "test_accuracy": [
+      [
+        "final",
+        "test",
+        "accuracy"
+      ],
+      [
+        "test_accuracy"
+      ]
+    ],
+    "validation_accuracy": [
+      [
+        "final",
+        "validation",
+        "accuracy"
+      ],
+      [
+        "validation_accuracy"
+      ]
+    ],
+    "train_accuracy": [
+      [
+        "final",
+        "train",
+        "accuracy"
+      ],
+      [
+        "train_accuracy"
+      ]
+    ]
+  },
+  "comparisons": [],
+  "selection": null
+}

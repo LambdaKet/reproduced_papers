@@ -1,0 +1,78 @@
+{
+  "sweep_id": "accuracy_diagnostics",
+  "purpose": "Gap diagnosis for the accuracy level: a known-answer pair (0/1) and the 3/8 pair with 6 features (7 qubits), DQuLearn rule, lr 0.01, 2 workers",
+  "order": "candidate_major",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "dqulearn_pair01",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "0,1"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "pair": "0/1",
+        "qubits": 5
+      }
+    },
+    {
+      "name": "dqulearn_q7_pair38",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8",
+        "--qubits",
+        "7"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "pair": "3/8",
+        "qubits": 7
+      }
+    }
+  ],
+  "metrics": {
+    "test_accuracy": [
+      [
+        "final",
+        "test",
+        "accuracy"
+      ],
+      [
+        "test_accuracy"
+      ]
+    ],
+    "validation_accuracy": [
+      [
+        "final",
+        "validation",
+        "accuracy"
+      ],
+      [
+        "validation_accuracy"
+      ]
+    ],
+    "train_accuracy": [
+      [
+        "final",
+        "train",
+        "accuracy"
+      ],
+      [
+        "train_accuracy"
+      ]
+    ]
+  },
+  "comparisons": [],
+  "selection": null
+}

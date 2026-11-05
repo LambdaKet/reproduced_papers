@@ -38,10 +38,14 @@ class WorkerSpec:
         Maximum qubits the worker holds at once (MR).
     cpu_slots : int, optional
         Circuits it simulates at the same time. Default value is 1.
+    latency_seconds : float, optional
+        Emulated latency of each circuit, spent outside the simulation slots
+        (see :mod:`lib.worker`). Default value is 0.0.
     """
 
     max_qubits: int
     cpu_slots: int = 1
+    latency_seconds: float = 0.0
 
 
 class RpycWorkerHandle:
@@ -182,10 +186,12 @@ class LocalCluster:
             raise
         self.startup_seconds = time.perf_counter() - start
         logger.info(
-            "CLUSTER_READY | workers=%d | max_qubits=%s | cpu_slots=%s | seconds=%.2f",
+            "CLUSTER_READY | workers=%d | max_qubits=%s | cpu_slots=%s "
+            "| latency_seconds=%s | seconds=%.2f",
             len(self.specs),
             [spec.max_qubits for spec in self.specs],
             [spec.cpu_slots for spec in self.specs],
+            [spec.latency_seconds for spec in self.specs],
             self.startup_seconds,
         )
         return self
@@ -226,6 +232,8 @@ class LocalCluster:
             str(self.settings.shots),
             "--compile-mode",
             self.settings.compile_mode,
+            "--latency-seconds",
+            str(spec.latency_seconds),
             "--log-file",
             str(self.log_dir / f"{name}.log"),
         ]

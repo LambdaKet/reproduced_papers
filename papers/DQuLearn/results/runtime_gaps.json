@@ -1,0 +1,251 @@
+{
+  "scope": "partial: local substitute environment (worker processes on one laptop instead of IBM-Q or Google Cloud VMs), paper circuit counts, 3 repetitions",
+  "worker_scaling_amdahl": {
+    "L1": {
+      "paper": {
+        "ratio_4_vs_1": 0.729,
+        "ratio_2_vs_1": 0.8988902589395806,
+        "serial_fraction": 0.6386666666666666,
+        "serial_seconds_per_circuit": 0.1654324074074074,
+        "parallel_seconds_per_circuit": 0.09359537037037038,
+        "predicted_ratio_2_vs_1": 0.8193333333333332
+      },
+      "reproduction": {
+        "ratio_4_vs_1": 0.3207018804642987,
+        "ratio_2_vs_1": 0.5731938228836075,
+        "serial_fraction": 0.09426917395239827,
+        "serial_seconds_per_circuit": 0.002596957390557865,
+        "parallel_seconds_per_circuit": 0.024951362825647833,
+        "predicted_ratio_2_vs_1": 0.5471345869761991
+      }
+    },
+    "L2": {
+      "paper": {
+        "ratio_4_vs_1": 0.627,
+        "ratio_2_vs_1": 0.9153284671532846,
+        "serial_fraction": 0.5026666666666667,
+        "serial_seconds_per_circuit": 0.16738101851851853,
+        "parallel_seconds_per_circuit": 0.1656050925925926,
+        "predicted_ratio_2_vs_1": 0.7513333333333334
+      },
+      "reproduction": {
+        "ratio_4_vs_1": 0.2915826464887306,
+        "ratio_2_vs_1": 0.517946700588412,
+        "serial_fraction": 0.05544352865164082,
+        "serial_seconds_per_circuit": 0.0016276095537771725,
+        "parallel_seconds_per_circuit": 0.027728558665667577,
+        "predicted_ratio_2_vs_1": 0.5277217643258204
+      }
+    },
+    "L3": {
+      "paper": {
+        "ratio_4_vs_1": 0.568,
+        "ratio_2_vs_1": 0.8114285714285714,
+        "serial_fraction": 0.42399999999999993,
+        "serial_seconds_per_circuit": 0.17058148148148147,
+        "parallel_seconds_per_circuit": 0.23173333333333335,
+        "predicted_ratio_2_vs_1": 0.712
+      },
+      "reproduction": {
+        "ratio_4_vs_1": 0.3060225609990099,
+        "ratio_2_vs_1": 0.5264025515517553,
+        "serial_fraction": 0.07469674799867983,
+        "serial_seconds_per_circuit": 0.0022345247175942187,
+        "parallel_seconds_per_circuit": 0.027680093755939748,
+        "predicted_ratio_2_vs_1": 0.5373483739993399
+      }
+    }
+  },
+  "seconds_per_circuit_per_worker": {
+    "one_worker_5Q_1L": {
+      "paper": 0.2590277777777778,
+      "reproduction": 0.0275483202162057
+    },
+    "single_tenant_four_jobs": {
+      "paper": 0.8954774515117154,
+      "reproduction": 0.0319389555784693
+    }
+  },
+  "multi_vs_single_with_latency": {
+    "no_latency": {
+      "5Q/1L": {
+        "n": 3,
+        "mean": 0.749949920682404,
+        "std": 0.33218193814515334,
+        "ci95": [
+          -0.07523575902628699,
+          1.575135600391095
+        ]
+      },
+      "5Q/2L": {
+        "n": 3,
+        "mean": 0.9541011446265378,
+        "std": 0.3998288881080446,
+        "ci95": [
+          -0.03912887456985892,
+          1.9473311638229345
+        ]
+      },
+      "7Q/1L": {
+        "n": 3,
+        "mean": 1.469298137246911,
+        "std": 0.46853774062271525,
+        "ci95": [
+          0.30538586638772935,
+          2.6332104081060925
+        ]
+      },
+      "7Q/2L": {
+        "n": 3,
+        "mean": 1.3289441762039962,
+        "std": 0.3983556396060718,
+        "ci95": [
+          0.3393739091701299,
+          2.3185144432378624
+        ]
+      },
+      "makespan": {
+        "n": 3,
+        "mean": 1.1341559312708023,
+        "std": 0.36465558241553053,
+        "ci95": [
+          0.22830124719210232,
+          2.040010615349502
+        ]
+      },
+      "circuits_per_second_5Q_1L": {
+        "n": 3,
+        "mean": 1.5143886176733907,
+        "std": 0.6305297406897366,
+        "ci95": [
+          -0.05193408955414025,
+          3.0807113249009217
+        ]
+      }
+    },
+    "latency": {
+      "5Q/1L": {
+        "n": 3,
+        "mean": 0.26268640079427513,
+        "std": 0.03138902178057213,
+        "ci95": [
+          0.18471174805420343,
+          0.34066105353434684
+        ]
+      },
+      "5Q/2L": {
+        "n": 3,
+        "mean": 0.39036895231917074,
+        "std": 0.02851685138713175,
+        "ci95": [
+          0.31952916636801704,
+          0.46120873827032444
+        ]
+      },
+      "7Q/1L": {
+        "n": 3,
+        "mean": 0.732287981549986,
+        "std": 0.03201670058019317,
+        "ci95": [
+          0.6527540882329095,
+          0.8118218748670625
+        ]
+      },
+      "7Q/2L": {
+        "n": 3,
+        "mean": 0.6780957558724334,
+        "std": 0.024114730367879866,
+        "ci95": [
+          0.6181914447568921,
+          0.7380000669879747
+        ]
+      },
+      "makespan": {
+        "n": 3,
+        "mean": 0.5781793107452367,
+        "std": 0.020515882729606083,
+        "ci95": [
+          0.5272150327667748,
+          0.6291435887236985
+        ]
+      },
+      "circuits_per_second_5Q_1L": {
+        "n": 3,
+        "mean": 3.841492044392787,
+        "std": 0.4313994179585079,
+        "ci95": [
+          2.769836481414915,
+          4.913147607370659
+        ]
+      }
+    }
+  },
+  "latency_seconds": 0.3,
+  "overhead_by_workers": {
+    "1": {
+      "communication_ms": [
+        0.366001235720937,
+        0.4124365837991778
+      ],
+      "execution_ms": [
+        26.78526838617472,
+        30.005465377490946
+      ]
+    },
+    "2": {
+      "communication_ms": [
+        0.3644940718206501,
+        0.45739487877654444
+      ],
+      "execution_ms": [
+        28.86878597101814,
+        33.78427844610188
+      ]
+    },
+    "4": {
+      "communication_ms": [
+        0.4464468041785741,
+        0.6292603289491869
+      ],
+      "execution_ms": [
+        30.834470689721154,
+        38.712502170855494
+      ]
+    }
+  },
+  "seven_qubit_circuits_on_the_5_qubit_worker": {
+    "multi_tenant/single_least_cpu__seed0": 0,
+    "multi_tenant/sequential_least_cpu__seed0": 0,
+    "multi_tenant/multi_round_robin__seed0": 0,
+    "multi_tenant/multi_least_cpu__seed0": 0,
+    "multi_tenant/multi_round_robin__seed1": 0,
+    "multi_tenant/single_least_cpu__seed1": 0,
+    "multi_tenant/sequential_least_cpu__seed1": 0,
+    "multi_tenant/multi_least_cpu__seed1": 0,
+    "multi_tenant/multi_least_cpu__seed2": 0,
+    "multi_tenant/single_least_cpu__seed2": 0,
+    "multi_tenant/sequential_least_cpu__seed2": 0,
+    "multi_tenant/multi_round_robin__seed2": 0,
+    "multi_tenant_variants_rerun/multi_fig6_sizes__seed0": 0,
+    "multi_tenant_variants_rerun/single_least_cpu__seed0": 0,
+    "multi_tenant_variants_rerun/multi_least_cpu__seed0": 0,
+    "multi_tenant_variants_rerun/multi_four_slots__seed0": 0,
+    "multi_tenant_variants_rerun/single_fig6_sizes__seed0": 0,
+    "multi_tenant_variants_rerun/single_least_cpu__seed1": 0,
+    "multi_tenant_variants_rerun/multi_least_cpu__seed1": 0,
+    "multi_tenant_variants_rerun/multi_four_slots__seed1": 0,
+    "multi_tenant_variants_rerun/single_fig6_sizes__seed1": 0,
+    "multi_tenant_variants_rerun/multi_fig6_sizes__seed1": 0,
+    "multi_tenant_variants_rerun/multi_four_slots__seed2": 0,
+    "multi_tenant_variants_rerun/single_least_cpu__seed2": 0,
+    "multi_tenant_variants_rerun/multi_least_cpu__seed2": 0,
+    "multi_tenant_variants_rerun/multi_fig6_sizes__seed2": 0,
+    "multi_tenant_variants_rerun/single_fig6_sizes__seed2": 0
+  },
+  "sources": {
+    "worker_scaling_5q": "outdir/sweep_worker_scaling_5q/sweep_summary.json",
+    "multi_tenant": "outdir/sweep_multi_tenant/sweep_summary.json",
+    "multi_tenant_variants_rerun": "outdir/sweep_multi_tenant_variants_rerun/sweep_summary.json",
+    "multi_tenant_latency": "outdir/sweep_multi_tenant_latency/sweep_summary.json"
+  }
+}

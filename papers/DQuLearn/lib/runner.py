@@ -107,6 +107,14 @@ def _timing_summary(timings: list[CircuitTiming]) -> dict:
     return summary
 
 
+def _worker_spec(max_qubits, execution: dict) -> WorkerSpec:
+    return WorkerSpec(
+        int(max_qubits),
+        int(execution["cpu_slots"]),
+        float(execution["latency_seconds"]),
+    )
+
+
 @contextmanager
 def _manager(
     cfg: dict, run_dir: Path, specs: list[WorkerSpec], min_qubits: int, tenancy: str
@@ -151,7 +159,7 @@ def _single_client_executor(cfg: dict, run_dir: Path, layout: QuClassiLayout):
         worker_qubits = execution["worker_qubits"] or [layout.n_qubits] * int(
             execution["workers"]
         )
-        specs = [WorkerSpec(int(q), int(execution["cpu_slots"])) for q in worker_qubits]
+        specs = [_worker_spec(q, execution) for q in worker_qubits]
         with _manager(cfg, run_dir, specs, layout.n_qubits, execution["tenancy"]) as (
             cluster,
             manager,
@@ -302,6 +310,7 @@ def _run_runtime(cfg: dict, run_dir: Path, status: dict) -> dict:
             "backend": execution["backend"],
             "workers": int(execution["workers"]),
             "cpu_slots": int(execution["cpu_slots"]),
+            "latency_seconds": float(execution["latency_seconds"]),
             "compile_mode": execution["compile_mode"],
             "shots": int(execution["shots"]),
             "exact": bool(execution["exact"]),
@@ -363,10 +372,7 @@ def _run_multi_tenant(cfg: dict, run_dir: Path, status: dict) -> dict:
     if tenant_cfg["shuffle_order"]:
         order = [order[i] for i in np.random.default_rng(seed).permutation(len(order))]
     job_seeds = {name: seed + 1000 * (index + 1) for index, name in enumerate(names)}
-    specs = [
-        WorkerSpec(int(q), int(execution["cpu_slots"]))
-        for q in execution["worker_qubits"]
-    ]
+    specs = [_worker_spec(q, execution) for q in execution["worker_qubits"]]
     tenancy = "single" if mode == "single" else "multi"
     min_qubits = min(layout.n_qubits for layout in layouts.values())
 
@@ -462,6 +468,7 @@ def _run_multi_tenant(cfg: dict, run_dir: Path, status: dict) -> dict:
             "policy": execution["policy"],
             "worker_qubits": list(execution["worker_qubits"]),
             "cpu_slots": int(execution["cpu_slots"]),
+            "latency_seconds": float(execution["latency_seconds"]),
             "compile_mode": execution["compile_mode"],
             "shots": int(execution["shots"]),
             "submission_order": order,

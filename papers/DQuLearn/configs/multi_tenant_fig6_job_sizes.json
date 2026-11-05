@@ -1,0 +1,9 @@
+{
+  "description": "Variant of multi_tenant_original for the size of the 7-qubit jobs: Sec. IV-C1 states 2,016 x layers circuits, Fig. 6 implies about 1,440 x layers (runtime x circuits per second); here 7Q/1L runs 1,440 circuits and 7Q/2L 2,880.",
+  "experiment": {"kind": "multi_tenant"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 3000}, "validation_fraction": 0.0},
+  "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},
+  "model": {"init_range": "pi"},
+  "execution": {"backend": "manager", "worker_qubits": [5, 10, 15, 20], "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit", "policy": "least_cpu"},
+  "multi_tenant": {"mode": "multi", "shuffle_order": true, "jobs": [{"name": "5Q/1L", "qubits": 5, "layers": 1, "circuits": "paper"}, {"name": "5Q/2L", "qubits": 5, "layers": 2, "circuits": "paper"}, {"name": "7Q/1L", "qubits": 7, "layers": 1, "circuits": 1440}, {"name": "7Q/2L", "qubits": 7, "layers": 2, "circuits": 2880}]}
+}

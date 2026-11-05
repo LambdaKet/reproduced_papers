@@ -1,0 +1,263 @@
+{
+  "sweep_id": "accuracy_final",
+  "purpose": "accuracy-parity: test accuracy of DQuLearn's rule (2 workers) and QuClassi's rule (local), lr 0.01 selected by accuracy_lr_selection, and of logistic regression, on the four pairs",
+  "order": "candidate_major",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "dqulearn_pair39",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "quclassi_pair39",
+      "config": "configs/accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "logistic_pair39",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "logistic_regression",
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "dqulearn_pair38",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "quclassi_pair38",
+      "config": "configs/accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "logistic_pair38",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "logistic_regression",
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "dqulearn_pair36",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "quclassi_pair36",
+      "config": "configs/accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "logistic_pair36",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "logistic_regression",
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "dqulearn_pair15",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "quclassi_pair15",
+      "config": "configs/accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "logistic_pair15",
+      "config": "configs/accuracy_classical.json",
+      "args": [
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "logistic_regression",
+        "pair": "1/5"
+      }
+    }
+  ],
+  "metrics": {
+    "test_accuracy": [
+      [
+        "final",
+        "test",
+        "accuracy"
+      ],
+      [
+        "test_accuracy"
+      ]
+    ],
+    "validation_accuracy": [
+      [
+        "final",
+        "validation",
+        "accuracy"
+      ],
+      [
+        "validation_accuracy"
+      ]
+    ],
+    "train_accuracy": [
+      [
+        "final",
+        "train",
+        "accuracy"
+      ],
+      [
+        "train_accuracy"
+      ]
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "dqulearn_vs_quclassi_test_39",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair39",
+      "reference": "quclassi_pair39"
+    },
+    {
+      "name": "dqulearn_vs_logistic_test_39",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair39",
+      "reference": "logistic_pair39"
+    },
+    {
+      "name": "dqulearn_vs_quclassi_test_38",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair38",
+      "reference": "quclassi_pair38"
+    },
+    {
+      "name": "dqulearn_vs_logistic_test_38",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair38",
+      "reference": "logistic_pair38"
+    },
+    {
+      "name": "dqulearn_vs_quclassi_test_36",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair36",
+      "reference": "quclassi_pair36"
+    },
+    {
+      "name": "dqulearn_vs_logistic_test_36",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair36",
+      "reference": "logistic_pair36"
+    },
+    {
+      "name": "dqulearn_vs_quclassi_test_15",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair15",
+      "reference": "quclassi_pair15"
+    },
+    {
+      "name": "dqulearn_vs_logistic_test_15",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair15",
+      "reference": "logistic_pair15"
+    }
+  ],
+  "selection": null
+}

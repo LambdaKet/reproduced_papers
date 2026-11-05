@@ -1,0 +1,59 @@
+{
+  "sweep_id": "accuracy_shots",
+  "purpose": "shot-noise variant (RED tier, reduced to one pair and one seed): DQuLearn rule, lr 0.01, 3/6, 2 workers, 10,000 shots per circuit",
+  "order": "candidate_major",
+  "seeds": [
+    0
+  ],
+  "candidates": [
+    {
+      "name": "shots_10000_w2",
+      "config": "configs/accuracy_shots.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "executor": "manager",
+        "workers": 2,
+        "shots": 10000
+      }
+    }
+  ],
+  "metrics": {
+    "test_accuracy": [
+      [
+        "final",
+        "test",
+        "accuracy"
+      ],
+      [
+        "test_accuracy"
+      ]
+    ],
+    "validation_accuracy": [
+      [
+        "final",
+        "validation",
+        "accuracy"
+      ],
+      [
+        "validation_accuracy"
+      ]
+    ],
+    "train_accuracy": [
+      [
+        "final",
+        "train",
+        "accuracy"
+      ],
+      [
+        "train_accuracy"
+      ]
+    ]
+  },
+  "comparisons": [],
+  "selection": null
+}

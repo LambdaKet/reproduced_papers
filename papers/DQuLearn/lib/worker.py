@@ -5,7 +5,9 @@ qubits when the co-Manager registers it, its active circuits and classical
 resource usage at every heartbeat, and executes the circuits assigned to it.
 Each worker runs in its own process with a fixed number of simulation slots,
 its CPU budget (standing in for the 1–2 vCPUs of the paper's e2-medium VMs);
-circuits beyond that number wait inside the worker.
+circuits beyond that number wait inside the worker. An optional fixed latency
+per circuit, spent outside the slots, emulates a remote worker that mostly
+waits rather than computes (a diagnostic setting; zero by default).
 
 :mod:`lib.cluster` starts it as ``python -m lib.worker`` from the paper folder.
 """
@@ -43,16 +45,25 @@ class QuantumWorkerService(rpyc.Service):
         Circuits simulated at the same time; further assigned circuits wait.
     settings : ExecutionSettings
         Shots, exact mode and compile mode.
+    latency_seconds : float
+        Seconds each circuit waits before its simulation, holding the worker's
+        qubits but no simulation slot, so concurrent circuits overlap it.
     """
 
     def __init__(
-        self, name: str, max_qubits: int, cpu_slots: int, settings: ExecutionSettings
+        self,
+        name: str,
+        max_qubits: int,
+        cpu_slots: int,
+        settings: ExecutionSettings,
+        latency_seconds: float,
     ) -> None:
         super().__init__()
         self._name = name
         self._max_qubits = max_qubits
         self._cpu_slots = cpu_slots
         self._settings = settings
+        self._latency_seconds = latency_seconds
         self._slots = threading.BoundedSemaphore(cpu_slots)
         self._lock = threading.Lock()
         self._active_demands: dict[int, int] = {}
@@ -68,6 +79,7 @@ class QuantumWorkerService(rpyc.Service):
             "name": self._name,
             "max_qubits": self._max_qubits,
             "cpu_slots": self._cpu_slots,
+            "latency_seconds": self._latency_seconds,
             "pid": os.getpid(),
         }
         logger.info("WORKER_REGISTERED | %s", info)
@@ -99,8 +111,9 @@ class QuantumWorkerService(rpyc.Service):
         Returns
         -------
         tuple of float
-            Fidelity estimate, seconds waited for a simulation slot, and seconds
-            spent executing (deserialize, compile, simulate, read out).
+            Fidelity estimate, seconds waited before executing (emulated
+            latency, then a free simulation slot), and seconds spent executing
+            (deserialize, compile, simulate, read out).
         """
         received = time.perf_counter()
         with self._lock:
@@ -108,6 +121,8 @@ class QuantumWorkerService(rpyc.Service):
             self._next_ticket += 1
             self._active_demands[ticket] = int(qubits)
         try:
+            if self._latency_seconds:
+                time.sleep(self._latency_seconds)
             with self._slots:
                 started = time.perf_counter()
                 fidelity = self._runner().run(bytes(circuit), int(seed))
@@ -137,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--shots", type=int, required=True)
     parser.add_argument("--exact", action="store_true")
     parser.add_argument("--compile-mode", required=True)
+    parser.add_argument("--latency-seconds", type=float, required=True)
     parser.add_argument("--log-file", required=True)
     args = parser.parse_args(argv)
 
@@ -145,7 +161,9 @@ def main(argv: list[str] | None = None) -> int:
     settings = ExecutionSettings(
         shots=args.shots, exact=args.exact, compile_mode=args.compile_mode
     )
-    service = QuantumWorkerService(args.name, args.max_qubits, args.cpu_slots, settings)
+    service = QuantumWorkerService(
+        args.name, args.max_qubits, args.cpu_slots, settings, args.latency_seconds
+    )
     server = ThreadedServer(
         service,
         hostname="127.0.0.1",
@@ -154,11 +172,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     signal.signal(signal.SIGTERM, lambda *_: server.close())
     logger.info(
-        "WORKER_STARTED | name=%s | port=%d | max_qubits=%d | cpu_slots=%d | pid=%d",
+        "WORKER_STARTED | name=%s | port=%d | max_qubits=%d | cpu_slots=%d "
+        "| latency_seconds=%g | pid=%d",
         args.name,
         args.port,
         args.max_qubits,
         args.cpu_slots,
+        args.latency_seconds,
         os.getpid(),
     )
     server.start()

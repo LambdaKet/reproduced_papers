@@ -1,0 +1,262 @@
+{
+  "sweep_id": "multi_tenant",
+  "purpose": "multi-tenant-gain (Fig. 6 analogue): four concurrent clients on workers of 5/10/15/20 qubits; multi vs single tenancy, jobs one after another, round-robin vs lowest-CPU rule",
+  "order": "interleaved",
+  "order_seed": 200,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "multi_least_cpu",
+      "config": "configs/multi_tenant_original.json",
+      "args": [],
+      "labels": {
+        "mode": "multi",
+        "policy": "least_cpu"
+      }
+    },
+    {
+      "name": "single_least_cpu",
+      "config": "configs/multi_tenant_single_tenant.json",
+      "args": [],
+      "labels": {
+        "mode": "single",
+        "policy": "least_cpu"
+      }
+    },
+    {
+      "name": "sequential_least_cpu",
+      "config": "configs/multi_tenant_sequential_jobs.json",
+      "args": [],
+      "labels": {
+        "mode": "sequential",
+        "policy": "least_cpu"
+      }
+    },
+    {
+      "name": "multi_round_robin",
+      "config": "configs/multi_tenant_round_robin.json",
+      "args": [],
+      "labels": {
+        "mode": "multi",
+        "policy": "round_robin"
+      }
+    }
+  ],
+  "metrics": {
+    "makespan_seconds": [
+      [
+        "makespan_seconds"
+      ]
+    ],
+    "system_circuits_per_second": [
+      [
+        "system_circuits_per_second"
+      ]
+    ],
+    "completion_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_5Q_1L": [
+      [
+        "jobs",
+        "5Q/1L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_5Q_2L": [
+      [
+        "jobs",
+        "5Q/2L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_7Q_1L": [
+      [
+        "jobs",
+        "7Q/1L",
+        "circuits_per_second"
+      ]
+    ],
+    "completion_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "completion_seconds"
+      ]
+    ],
+    "duration_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "duration_seconds"
+      ]
+    ],
+    "circuits_per_second_7Q_2L": [
+      [
+        "jobs",
+        "7Q/2L",
+        "circuits_per_second"
+      ]
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "multi_vs_single_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_sequential_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "sequential_least_cpu"
+    },
+    {
+      "name": "round_robin_vs_least_cpu_completion_5Q_1L",
+      "metric": "completion_5Q_1L",
+      "candidate": "multi_round_robin",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_circuits_per_second_5Q_1L",
+      "metric": "circuits_per_second_5Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_sequential_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "sequential_least_cpu"
+    },
+    {
+      "name": "round_robin_vs_least_cpu_completion_5Q_2L",
+      "metric": "completion_5Q_2L",
+      "candidate": "multi_round_robin",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_circuits_per_second_5Q_2L",
+      "metric": "circuits_per_second_5Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_sequential_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "sequential_least_cpu"
+    },
+    {
+      "name": "round_robin_vs_least_cpu_completion_7Q_1L",
+      "metric": "completion_7Q_1L",
+      "candidate": "multi_round_robin",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_circuits_per_second_7Q_1L",
+      "metric": "circuits_per_second_7Q_1L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_sequential_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "sequential_least_cpu"
+    },
+    {
+      "name": "round_robin_vs_least_cpu_completion_7Q_2L",
+      "metric": "completion_7Q_2L",
+      "candidate": "multi_round_robin",
+      "reference": "multi_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_circuits_per_second_7Q_2L",
+      "metric": "circuits_per_second_7Q_2L",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_single_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_least_cpu",
+      "reference": "single_least_cpu"
+    },
+    {
+      "name": "multi_vs_sequential_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_least_cpu",
+      "reference": "sequential_least_cpu"
+    },
+    {
+      "name": "round_robin_vs_least_cpu_makespan",
+      "metric": "makespan_seconds",
+      "candidate": "multi_round_robin",
+      "reference": "multi_least_cpu"
+    }
+  ],
+  "selection": null
+}

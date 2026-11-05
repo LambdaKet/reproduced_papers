@@ -1,0 +1,334 @@
+{
+  "sweep_id": "worker_scaling_7q",
+  "purpose": "worker-scaling at 7 qubits (announced in Sec. IV-C2, not shown): DQuLearn manager, per-circuit compilation, 1/2/4 workers, 1/2/3 layers, plus the batched baseline",
+  "order": "interleaved",
+  "order_seed": 100,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "manager_per_circuit_q7_w1_l1",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "1",
+        "--layers",
+        "1",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 1,
+        "layers": 1,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w1_l2",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "1",
+        "--layers",
+        "2",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 1,
+        "layers": 2,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w1_l3",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "1",
+        "--layers",
+        "3",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 1,
+        "layers": 3,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w2_l1",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "2",
+        "--layers",
+        "1",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 2,
+        "layers": 1,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w2_l2",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "2",
+        "--layers",
+        "2",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 2,
+        "layers": 2,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w2_l3",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "2",
+        "--layers",
+        "3",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 2,
+        "layers": 3,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w4_l1",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "4",
+        "--layers",
+        "1",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 4,
+        "layers": 1,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w4_l2",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "4",
+        "--layers",
+        "2",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 4,
+        "layers": 2,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "manager_per_circuit_q7_w4_l3",
+      "config": "configs/worker_scaling_original.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--workers",
+        "4",
+        "--layers",
+        "3",
+        "--compile-mode",
+        "per_circuit"
+      ],
+      "labels": {
+        "family": "manager_per_circuit",
+        "workers": 4,
+        "layers": 3,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "batched_q7_l1",
+      "config": "configs/worker_scaling_batched_baseline.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--layers",
+        "1"
+      ],
+      "labels": {
+        "family": "batched",
+        "workers": 1,
+        "layers": 1,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "batched_q7_l2",
+      "config": "configs/worker_scaling_batched_baseline.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--layers",
+        "2"
+      ],
+      "labels": {
+        "family": "batched",
+        "workers": 1,
+        "layers": 2,
+        "qubits": 7
+      }
+    },
+    {
+      "name": "batched_q7_l3",
+      "config": "configs/worker_scaling_batched_baseline.json",
+      "args": [
+        "--qubits",
+        "7",
+        "--layers",
+        "3"
+      ],
+      "labels": {
+        "family": "batched",
+        "workers": 1,
+        "layers": 3,
+        "qubits": 7
+      }
+    }
+  ],
+  "metrics": {
+    "epoch_seconds": [
+      [
+        "epoch_seconds"
+      ]
+    ],
+    "circuits_per_second": [
+      [
+        "circuits_per_second"
+      ]
+    ],
+    "circuits": [
+      [
+        "epochs",
+        0,
+        "circuits"
+      ]
+    ],
+    "worker_utilization": [
+      [
+        "worker_utilization"
+      ]
+    ],
+    "execution_median_seconds": [
+      [
+        "timing_seconds",
+        "execution_median"
+      ]
+    ],
+    "round_trip_median_seconds": [
+      [
+        "timing_seconds",
+        "round_trip_median"
+      ]
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "manager_q7_l1_w2_vs_w1",
+      "metric": "epoch_seconds",
+      "candidate": "manager_per_circuit_q7_w2_l1",
+      "reference": "manager_per_circuit_q7_w1_l1"
+    },
+    {
+      "name": "manager_q7_l1_w4_vs_w1",
+      "metric": "epoch_seconds",
+      "candidate": "manager_per_circuit_q7_w4_l1",
+      "reference": "manager_per_circuit_q7_w1_l1"
+    },
+    {
+      "name": "batched_vs_manager_q7_w4_l1",
+      "metric": "epoch_seconds",
+      "candidate": "batched_q7_l1",
+      "reference": "manager_per_circuit_q7_w4_l1"
+    },
+    {
+      "name": "manager_q7_l2_w2_vs_w1",
+      "metric": "epoch_seconds",
+      "candidate": "manager_per_circuit_q7_w2_l2",
+      "reference": "manager_per_circuit_q7_w1_l2"
+    },
+    {
+      "name": "manager_q7_l2_w4_vs_w1",
+      "metric": "epoch_seconds",
+      "candidate": "manager_per_circuit_q7_w4_l2",
+      "reference": "manager_per_circuit_q7_w1_l2"
+    },
+    {
+      "name": "batched_vs_manager_q7_w4_l2",
+      "metric": "epoch_seconds",
+      "candidate": "batched_q7_l2",
+      "reference": "manager_per_circuit_q7_w4_l2"
+    },
+    {
+      "name": "manager_q7_l3_w2_vs_w1",
+      "metric": "epoch_seconds",
+      "candidate": "manager_per_circuit_q7_w2_l3",
+      "reference": "manager_per_circuit_q7_w1_l3"
+    },
+    {
+      "name": "manager_q7_l3_w4_vs_w1",
+      "metric": "epoch_seconds",
+      "candidate": "manager_per_circuit_q7_w4_l3",
+      "reference": "manager_per_circuit_q7_w1_l3"
+    },
+    {
+      "name": "batched_vs_manager_q7_w4_l3",
+      "metric": "epoch_seconds",
+      "candidate": "batched_q7_l3",
+      "reference": "manager_per_circuit_q7_w4_l3"
+    }
+  ],
+  "selection": null
+}

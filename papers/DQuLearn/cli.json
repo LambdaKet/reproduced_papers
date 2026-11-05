@@ -14,6 +14,7 @@
     {"flags": ["--workers"], "help": "Number of workers or pool processes", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "execution.workers"}},
     {"flags": ["--worker-qubits"], "help": "Maximum qubits of each worker, comma-separated", "type": "csv_int_list", "default": null, "apply": {"kind": "config_path", "path": "execution.worker_qubits"}},
     {"flags": ["--cpu-slots"], "help": "Circuits a worker simulates at the same time", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "execution.cpu_slots"}},
+    {"flags": ["--latency-seconds"], "help": "Diagnostic: fixed latency per circuit on each worker, outside its simulation slots (0 = none)", "type": "float", "default": null, "apply": {"kind": "config_path", "path": "execution.latency_seconds"}},
     {"flags": ["--shots"], "help": "Shots per circuit", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "execution.shots"}},
     {"flags": ["--exact"], "help": "Exact ancilla probabilities instead of shots (true/false)", "type": "bool", "default": null, "apply": {"kind": "config_path", "path": "execution.exact"}},
     {"flags": ["--compile-mode"], "help": "per_circuit (as qiskit.execute) or cached compiler", "type": "str", "choices": ["per_circuit", "cached"], "default": null, "apply": {"kind": "config_path", "path": "execution.compile_mode"}},

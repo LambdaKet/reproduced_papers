@@ -1,0 +1,9 @@
+{
+  "description": "Diagnostic for the multi-tenant gap: workers that mostly wait rather than compute. Each circuit spends 0.3 s on its worker outside the simulation slot, about ten times its simulation time here, the ratio the paper's per-circuit times suggest for its cloud workers (our inference, LOG.md). Jobs at one tenth of Fig. 6's sizes (144, 288, 144, 288 circuits) to keep runs short.",
+  "experiment": {"kind": "multi_tenant"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 3000}, "validation_fraction": 0.0},
+  "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},
+  "model": {"init_range": "pi"},
+  "execution": {"backend": "manager", "worker_qubits": [5, 10, 15, 20], "cpu_slots": 1, "shots": 10000, "exact": false, "compile_mode": "per_circuit", "policy": "least_cpu", "latency_seconds": 0.3},
+  "multi_tenant": {"mode": "multi", "shuffle_order": true, "jobs": [{"name": "5Q/1L", "qubits": 5, "layers": 1, "circuits": 144}, {"name": "5Q/2L", "qubits": 5, "layers": 2, "circuits": 288}, {"name": "7Q/1L", "qubits": 7, "layers": 1, "circuits": 144}, {"name": "7Q/2L", "qubits": 7, "layers": 2, "circuits": 288}]}
+}

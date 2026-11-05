@@ -1,0 +1,104 @@
+{
+  "sweep_id": "accuracy_parity",
+  "purpose": "accuracy-parity identity check: the same DQuLearn training (lr 0.01, 3/6, seed 0) run locally, through the manager on 1 worker and on 2 workers",
+  "order": "candidate_major",
+  "seeds": [
+    0
+  ],
+  "candidates": [
+    {
+      "name": "local",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6",
+        "--backend",
+        "local"
+      ],
+      "labels": {
+        "executor": "local"
+      }
+    },
+    {
+      "name": "manager_w1",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6",
+        "--workers",
+        "1"
+      ],
+      "labels": {
+        "executor": "manager",
+        "workers": 1
+      }
+    },
+    {
+      "name": "manager_w2",
+      "config": "configs/accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6",
+        "--workers",
+        "2"
+      ],
+      "labels": {
+        "executor": "manager",
+        "workers": 2
+      }
+    }
+  ],
+  "metrics": {
+    "test_accuracy": [
+      [
+        "final",
+        "test",
+        "accuracy"
+      ],
+      [
+        "test_accuracy"
+      ]
+    ],
+    "validation_accuracy": [
+      [
+        "final",
+        "validation",
+        "accuracy"
+      ],
+      [
+        "validation_accuracy"
+      ]
+    ],
+    "train_accuracy": [
+      [
+        "final",
+        "train",
+        "accuracy"
+      ],
+      [
+        "train_accuracy"
+      ]
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "manager_w1_vs_local_test",
+      "metric": "test_accuracy",
+      "candidate": "manager_w1",
+      "reference": "local"
+    },
+    {
+      "name": "manager_w2_vs_local_test",
+      "metric": "test_accuracy",
+      "candidate": "manager_w2",
+      "reference": "local"
+    }
+  ],
+  "selection": null
+}

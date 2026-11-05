@@ -26,6 +26,7 @@
     "workers": 2,
     "worker_qubits": null,
     "cpu_slots": 1,
+    "latency_seconds": 0.0,
     "shots": 10000,
     "exact": false,
     "compile_mode": "per_circuit",
