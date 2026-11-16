@@ -4,9 +4,9 @@ One learned state per class. As in QuClassi's code, a class state trains only
 on its own class's samples: the loss of a sample is L = −log F, where F is the
 swap-test fidelity between the class state and the sample (QuClassi Eq. 14 with
 y = 1). For each parameter, one circuit shifted by +s and one by −s give
-QuClassi's estimate g = ½[L(θ+s) − L(θ−s)] (LOG.md, Gradient method).
+QuClassi's estimate g = ½[L(θ+s) − L(θ−s)].
 
-Update rules (LOG.md, Reproducibility Assessment):
+Update rules:
 
 - ``simultaneous``: all shifted circuits of a sample form one bank, DQuLearn's
   circuit bank (Algorithm 1, lines 12–22), and all parameters update together;

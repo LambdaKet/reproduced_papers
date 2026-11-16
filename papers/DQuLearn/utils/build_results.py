@@ -10,8 +10,7 @@ the runs' ``metrics.json``), plus the ``metrics.json`` of the parity and
 shot-noise runs, adds 95% confidence intervals (Student t, n − 1 degrees of
 freedom) to the paired ratios, and writes ``results/<topic>.json`` and
 ``results/<topic>.md`` for the worker-scaling, multi-tenant and accuracy claims.
-Paper values are the paper's text, or bars measured on its rendered figures
-(``LOG.md``, Experiment Inventory).
+Paper values are the paper's text, or bars measured on its rendered figures.
 """
 
 from __future__ import annotations

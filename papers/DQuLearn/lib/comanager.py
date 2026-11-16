@@ -7,7 +7,7 @@ refresh CRU, and a worker that misses three in a row is removed (lines 7–13); 
 pending circuit goes to the worker with the lowest CRU among those that can hold
 it (lines 14–20).
 
-Implementation choices (recorded in LOG.md):
+Implementation choices:
 
 - A worker can hold a circuit when AR >= demand. Algorithm 2 writes AR > demand,
   which would never place a 5-qubit circuit on a 5-qubit worker, whereas the

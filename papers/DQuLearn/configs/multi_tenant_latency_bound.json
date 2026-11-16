@@ -1,5 +1,5 @@
 {
-  "description": "Diagnostic for the multi-tenant gap: workers that mostly wait rather than compute. Each circuit spends 0.3 s on its worker outside the simulation slot, about ten times its simulation time here, the ratio the paper's per-circuit times suggest for its cloud workers (our inference, LOG.md). Jobs at one tenth of Fig. 6's sizes (144, 288, 144, 288 circuits) to keep runs short.",
+  "description": "Diagnostic for the multi-tenant gap: workers that mostly wait rather than compute. Each circuit spends 0.3 s on its worker outside the simulation slot, about ten times its simulation time here, the ratio the paper's per-circuit times suggest for its cloud workers (our inference). Jobs at one tenth of Fig. 6's sizes (144, 288, 144, 288 circuits) to keep runs short.",
   "experiment": {"kind": "multi_tenant"},
   "data": {"pair": [3, 6], "subsample": {"mode": "first", "size": 3000}, "validation_fraction": 0.0},
   "training": {"epochs": 1, "lr": 0.001, "update_rule": "simultaneous", "shift_schedule": "fixed", "dispatch_unit": "sample", "circuits_per_epoch": "paper"},

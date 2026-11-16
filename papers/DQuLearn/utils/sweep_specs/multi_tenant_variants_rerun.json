@@ -1,6 +1,6 @@
 {
   "sweep_id": "multi_tenant_variants_rerun",
-  "purpose": "Rerun of multi_tenant_variants, which a system sleep interrupted (LOG.md): both variants of two open multi-tenant ambiguities, circuits a worker runs at once (one slot vs four) and the size of the 7-qubit jobs (Sec. IV-C1 text vs Fig. 6)",
+  "purpose": "Rerun of multi_tenant_variants, which a system sleep interrupted: both variants of two open multi-tenant ambiguities, circuits a worker runs at once (one slot vs four) and the size of the 7-qubit jobs (Sec. IV-C1 text vs Fig. 6)",
   "order": "interleaved",
   "order_seed": 300,
   "seeds": [
