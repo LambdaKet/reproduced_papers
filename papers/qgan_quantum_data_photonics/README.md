@@ -232,7 +232,7 @@ values are mean ± standard deviation over targets. Training settings (step
 0.3π, up to 20 steps per turn, generator stops at a measured d ≤ 0.05) were
 calibrated on one point of Fig. 2c (20 separate targets) because the paper
 gives none. Paper values
-are read from its figures (about ±0.01–0.02) or quoted from its text.
+are read from its figures (Fig. 3b to 0.001 by `utils/read_figure_3b.py`, the others by eye to about ±0.01–0.02) or quoted from its text.
 Generated tables: [results/comparison_with_paper.md](results/comparison_with_paper.md);
 every candidate of every sweep: [results/sweep_tables.md](results/sweep_tables.md);
 per-target values used by `notebook.ipynb`: `results/per_target_results.json`.
@@ -246,8 +246,8 @@ set before the runs for Fig. 2c and used here for every item):
 | Fig. 2c, σ ≤ 0.03π | Phase-noise robustness | 1.00, 0.99, 0.97 | 0.993, 0.984, 0.980 | −0.007 to +0.010 | within | yes | supported | 100 per σ | The σ = 0.01π speed was used for the calibration |
 | Fig. 2c, σ = 0.04π, 0.05π | Phase-noise robustness | 0.92; 0.78 | 0.969 ± 0.014; 0.962 ± 0.018 | +0.049; +0.182 | no | partial: falls with σ but stays above 0.90 | partially supported | 100 per σ | The drop depends on the unpublished training protocol |
 | Fig. 3a (chip run, 16 / 30 stuck) | Defect tolerance | 0.9211 | 0.940 ± 0.091 (σ = 0.01π); 0.902 ± 0.127 (0.02π) | +0.019; −0.019 | N/A: one chip run against a simulation | yes | supported in simulation | 20 | Same stuck positions as Fig. 1(f) |
-| Fig. 3b, 0–18 / 30 stuck | Defect tolerance | 0.985 to 0.799 | 0.985 to 0.810 | +0.000 to +0.024 | within | yes | supported: ≥ 0.90 up to 14 / 30 | 100 per rate | 0.913 at 14 / 30 as in the paper |
-| Fig. 3b, 20–24 / 30 stuck | Defect tolerance | 0.709, 0.648, 0.456 | 0.645, 0.534, 0.460 | −0.064, −0.114, +0.004 | no at 20 and 22 | yes: sharp drop beyond half | beyond the claim's range | 100 per rate | Large spread over targets (std ≈ 0.2) |
+| Fig. 3b, 0–18 / 30 stuck | Defect tolerance | 0.992 to 0.803 | 0.985 to 0.810 | −0.007 to +0.017 | within | yes | supported: ≥ 0.90 up to 14 / 30 | 100 per rate | 0.913 at 14 / 30 (paper 0.918) |
+| Fig. 3b, 20–24 / 30 stuck | Defect tolerance | 0.712, 0.651, 0.456 | 0.645, 0.534, 0.460 | −0.067, −0.117, +0.004 | no at 20 and 22 | yes: sharp drop beyond half | beyond the claim's range | 100 per rate | Large spread over targets (std ≈ 0.2) |
 | Suppl. Fig. 9a | Shot noise (sampling error) | 0.155; 0.016 | 0.1551; 0.0155 | +0.0001; −0.0005 | within | yes | supported | 1000 repeats | Total variation distance at 100 and 10,000 counts |
 | Suppl. Fig. 9b | Shot noise (learning) | 0.921 at 100 counts; 0.986–0.990 from 200 | 0.961 at 100; 0.980–0.998 from 200 | +0.040 at 100; −0.007 to +0.011 from 200 | no at 100 counts | yes: rises with counts | partially supported | 100 per budget | Convergence rounds not comparable (our rule) |
 | Suppl. Sec. 6 | No crucial phase shifter | 0.9833 ± 0.0700 | 0.987 ± 0.006 | +0.004 | within | yes: no effect | supported | 100 | 0.985 ± 0.007 without defect; each of the 15 positions gives 0.981–0.990 |
@@ -256,8 +256,8 @@ set before the runs for Fig. 2c and used here for every item):
 
 ![Final fidelity against the number of stuck phase shifters](results/defect_rate.png)
 
-The reproduced curve follows Fig. 3b (σ = 0.02π) within 0.025, except at 20
-and 22 stuck phase shifters, where ours is 0.064 and 0.114 lower. The ceiling, the best
+The reproduced curve follows Fig. 3b (σ = 0.02π) within 0.02, except at 20
+and 22 stuck phase shifters, where ours is 0.067 and 0.117 lower. The ceiling, the best
 fidelity the defective circuit can reach (our control, found by direct
 optimization with knowledge of τ), stays far above the QGAN beyond 12 stuck
 phase shifters: the decline comes from learning, not from what the circuit can
@@ -265,18 +265,18 @@ express.
 
 | Stuck / 30 | Ours | Paper (read) | Ceiling |
 |---:|---:|---:|---:|
-| 0 | 0.985 ± 0.007 | 0.985 | 1.000 |
-| 2 | 0.987 ± 0.006 | 0.979 | 1.000 |
-| 4 | 0.988 ± 0.005 | 0.980 | 1.000 |
-| 6 | 0.988 ± 0.006 | 0.969 | 1.000 |
-| 8 | 0.989 ± 0.008 | 0.970 | 1.000 |
-| 10 | 0.982 ± 0.063 | 0.958 | 0.998 |
-| 12 | 0.965 ± 0.104 | 0.944 | 0.994 |
-| 14 | 0.913 ± 0.192 | 0.913 | 0.986 |
-| 16 | 0.877 ± 0.209 | 0.867 | 0.975 |
-| 18 | 0.810 ± 0.204 | 0.799 | 0.953 |
-| 20 | 0.645 ± 0.225 | 0.709 | 0.893 |
-| 22 | 0.534 ± 0.203 | 0.648 | 0.820 |
+| 0 | 0.985 ± 0.007 | 0.992 | 1.000 |
+| 2 | 0.987 ± 0.006 | 0.984 | 1.000 |
+| 4 | 0.988 ± 0.005 | 0.985 | 1.000 |
+| 6 | 0.988 ± 0.006 | 0.973 | 1.000 |
+| 8 | 0.989 ± 0.008 | 0.974 | 1.000 |
+| 10 | 0.982 ± 0.063 | 0.965 | 0.998 |
+| 12 | 0.965 ± 0.104 | 0.949 | 0.994 |
+| 14 | 0.913 ± 0.192 | 0.918 | 0.986 |
+| 16 | 0.877 ± 0.209 | 0.872 | 0.975 |
+| 18 | 0.810 ± 0.204 | 0.803 | 0.953 |
+| 20 | 0.645 ± 0.225 | 0.712 | 0.893 |
+| 22 | 0.534 ± 0.203 | 0.651 | 0.820 |
 | 24 | 0.460 ± 0.203 | 0.456 | 0.711 |
 
 ### Phase noise: above 90 % for σ < 0.04π, but our QGAN does not show the paper's drop at 0.05π

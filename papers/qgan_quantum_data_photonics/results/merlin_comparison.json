@@ -177,7 +177,7 @@
         "merlin_seconds": 1169.5786245000018,
         "numpy_seconds": 662.3496757500034,
         "stuck_of_30": 0,
-        "paper": 0.985
+        "paper": 0.992
       },
       {
         "condition": "stuck_8_of_30",
@@ -200,7 +200,7 @@
         "merlin_seconds": 1078.9842665840006,
         "numpy_seconds": 415.42542449999746,
         "stuck_of_30": 8,
-        "paper": 0.97
+        "paper": 0.974
       },
       {
         "condition": "stuck_14_of_30",
@@ -223,7 +223,7 @@
         "merlin_seconds": 1168.4292094580014,
         "numpy_seconds": 547.744956167,
         "stuck_of_30": 14,
-        "paper": 0.913
+        "paper": 0.918
       },
       {
         "condition": "stuck_16_of_30",
@@ -246,7 +246,7 @@
         "merlin_seconds": 1257.0089857500025,
         "numpy_seconds": 544.6267435410045,
         "stuck_of_30": 16,
-        "paper": 0.867
+        "paper": 0.872
       },
       {
         "condition": "stuck_20_of_30",
@@ -269,7 +269,7 @@
         "merlin_seconds": 1715.3356499589972,
         "numpy_seconds": 902.4433227080008,
         "stuck_of_30": 20,
-        "paper": 0.709
+        "paper": 0.712
       }
     ],
     "claim_rule": {
