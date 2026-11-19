@@ -1,6 +1,6 @@
 # Distributed Quantum Learning with co-Management in a Multi-tenant Quantum System - Reproduction
 
-Status: experiments done (phase 03) and MerLin adaptation done (phase 04, partial): results and their comparison with the paper are below; fair comparison, documentation and notebook come next.
+Status: experiments (phase 03), MerLin adaptation (phase 04, partial) and fair comparison (phase 05) done: results and their comparison with the paper are below; documentation and notebook come next.
 
 ## Reference and Attribution
 
@@ -80,6 +80,9 @@ python papers/DQuLearn/utils/diagnose_runtime_gaps.py --sweeps papers/DQuLearn/o
 
 # MerLin adaptation table
 python papers/DQuLearn/utils/build_photonic_results.py --sweeps papers/DQuLearn/outdir --results papers/DQuLearn/results
+
+# Fair comparison table
+python papers/DQuLearn/utils/build_comparison.py --sweeps papers/DQuLearn/outdir --results papers/DQuLearn/results
 ```
 
 Runtime sweeps measure wall-clock time: run them one at a time, on a machine that stays otherwise idle and awake (on a laptop, keep the lid open).
@@ -209,6 +212,18 @@ Test accuracy (%), mean ± std over 3 seeds, learning rate 0.01 chosen on the va
 - The photonic model trains less reliably than the qubit model. With DQuLearn's rule, one initialization in three stays low on every pair, and both its training and test accuracy are low; the other two reach the qubit model's accuracy. With QuClassi's rule, 6 runs in 12 stay below 80%. The parity test fixed before the runs (at most 2 points between the two update rules) is therefore not met (gaps from −4 to +26 points); the cause is not identified.
 - With 2 photons, Algorithm 1's two-point shift (±π/2) does not give the gradient, because a phase enters the fidelity with frequencies up to 2. The exact rule needs 4 shifted circuits per phase plus one per sample: 49 circuits per sample instead of 24, for the same accuracy here.
 - Hardware-aware settings: FOCK computation space, threshold detection, 2 photons, 4 modes, input |1,0,1,0⟩, dual-rail angle encoding, probability of the input state, no postselection, MerLin CPU simulator with exact probabilities (no shots), seeds 0–2, 26–63 s per run. No loss or noise (`results/photonic_accuracy.md`).
+
+## Fair Comparison
+
+The paper's own references (non-distributed training, 1 worker, single-tenant mode) are the right controls for its claims; this reproduction added a classical model on the same features, a plain process pool, batched execution in one process and round-robin assignment. No new run was needed: every comparison reads the runs above, under one rule fixed beforehand (a paired ratio differs when it is more than two standard deviations from 1). Full tables: `results/comparison.md`.
+
+| Claim | Outcome | Why |
+|---|---|---|
+| Accuracy kept with 2 workers | Partially supported | Parity holds (within 0.54 points; distributed training is bit-identical to local), but not the paper's accuracy levels; logistic regression on the same 4 features is within 2.7 points of the quantum model |
+| More workers shorten the epoch | Partially supported | Trend reproduced at 5 and 7 qubits; the co-Manager costs no consistent time against a plain process pool, but one process running each sample's circuits as a batch is 39–50% faster than the manager with 4 workers |
+| Multi-tenancy shortens concurrent jobs | Partially supported | The smallest job finishes 37–44% earlier, but the 7-qubit jobs finish later and the last job ends later; the least-CPU assignment rule does no better than round-robin |
+
+No quantum or photonic advantage is claimed: the paper claims none over classical models, and none of these comparisons shows one.
 
 ## Extensions and Next Steps
 
