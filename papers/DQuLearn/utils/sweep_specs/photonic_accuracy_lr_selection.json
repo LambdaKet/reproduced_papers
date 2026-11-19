@@ -1,0 +1,583 @@
+{
+  "sweep_id": "photonic_accuracy_lr_selection",
+  "purpose": "MerLin adaptation: learning rate of each training rule of the photonic model (DQuLearn two-point, QuClassi sequential, exact photonic shift) among the three values of the sources, chosen on the validation split",
+  "order": "candidate_major",
+  "seeds": [
+    0
+  ],
+  "candidates": [
+    {
+      "name": "dqulearn_lr0.0001_pair39",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.0001,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.0001_pair38",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.0001,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.0001_pair36",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.0001,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.0001_pair15",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.0001,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.001_pair39",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.001,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.001_pair38",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.001,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.001_pair36",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.001,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.001_pair15",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.001,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.01_pair39",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.01_pair38",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.01_pair36",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "dqulearn_lr0.01_pair15",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "quclassi_lr0.0001_pair39",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.0001,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "quclassi_lr0.0001_pair38",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.0001,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "quclassi_lr0.0001_pair36",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.0001,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "quclassi_lr0.0001_pair15",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.0001,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "quclassi_lr0.001_pair39",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.001,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "quclassi_lr0.001_pair38",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.001,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "quclassi_lr0.001_pair36",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.001,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "quclassi_lr0.001_pair15",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.001,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "quclassi_lr0.01_pair39",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "quclassi_lr0.01_pair38",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "quclassi_lr0.01_pair36",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "quclassi_lr0.01_pair15",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.0001_pair39",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.0001,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.0001_pair38",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.0001,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.0001_pair36",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.0001,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.0001_pair15",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.0001",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.0001,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.001_pair39",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.001,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.001_pair38",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.001,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.001_pair36",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.001,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.001_pair15",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.001",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.001,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.01_pair39",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.01_pair38",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.01_pair36",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "exact_shift_lr0.01_pair15",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    }
+  ],
+  "metrics": {
+    "validation_accuracy": [
+      [
+        "final",
+        "validation",
+        "accuracy"
+      ]
+    ],
+    "test_accuracy": [
+      [
+        "final",
+        "test",
+        "accuracy"
+      ]
+    ],
+    "train_accuracy": [
+      [
+        "final",
+        "train",
+        "accuracy"
+      ]
+    ]
+  },
+  "comparisons": [],
+  "selection": {
+    "metric": "validation_accuracy",
+    "direction": "maximize",
+    "group_by": "rule",
+    "choose_by": "lr",
+    "aggregate_over": "the four pairs (seed 0)",
+    "tie_tolerance": 0.005,
+    "tie_rule": "smaller"
+  }
+}

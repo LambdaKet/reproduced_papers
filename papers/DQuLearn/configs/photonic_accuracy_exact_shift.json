@@ -1,0 +1,9 @@
+{
+  "description": "MerLin adaptation: photonic_accuracy_original with the exact photonic shift rule instead of the two-point pi/2 shift: per phase, the fidelity at 4 shifts ((2mu-1) pi/4, mu = 1..4; 2 photons give frequencies up to 2) plus one unshifted circuit per sample, gradient of -log F = -F'/F; simultaneous update through the co-Manager on 2 workers, weights in [0, pi], 25 epochs.",
+  "experiment": {"kind": "accuracy"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "random", "size": 1000}, "validation_fraction": 0.2},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi", "workload": "merlin"},
+  "training": {"epochs": 25, "lr": 0.01, "update_rule": "simultaneous", "shift_schedule": "fixed", "gradient_rule": "exact_shift", "dispatch_unit": "sample", "circuits_per_epoch": "all"},
+  "execution": {"backend": "manager", "workers": 2, "worker_qubits": null, "cpu_slots": 1, "shots": 10000, "exact": true, "compile_mode": "per_circuit", "policy": "least_cpu", "tenancy": "multi"},
+  "evaluation": {"each_epoch": ["validation"], "final": ["train", "validation", "test"]}
+}

@@ -1,0 +1,266 @@
+{
+  "sweep_id": "photonic_accuracy_final",
+  "purpose": "MerLin adaptation of accuracy-parity: test accuracy of the photonic model under DQuLearn's rule (2 workers), QuClassi's rule (local) and the exact photonic shift (2 workers), lr 0.01 selected by photonic_accuracy_lr_selection, on the four pairs",
+  "order": "candidate_major",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "name": "dqulearn_pair39",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "quclassi_pair39",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "exact_shift_pair39",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,9"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "3/9"
+      }
+    },
+    {
+      "name": "dqulearn_pair38",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "quclassi_pair38",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "exact_shift_pair38",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,8"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "3/8"
+      }
+    },
+    {
+      "name": "dqulearn_pair36",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "quclassi_pair36",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "exact_shift_pair36",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "3,6"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "3/6"
+      }
+    },
+    {
+      "name": "dqulearn_pair15",
+      "config": "configs/photonic_accuracy_original.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "dqulearn",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "quclassi_pair15",
+      "config": "configs/photonic_accuracy_quclassi_reference.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "quclassi",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    },
+    {
+      "name": "exact_shift_pair15",
+      "config": "configs/photonic_accuracy_exact_shift.json",
+      "args": [
+        "--lr",
+        "0.01",
+        "--pair",
+        "1,5"
+      ],
+      "labels": {
+        "rule": "exact_shift",
+        "lr": 0.01,
+        "pair": "1/5"
+      }
+    }
+  ],
+  "metrics": {
+    "validation_accuracy": [
+      [
+        "final",
+        "validation",
+        "accuracy"
+      ]
+    ],
+    "test_accuracy": [
+      [
+        "final",
+        "test",
+        "accuracy"
+      ]
+    ],
+    "train_accuracy": [
+      [
+        "final",
+        "train",
+        "accuracy"
+      ]
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "dqulearn_vs_quclassi_test_39",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair39",
+      "reference": "quclassi_pair39"
+    },
+    {
+      "name": "exact_shift_vs_dqulearn_test_39",
+      "metric": "test_accuracy",
+      "candidate": "exact_shift_pair39",
+      "reference": "dqulearn_pair39"
+    },
+    {
+      "name": "dqulearn_vs_quclassi_test_38",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair38",
+      "reference": "quclassi_pair38"
+    },
+    {
+      "name": "exact_shift_vs_dqulearn_test_38",
+      "metric": "test_accuracy",
+      "candidate": "exact_shift_pair38",
+      "reference": "dqulearn_pair38"
+    },
+    {
+      "name": "dqulearn_vs_quclassi_test_36",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair36",
+      "reference": "quclassi_pair36"
+    },
+    {
+      "name": "exact_shift_vs_dqulearn_test_36",
+      "metric": "test_accuracy",
+      "candidate": "exact_shift_pair36",
+      "reference": "dqulearn_pair36"
+    },
+    {
+      "name": "dqulearn_vs_quclassi_test_15",
+      "metric": "test_accuracy",
+      "candidate": "dqulearn_pair15",
+      "reference": "quclassi_pair15"
+    },
+    {
+      "name": "exact_shift_vs_dqulearn_test_15",
+      "metric": "test_accuracy",
+      "candidate": "exact_shift_pair15",
+      "reference": "dqulearn_pair15"
+    }
+  ],
+  "selection": null
+}

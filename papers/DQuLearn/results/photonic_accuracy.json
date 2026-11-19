@@ -1,0 +1,460 @@
+{
+  "scope": "partial, simulation only: MerLin adaptation of claim accuracy-parity; 2 photons in 4 modes (counterpart of QuClassi's 5-qubit circuit), exact probabilities, QuClassi's preprocessing (4 PCA features), learning rate per rule selected on the validation split of seed 0, 3 seeds",
+  "hardware": {
+    "computation_space": "FOCK",
+    "detector_model": "threshold (outcome |s>: one click on each occupied input mode; equal to its FOCK probability with no loss)",
+    "encoding": "dual rail: per photon BS, PS(2 asin sqrt x1), BS, PS(2 asin sqrt x2)",
+    "input_state": [
+      1,
+      0,
+      1,
+      0
+    ],
+    "measurement": "MeasurementStrategy.probs(FOCK); probability of the input state",
+    "merlinquantum": "0.4.2",
+    "modes": 4,
+    "perceval_quandela": "1.3.1",
+    "photons": 2,
+    "postselection": "none",
+    "shots": null,
+    "simulator": "MerLin CPU simulator, exact probabilities",
+    "torch_threads_per_process": 1,
+    "trainable": "rectangular Mach-Zehnder mesh, 12 phases"
+  },
+  "learning_rates": {
+    "dqulearn": 0.01,
+    "quclassi": 0.01,
+    "exact_shift": 0.01
+  },
+  "circuits_per_sample": {
+    "dqulearn": 24,
+    "quclassi": 24,
+    "exact_shift": 49
+  },
+  "mean_run_seconds": {
+    "dqulearn": 37.93103279524803,
+    "quclassi": 26.096419465332776,
+    "exact_shift": 63.33741056241828
+  },
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "parity_tolerance_points": 2.0,
+  "parity_kept": false,
+  "parity_runs": {
+    "test_accuracy": {
+      "local": 95.630081300813,
+      "manager_w1": 95.630081300813,
+      "manager_w2": 95.630081300813
+    },
+    "max_abs_parameter_difference_vs_local": {
+      "local": 0.0,
+      "manager_w1": 0.0,
+      "manager_w2": 0.0
+    }
+  },
+  "pairs": {
+    "3/9": {
+      "photonic": {
+        "dqulearn": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            95.34422981674096,
+            57.30559683011391,
+            95.83952451708767
+          ],
+          "mean": 82.82978372131419,
+          "std": 22.105981465493397
+        },
+        "quclassi": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            93.95740465577018,
+            89.84645864289253,
+            76.86973749380883
+          ],
+          "mean": 86.89120026415718,
+          "std": 8.918926859398903
+        },
+        "exact_shift": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            95.24517087667161,
+            52.20406141654285,
+            95.789995047053
+          ],
+          "mean": 81.07974244675582,
+          "std": 25.008557026808017
+        }
+      },
+      "qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "test_accuracy": [
+          95.14611193660227,
+          94.45269935611688,
+          95.88905398712234
+        ],
+        "mean": 95.16262175994716,
+        "std": 0.718319627465981
+      },
+      "paper": 97.5,
+      "dqulearn_minus_quclassi_points": -4.061416542842991,
+      "photonic_vs_qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          1.002082248828735,
+          0.6067121132669114,
+          0.9994834710743802
+        ],
+        "mean": 0.8694259443900089,
+        "std": 0.22752056216743502,
+        "ci95": [
+          0.3042335357112481,
+          1.4346183530687697
+        ],
+        "difference": false
+      },
+      "exact_shift_vs_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          0.9989610389610388,
+          0.9109766637856528,
+          0.999483204134367
+        ],
+        "mean": 0.9698069689603529,
+        "std": 0.0509492077399474,
+        "ci95": [
+          0.8432421206297478,
+          1.096371817290958
+        ],
+        "difference": false
+      }
+    },
+    "3/8": {
+      "photonic": {
+        "dqulearn": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            72.73185483870968,
+            52.016129032258064,
+            73.28629032258065
+          ],
+          "mean": 66.0114247311828,
+          "std": 12.123451486754904
+        },
+        "quclassi": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            73.4375,
+            58.36693548387096,
+            50.90725806451613
+          ],
+          "mean": 60.90389784946237,
+          "std": 11.477372693747439
+        },
+        "exact_shift": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            72.37903225806451,
+            51.81451612903226,
+            73.5383064516129
+          ],
+          "mean": 65.91061827956989,
+          "std": 12.221335894359113
+        }
+      },
+      "qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "test_accuracy": [
+          72.73185483870968,
+          71.67338709677419,
+          73.48790322580645
+        ],
+        "mean": 72.63104838709677,
+        "std": 0.9114486552432012
+      },
+      "paper": 96.2,
+      "dqulearn_minus_quclassi_points": 5.107526881720432,
+      "photonic_vs_qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          1.0,
+          0.7257383966244726,
+          0.9972565157750345
+        ],
+        "mean": 0.9076649707998357,
+        "std": 0.15755900631132158,
+        "ci95": [
+          0.5162667013959734,
+          1.299063240203698
+        ],
+        "difference": false
+      },
+      "exact_shift_vs_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          0.995148995148995,
+          0.996124031007752,
+          1.0034387895460795
+        ],
+        "mean": 0.9982372719009422,
+        "std": 0.004530950572558853,
+        "ci95": [
+          0.9869817667135721,
+          1.0094927770883124
+        ],
+        "difference": false
+      }
+    },
+    "3/6": {
+      "photonic": {
+        "dqulearn": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            95.630081300813,
+            75.8130081300813,
+            95.88414634146342
+          ],
+          "mean": 89.1090785907859,
+          "std": 11.51543549038578
+        },
+        "quclassi": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            92.6321138211382,
+            95.32520325203252,
+            57.16463414634146
+          ],
+          "mean": 81.70731707317073,
+          "std": 21.297198092844425
+        },
+        "exact_shift": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            95.73170731707317,
+            81.04674796747967,
+            95.88414634146342
+          ],
+          "mean": 90.88753387533876,
+          "std": 8.522711415815841
+        }
+      },
+      "qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "test_accuracy": [
+          95.68089430894308,
+          95.83333333333334,
+          95.83333333333334
+        ],
+        "mean": 95.78252032520327,
+        "std": 0.08801071176672146
+      },
+      "paper": 98.1,
+      "dqulearn_minus_quclassi_points": 7.401761517615171,
+      "photonic_vs_qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          0.9994689325544345,
+          0.7910922587486744,
+          1.0005302226935313
+        ],
+        "mean": 0.9303638046655468,
+        "std": 0.12061386409010551,
+        "ci95": [
+          0.6307423563193868,
+          1.2299852530117068
+        ],
+        "difference": false
+      },
+      "exact_shift_vs_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          1.0010626992561107,
+          1.0690348525469169,
+          1.0
+        ],
+        "mean": 1.0233658506010093,
+        "std": 0.03955408495312115,
+        "ci95": [
+          0.9251080565151848,
+          1.1216236446868337
+        ],
+        "difference": false
+      }
+    },
+    "1/5": {
+      "photonic": {
+        "dqulearn": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            93.73458312777504,
+            82.88110508140109,
+            93.19190922545634
+          ],
+          "mean": 89.93586581154416,
+          "std": 6.115624290351805
+        },
+        "quclassi": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            88.40651208682783,
+            44.548593981253084,
+            57.96743956586088
+          ],
+          "mean": 63.64084854464726,
+          "std": 22.472648313433282
+        },
+        "exact_shift": {
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "test_accuracy": [
+            93.78391711889492,
+            61.96349284657129,
+            93.38924518993586
+          ],
+          "mean": 83.04555171846737,
+          "std": 18.258664961914544
+        }
+      },
+      "qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "test_accuracy": [
+          93.63591514553528,
+          94.3759250123335,
+          93.04390725209669
+        ],
+        "mean": 93.68524913665516,
+        "std": 0.6673778617892815
+      },
+      "paper": 98.6,
+      "dqulearn_minus_quclassi_points": 26.2950172668969,
+      "photonic_vs_qubit_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          1.0010537407797682,
+          0.8782017773131208,
+          1.001590668080594
+        ],
+        "mean": 0.9602820620578276,
+        "std": 0.07108411869440817,
+        "ci95": [
+          0.7836993221025117,
+          1.1368648020131435
+        ],
+        "difference": false
+      },
+      "exact_shift_vs_dqulearn": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "ratios": [
+          1.0005263157894737,
+          0.7476190476190476,
+          1.0021175224986765
+        ],
+        "mean": 0.9167542953023992,
+        "std": 0.14647758187306134,
+        "ci95": [
+          0.5528838102455309,
+          1.2806247803592674
+        ],
+        "difference": false
+      }
+    }
+  }
+}

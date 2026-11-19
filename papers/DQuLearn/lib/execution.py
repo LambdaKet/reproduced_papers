@@ -31,6 +31,9 @@ from .circuits import circuit_from_bytes, fidelity_from_probability
 # compiler once per runner. Both use optimization level 2, transpile's default.
 COMPILE_MODES = ("per_circuit", "cached")
 OPTIMIZATION_LEVEL = 2
+# "qiskit": QuClassi's swap-test circuits (the reproduction); "merlin": the
+# photonic counterpart of the MerLin adaptation (lib.photonic_merlin).
+WORKLOADS = ("qiskit", "merlin")
 
 
 def quiet_qiskit_logging() -> None:
@@ -74,18 +77,30 @@ class ExecutionSettings:
         Use the exact ancilla probability from the statevector instead of shots.
     compile_mode : str
         ``per_circuit`` or ``cached`` (see ``COMPILE_MODES``).
+    workload : str, optional
+        ``qiskit`` or ``merlin`` (see ``WORKLOADS``). Default value is ``qiskit``.
 
     Raises
     ------
     ValueError
-        If the compile mode is unknown or shots are not positive when sampling.
+        If the compile mode or workload is unknown, shots are not positive when
+        sampling, or the MerLin workload is asked to sample.
     """
 
     shots: int
     exact: bool
     compile_mode: str
+    workload: str = "qiskit"
 
     def __post_init__(self) -> None:
+        if self.workload not in WORKLOADS:
+            raise ValueError(
+                f"workload must be one of {WORKLOADS}, got {self.workload!r}"
+            )
+        if self.workload == "merlin" and not self.exact:
+            raise ValueError(
+                "the MerLin workload computes exact probabilities only; set exact"
+            )
         if self.compile_mode not in COMPILE_MODES:
             raise ValueError(
                 f"compile_mode must be one of {COMPILE_MODES}, got {self.compile_mode!r}"
@@ -130,6 +145,12 @@ class CircuitRunner:
 
     def __init__(self, settings: ExecutionSettings) -> None:
         self.settings = settings
+        self._photonic = None
+        if settings.workload == "merlin":
+            # Imported here so that Qiskit workers do not load torch and MerLin.
+            from .photonic_merlin import PhotonicFidelityRunner
+
+            self._photonic = PhotonicFidelityRunner()
         self._simulator = AerSimulator(max_parallel_threads=1)
         self._pass_manager = (
             generate_preset_pass_manager(
@@ -152,8 +173,11 @@ class CircuitRunner:
         Returns
         -------
         float
-            Fidelity estimate ``max(2·P(0) − 1, 1e-16)``.
+            Fidelity estimate ``max(2·P(0) − 1, 1e-16)``; for the MerLin
+            workload, ``max(P(input state), 1e-16)``.
         """
+        if self._photonic is not None:
+            return self._photonic.run(circuit_bytes)
         circuit = circuit_from_bytes(circuit_bytes)
         if self.settings.exact:
             state = Statevector(circuit.remove_final_measurements(inplace=False))

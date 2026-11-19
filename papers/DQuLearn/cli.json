@@ -3,11 +3,13 @@
   "arguments": [
     {"flags": ["--qubits"], "help": "Circuit width (5 or 7 in the paper)", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "model.qubits"}},
     {"flags": ["--layers"], "help": "QuClassi layers: 1 Single, 2 Dual, 3 Controlled-Dual", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "model.layers"}},
+    {"flags": ["--workload"], "help": "Circuits: qiskit (QuClassi, the reproduction) or merlin (photonic adaptation, accuracy runs only)", "type": "str", "choices": ["qiskit", "merlin"], "default": null, "apply": {"kind": "config_path", "path": "model.workload"}},
     {"flags": ["--init-range"], "help": "Initial parameters uniform in [0, pi] or [0, 2 pi)", "type": "str", "choices": ["pi", "two_pi"], "default": null, "apply": {"kind": "config_path", "path": "model.init_range"}},
     {"flags": ["--epochs"], "help": "Training epochs", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "training.epochs"}},
     {"flags": ["--lr"], "help": "Learning rate", "type": "float", "default": null, "apply": {"kind": "config_path", "path": "training.lr"}},
     {"flags": ["--update-rule"], "help": "simultaneous (DQuLearn circuit bank) or sequential (QuClassi code)", "type": "str", "choices": ["simultaneous", "sequential"], "default": null, "apply": {"kind": "config_path", "path": "training.update_rule"}},
     {"flags": ["--shift-schedule"], "help": "fixed pi/2 (DQuLearn) or shrinking pi/(2 sqrt(epoch+1)) (QuClassi code)", "type": "str", "choices": ["fixed", "shrinking"], "default": null, "apply": {"kind": "config_path", "path": "training.shift_schedule"}},
+    {"flags": ["--gradient-rule"], "help": "two_point (Algorithm 1) or exact_shift (photonic workload: 2R shifts per phase, R = photons)", "type": "str", "choices": ["two_point", "exact_shift"], "default": null, "apply": {"kind": "config_path", "path": "training.gradient_rule"}},
     {"flags": ["--dispatch-unit"], "help": "Circuit bank per sample (Algorithm 1) or per epoch", "type": "str", "choices": ["sample", "epoch"], "default": null, "apply": {"kind": "config_path", "path": "training.dispatch_unit"}},
     {"flags": ["--circuits-per-epoch"], "help": "Circuit budget per epoch: 'paper', 'all' or a number", "type": "str", "default": null, "apply": {"kind": "config_path", "path": "training.circuits_per_epoch"}},
     {"flags": ["--backend"], "help": "manager (DQuLearn), local, pool or batched", "type": "str", "choices": ["manager", "local", "pool", "batched"], "default": null, "apply": {"kind": "config_path", "path": "execution.backend"}},

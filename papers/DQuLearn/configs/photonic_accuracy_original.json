@@ -1,0 +1,9 @@
+{
+  "description": "MerLin adaptation of accuracy_original (claim accuracy-parity): the photonic counterpart of QuClassi's 5-qubit circuit (2 photons in 4 modes, dual-rail data states, trainable 12-phase mesh, fidelity by inversion, exact FOCK probabilities), trained with DQuLearn's Algorithm 1 as written (simultaneous update, two-point shift pi/2, weights in [0, pi]) through the co-Manager on 2 workers, 25 epochs. Learning rate chosen on the validation split (sweep --lr). Sweep --pair and --seed.",
+  "experiment": {"kind": "accuracy"},
+  "data": {"pair": [3, 6], "subsample": {"mode": "random", "size": 1000}, "validation_fraction": 0.2},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi", "workload": "merlin"},
+  "training": {"epochs": 25, "lr": 0.01, "update_rule": "simultaneous", "shift_schedule": "fixed", "gradient_rule": "two_point", "dispatch_unit": "sample", "circuits_per_epoch": "all"},
+  "execution": {"backend": "manager", "workers": 2, "worker_qubits": null, "cpu_slots": 1, "shots": 10000, "exact": true, "compile_mode": "per_circuit", "policy": "least_cpu", "tenancy": "multi"},
+  "evaluation": {"each_epoch": ["validation"], "final": ["train", "validation", "test"]}
+}

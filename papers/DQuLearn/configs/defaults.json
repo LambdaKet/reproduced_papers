@@ -12,12 +12,13 @@
     "validation_fraction": 0.0,
     "batch_size": 1
   },
-  "model": {"qubits": 5, "layers": 1, "init_range": "pi"},
+  "model": {"qubits": 5, "layers": 1, "init_range": "pi", "workload": "qiskit"},
   "training": {
     "epochs": 1,
     "lr": 0.001,
     "update_rule": "simultaneous",
     "shift_schedule": "fixed",
+    "gradient_rule": "two_point",
     "dispatch_unit": "sample",
     "circuits_per_epoch": 80
   },

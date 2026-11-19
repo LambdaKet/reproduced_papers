@@ -26,7 +26,12 @@ import psutil
 import rpyc
 from rpyc.utils.server import ThreadedServer
 
-from .execution import CircuitRunner, ExecutionSettings, quiet_qiskit_logging
+from .execution import (
+    WORKLOADS,
+    CircuitRunner,
+    ExecutionSettings,
+    quiet_qiskit_logging,
+)
 from .experiment_logging import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -40,7 +45,8 @@ class QuantumWorkerService(rpyc.Service):
     name : str
         Worker name used in logs and assignment counts.
     max_qubits : int
-        Maximum qubits the worker can hold at once (MR in Algorithm 2).
+        Maximum qubits the worker can hold at once (MR in Algorithm 2); modes
+        for the MerLin workload.
     cpu_slots : int
         Circuits simulated at the same time; further assigned circuits wait.
     settings : ExecutionSettings
@@ -153,13 +159,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--exact", action="store_true")
     parser.add_argument("--compile-mode", required=True)
     parser.add_argument("--latency-seconds", type=float, required=True)
+    parser.add_argument("--workload", choices=WORKLOADS, required=True)
     parser.add_argument("--log-file", required=True)
     args = parser.parse_args(argv)
 
     configure_logging(args.log_file, console=False)
     quiet_qiskit_logging()
     settings = ExecutionSettings(
-        shots=args.shots, exact=args.exact, compile_mode=args.compile_mode
+        shots=args.shots,
+        exact=args.exact,
+        compile_mode=args.compile_mode,
+        workload=args.workload,
     )
     service = QuantumWorkerService(
         args.name, args.max_qubits, args.cpu_slots, settings, args.latency_seconds
@@ -173,12 +183,13 @@ def main(argv: list[str] | None = None) -> int:
     signal.signal(signal.SIGTERM, lambda *_: server.close())
     logger.info(
         "WORKER_STARTED | name=%s | port=%d | max_qubits=%d | cpu_slots=%d "
-        "| latency_seconds=%g | pid=%d",
+        "| latency_seconds=%g | workload=%s | pid=%d",
         args.name,
         args.port,
         args.max_qubits,
         args.cpu_slots,
         args.latency_seconds,
+        args.workload,
         os.getpid(),
     )
     server.start()

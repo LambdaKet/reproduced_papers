@@ -1,6 +1,6 @@
 # Distributed Quantum Learning with co-Management in a Multi-tenant Quantum System - Reproduction
 
-Status: experiments done (phase 03): results and their comparison with the paper are below; photonic adaptation, documentation and notebook come next.
+Status: experiments done (phase 03) and MerLin adaptation done (phase 04, partial): results and their comparison with the paper are below; fair comparison, documentation and notebook come next.
 
 ## Reference and Attribution
 
@@ -38,7 +38,7 @@ python ../../implementation.py --help
 python implementation.py --paper DQuLearn --help
 ```
 
-Main flags (see `cli.json` for the authoritative list): `--config PATH`, `--seed INT`, `--qubits`, `--layers`, `--workers`, `--worker-qubits`, `--backend` (`manager`, `pool`, `batched`, `local`), `--mode` (multi-tenant: `multi`, `single`, `sequential`), `--policy` (`least_cpu`, `round_robin`), `--compile-mode`, `--cpu-slots`, `--pair`, `--lr`, `--epochs`, `--update-rule`, `--shift-schedule`, `--circuits-per-epoch`, `--exact`, and the diagnostic `--latency-seconds` (a fixed wait per circuit on each worker). The device must be `cpu`.
+Main flags (see `cli.json` for the authoritative list): `--config PATH`, `--seed INT`, `--qubits`, `--layers`, `--workers`, `--worker-qubits`, `--backend` (`manager`, `pool`, `batched`, `local`), `--mode` (multi-tenant: `multi`, `single`, `sequential`), `--policy` (`least_cpu`, `round_robin`), `--compile-mode`, `--cpu-slots`, `--pair`, `--lr`, `--epochs`, `--update-rule`, `--shift-schedule`, `--circuits-per-epoch`, `--exact`, the diagnostic `--latency-seconds` (a fixed wait per circuit on each worker), and for the MerLin adaptation `--workload` (`qiskit`, `merlin`) and `--gradient-rule` (`two_point`, `exact_shift`). The device must be `cpu`.
 
 Example runs, from the repository root:
 
@@ -62,7 +62,7 @@ The script saves a snapshot of the resolved config alongside results and logs.
 
 ### Reproduce the results
 
-Each experiment is a sweep of repeated runs described by a spec in `utils/sweep_specs/`: `worker_scaling_5q`, `worker_scaling_7q`, `multi_tenant`, `multi_tenant_variants_rerun`, `multi_tenant_latency`, `accuracy_lr_selection`, `accuracy_final` (written after the learning-rate selection), `accuracy_parity`, `accuracy_shots`, `accuracy_diagnostics`, `accuracy_feature_ceiling`. From the repository root:
+Each experiment is a sweep of repeated runs described by a spec in `utils/sweep_specs/`: `worker_scaling_5q`, `worker_scaling_7q`, `multi_tenant`, `multi_tenant_variants_rerun`, `multi_tenant_latency`, `accuracy_lr_selection`, `accuracy_final` (written after the learning-rate selection), `accuracy_parity`, `accuracy_shots`, `accuracy_diagnostics`, `accuracy_feature_ceiling`, and for the MerLin adaptation `photonic_accuracy_lr_selection`, `photonic_accuracy_final` (written after the learning-rate selection), `photonic_accuracy_parity`. From the repository root:
 
 ```bash
 # One sweep, written to papers/DQuLearn/outdir/sweep_<id>/; --validator takes the experiment-logging validate_logging.py
@@ -77,6 +77,9 @@ python papers/DQuLearn/utils/plot_accuracy.py --sweep papers/DQuLearn/outdir/swe
 # Gap diagnosis
 python papers/DQuLearn/utils/diagnose_accuracy_gap.py --sweeps papers/DQuLearn/outdir --results papers/DQuLearn/results
 python papers/DQuLearn/utils/diagnose_runtime_gaps.py --sweeps papers/DQuLearn/outdir --results papers/DQuLearn/results
+
+# MerLin adaptation table
+python papers/DQuLearn/utils/build_photonic_results.py --sweeps papers/DQuLearn/outdir --results papers/DQuLearn/results
 ```
 
 Runtime sweeps measure wall-clock time: run them one at a time, on a machine that stays otherwise idle and awake (on a laptop, keep the lid open).
@@ -118,7 +121,7 @@ Notes:
 
 Place configuration files in `configs/`.
 
-- `defaults.json`: a lightweight smoke run; every named config overlays it. Named configs: `worker_scaling_original.json` and its `_pool_baseline` and `_batched_baseline` variants; `multi_tenant_original.json`, `multi_tenant_single_tenant.json`, `multi_tenant_sequential_jobs.json`, `multi_tenant_round_robin.json`, `multi_tenant_fig6_job_sizes.json` and the diagnostic `multi_tenant_latency_bound.json`; `accuracy_original.json`, `accuracy_quclassi_reference.json`, `accuracy_classical.json`, `accuracy_shots.json`; smoke sizes `multi_tenant_reduced.json` and `accuracy_reduced.json`. Each file's `description` says what it runs.
+- `defaults.json`: a lightweight smoke run; every named config overlays it. Named configs: `worker_scaling_original.json` and its `_pool_baseline` and `_batched_baseline` variants; `multi_tenant_original.json`, `multi_tenant_single_tenant.json`, `multi_tenant_sequential_jobs.json`, `multi_tenant_round_robin.json`, `multi_tenant_fig6_job_sizes.json` and the diagnostic `multi_tenant_latency_bound.json`; `accuracy_original.json`, `accuracy_quclassi_reference.json`, `accuracy_classical.json`, `accuracy_shots.json`; smoke sizes `multi_tenant_reduced.json` and `accuracy_reduced.json`; for the MerLin adaptation `photonic_accuracy_original.json`, `photonic_accuracy_quclassi_reference.json` and `photonic_accuracy_exact_shift.json`. Each file's `description` says what it runs.
 - `cli.json` declares the CLI arguments, their types, and the config keys they mutate.
 - The shared runtime automatically loads `configs/defaults.json`, `cli.json`, and calls `lib/runner.py::train_and_evaluate`, so keep that entry point in every project.
 - Any config value named `dtype` is normalized into a `(label, torch.dtype)` pair at runtime via `runtime_lib.dtypes`, so you can inspect both the requested string and the resolved `torch.dtype` without duplicating conversion logic.
@@ -185,6 +188,28 @@ Test accuracy (%), mean ± std over 3 seeds:
 - Parity is reproduced. Distributed training (DQuLearn's update, 2 workers) and non-distributed training (QuClassi's update, one process) differ by at most 0.54 points on every pair. With exact probabilities, local, 1-worker and 2-worker training give bit-identical parameters (pair 3/6, seed 0; a unit test checks the same on a small random problem). With 10,000 shots (3/6, one seed, preliminary), test accuracy moves by 0.2 points.
 - Accuracy is 2.3–4.9 points below the paper on three pairs, and 23.6 points below on 3/8. The 4 PCA features of QuClassi's code cap both classifiers tested, logistic regression and the quantum model, near 75% on 3/8. With more features both improve: logistic regression reaches 92–93% with 16–64 features, and the quantum model gains 5.2 points with 6 features (7 qubits). The paper's unspecified classical front end presumably gives it richer inputs (`results/accuracy_gap.md`).
 
+## MerLin Adaptation
+
+Status: **partial MerLin translation**, simulation only. The workload is translated, and the runtime claims are not: a simulator's wall-clock on a laptop says nothing about photonic hardware.
+
+Confidence: high that distribution leaves photonic training unchanged (identical runs and a unit test); medium for the photonic accuracies (3 seeds with a large spread, learning rate chosen on one seed); low on why some initializations fail, which is not identified.
+
+Each of QuClassi's two data qubits becomes one photon in two modes (2 photons, 4 modes). A beam splitter, a phase 2·asin√x₁, a beam splitter and a phase 2·asin√x₂ prepare data states with the same overlaps as QuClassi's qubit states (checked by a test). A trainable 12-phase interferometer sets each class state. The fidelity is the probability of detecting the input state |1,0,1,0⟩ after the encoding and the interferometer, which threshold detectors measure without postselection. The co-Manager and the workers are unchanged; a worker evaluates a MerLin layer instead of a Qiskit circuit (`lib/photonic_merlin.py`).
+
+Test accuracy (%), mean ± std over 3 seeds, learning rate 0.01 chosen on the validation split of seed 0:
+
+| Pair | Photonic, DQuLearn rule, 2 workers | Photonic, QuClassi rule, one process | Photonic, exact shift, 2 workers | Qubit model, DQuLearn rule |
+|---|---|---|---|---|
+| 3/9 | 82.8 ± 22.1 | 86.9 ± 8.9 | 81.1 ± 25.0 | 95.2 ± 0.7 |
+| 3/8 | 66.0 ± 12.1 | 60.9 ± 11.5 | 65.9 ± 12.2 | 72.6 ± 0.9 |
+| 3/6 | 89.1 ± 11.5 | 81.7 ± 21.3 | 90.9 ± 8.5 | 95.8 ± 0.1 |
+| 1/5 | 89.9 ± 6.1 | 63.6 ± 22.5 | 83.0 ± 18.3 | 93.7 ± 0.7 |
+
+- Distribution still changes nothing: local, 1-worker and 2-worker training give identical parameters (pair 3/6, seed 0).
+- The photonic model trains less reliably than the qubit model. With DQuLearn's rule, one initialization in three stays low on every pair, and both its training and test accuracy are low; the other two reach the qubit model's accuracy. With QuClassi's rule, 6 runs in 12 stay below 80%. The parity test fixed before the runs (at most 2 points between the two update rules) is therefore not met (gaps from −4 to +26 points); the cause is not identified.
+- With 2 photons, Algorithm 1's two-point shift (±π/2) does not give the gradient, because a phase enters the fidelity with frequencies up to 2. The exact rule needs 4 shifted circuits per phase plus one per sample: 49 circuits per sample instead of 24, for the same accuracy here.
+- Hardware-aware settings: FOCK computation space, threshold detection, 2 photons, 4 modes, input |1,0,1,0⟩, dual-rail angle encoding, probability of the input state, no postselection, MerLin CPU simulator with exact probabilities (no shots), seeds 0–2, 26–63 s per run. No loss or noise (`results/photonic_accuracy.md`).
+
 ## Extensions and Next Steps
 
 None planned yet.
@@ -204,5 +229,5 @@ pytest -q
 
 Notes:
 - Tests are scoped to this paper folder and expect the current working directory to be `DQuLearn/`.
-- The tests check the circuits against QuClassi's layout and an independent fidelity computation, the co-Manager rules of Algorithm 2, the training updates, the data loader, that training through two worker processes is identical to local training, and that a worker's emulated latency overlaps only when circuits share the worker.
+- The tests check the circuits against QuClassi's layout and an independent fidelity computation, the co-Manager rules of Algorithm 2, the training updates, the data loader, that training through two worker processes is identical to local training, and that a worker's emulated latency overlaps only when circuits share the worker. For the MerLin adaptation, they check MerLin's probability against an independent permanent computation, that the photonic data states have QuClassi's overlaps, that the exact shift rule gives the autograd gradient while the two-point rule does not, and that photonic training through two worker processes is identical to local training.
 - If `pytest` is not installed: `pip install pytest`.

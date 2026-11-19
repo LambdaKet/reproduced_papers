@@ -13,6 +13,14 @@ Update rules:
 - ``sequential``: QuClassi's code updates each parameter right after its two
   circuits, so the next parameter's circuits see the updated value.
 
+Gradient rules:
+
+- ``two_point``: the estimate above (Algorithm 1 and QuClassi's code);
+- ``exact_shift``: for circuits whose fidelity has integer Fourier frequencies
+  up to R in each parameter (R = photon number for the MerLin adaptation,
+  ``lib.photonic_merlin``), F′ from 2R shifted circuits per parameter plus one
+  circuit at θ, and the gradient of the loss −F′/F; simultaneous update only.
+
 A sample is predicted as the class whose state has the highest normalized
 fidelity to it.
 """
@@ -27,10 +35,12 @@ import numpy as np
 from .circuits import QuClassiLayout, build_fidelity_circuit, circuit_to_bytes
 from .data import SplitArrays
 from .execution import CircuitTask
+from .photonic_merlin import PhotonicLayout, encode_task, exact_shift_rule
 
 UPDATE_RULES = ("simultaneous", "sequential")
 SHIFT_SCHEDULES = ("fixed", "shrinking")
 DISPATCH_UNITS = ("sample", "epoch")
+GRADIENT_RULES = ("two_point", "exact_shift")
 INIT_UPPER_BOUNDS = {"pi": np.pi, "two_pi": 2.0 * np.pi}
 
 # DQuLearn Sec. IV-C1: 1,440 / 2,880 / 4,320 circuits per epoch at 5 qubits and
@@ -125,7 +135,8 @@ class EpochStats:
     seconds : float
         Wall-clock of the epoch.
     mean_shifted_loss : float
-        Mean of −log F over the shifted circuits of the epoch (not the loss at θ).
+        Mean of −log F over the circuits of the epoch's banks (shifted circuits,
+        plus the unshifted one under the exact shift rule; not the loss at θ).
     """
 
     circuits: int
@@ -149,6 +160,10 @@ class QuClassiModel:
     seed : int
         Seed of the initialization.
     """
+
+    # Highest Fourier frequency of the fidelity in one parameter, when known; the
+    # exact shift rule needs it. Not set for the qubit circuits (CRY and CRZ).
+    max_frequency: int | None = None
 
     def __init__(
         self, layout: QuClassiLayout, n_classes: int, init_range: str, seed: int
@@ -178,16 +193,74 @@ class QuClassiModel:
         keys: tuple[int, ...],
     ) -> list[CircuitTask]:
         """Circuits shifted by +s then −s for each listed parameter."""
+        return self._offset_tasks(
+            class_index, angles, (shift, -shift), parameter_indices, keys
+        )
+
+    def _offset_tasks(
+        self,
+        class_index: int,
+        angles: np.ndarray,
+        offsets,
+        parameter_indices,
+        keys: tuple[int, ...],
+    ) -> list[CircuitTask]:
+        """One circuit per listed parameter and offset, parameter-major."""
         base = self.parameters[class_index]
         tasks = []
         for index in parameter_indices:
-            for sign_code, sign in ((0, 1.0), (1, -1.0)):
+            for offset_code, offset in enumerate(offsets):
                 shifted = base.copy()
-                shifted[index] += sign * shift
+                shifted[index] += offset
                 tasks.append(
-                    self._task(shifted, angles, circuit_seed(*keys, index, sign_code))
+                    self._task(shifted, angles, circuit_seed(*keys, index, offset_code))
                 )
         return tasks
+
+    def circuits_per_sample(self, gradient_rule: str) -> int:
+        """Circuits in one sample's bank under a gradient rule."""
+        if gradient_rule == "two_point":
+            return 2 * self.layout.n_parameters
+        if gradient_rule == "exact_shift":
+            return 1 + 2 * self._required_frequency() * self.layout.n_parameters
+        raise ValueError(
+            f"gradient_rule must be one of {GRADIENT_RULES}, got {gradient_rule!r}"
+        )
+
+    def _required_frequency(self) -> int:
+        if self.max_frequency is None:
+            raise ValueError(
+                "the exact shift rule needs the fidelity's highest frequency per "
+                "parameter, known here only for the photonic model"
+            )
+        return self.max_frequency
+
+    def _exact_shift_step(
+        self,
+        class_index: int,
+        angles: np.ndarray,
+        lr: float,
+        keys: tuple[int, ...],
+        executor,
+    ) -> np.ndarray:
+        """One simultaneous update with the exact gradient of −log F.
+
+        Returns the fidelities of the bank (first: at θ; then parameter-major).
+        """
+        shifts, weights = exact_shift_rule(self._required_frequency())
+        n_parameters = self.layout.n_parameters
+        unshifted = self._task(
+            self.parameters[class_index],
+            angles,
+            circuit_seed(*keys, n_parameters, 0),
+        )
+        bank = [unshifted] + self._offset_tasks(
+            class_index, angles, shifts, range(n_parameters), keys
+        )
+        fidelities = np.asarray(executor.run(bank))
+        derivative = fidelities[1:].reshape(n_parameters, len(shifts)) @ weights
+        self.parameters[class_index] -= lr * (-derivative / fidelities[0])
+        return fidelities
 
     def train_epoch(
         self,
@@ -201,6 +274,7 @@ class QuClassiModel:
         dispatch_unit: str,
         circuit_budget: int | None,
         run_seed: int,
+        gradient_rule: str = "two_point",
     ) -> EpochStats:
         """Train for one epoch, or until the circuit budget is spent.
 
@@ -227,6 +301,9 @@ class QuClassiModel:
             Circuits allowed this epoch; None for one pass over the split.
         run_seed : int
             Seed from which every circuit's simulator seed is derived.
+        gradient_rule : str, optional
+            ``two_point`` or ``exact_shift`` (simultaneous update, sample
+            dispatch and no budget only). Default value is ``two_point``.
 
         Returns
         -------
@@ -239,12 +316,20 @@ class QuClassiModel:
             raise ValueError(f"dispatch_unit must be one of {DISPATCH_UNITS}")
         if dispatch_unit == "epoch" and update_rule != "simultaneous":
             raise ValueError("epoch dispatch needs the simultaneous update rule")
+        per_sample = self.circuits_per_sample(gradient_rule)
+        if gradient_rule == "exact_shift" and (
+            update_rule != "simultaneous"
+            or dispatch_unit != "sample"
+            or circuit_budget is not None
+        ):
+            raise ValueError(
+                "the exact shift rule needs the simultaneous update, sample dispatch "
+                "and no circuit budget"
+            )
         shift = shift_for_epoch(shift_schedule, epoch_index)
         n_parameters = self.layout.n_parameters
         budget = (
-            circuit_budget
-            if circuit_budget is not None
-            else 2 * n_parameters * len(split)
+            circuit_budget if circuit_budget is not None else per_sample * len(split)
         )
         start = time.perf_counter()
         used = 0
@@ -289,7 +374,13 @@ class QuClassiModel:
                     break
                 class_index = int(label)
                 keys = (run_seed, _TRAINING_STREAM, epoch_index, sample_index)
-                if update_rule == "simultaneous":
+                if gradient_rule == "exact_shift":
+                    fidelities = self._exact_shift_step(
+                        class_index, angles, lr, keys, executor
+                    )
+                    used += len(fidelities)
+                    losses.extend((-np.log(fidelities)).tolist())
+                elif update_rule == "simultaneous":
                     count = min(n_parameters, (budget - used) // 2)
                     bank = self._shifted_tasks(
                         class_index, angles, shift, range(count), keys
@@ -378,3 +469,32 @@ class QuClassiModel:
             "loss": float(np.mean(-np.log(own))),
             "samples": int(len(split)),
         }
+
+
+class PhotonicQuClassiModel(QuClassiModel):
+    """QuClassi's training and inference with the photonic circuit as workload.
+
+    Parameters
+    ----------
+    layout : PhotonicLayout
+        Photon and mode counts.
+    n_classes : int
+        Number of class states.
+    init_range : str
+        ``pi`` or ``two_pi`` (see :class:`QuClassiModel`).
+    seed : int
+        Seed of the initialization.
+    """
+
+    def __init__(
+        self, layout: PhotonicLayout, n_classes: int, init_range: str, seed: int
+    ) -> None:
+        super().__init__(layout, n_classes, init_range, seed)
+        self.max_frequency = layout.max_frequency
+
+    def _task(
+        self, parameters: np.ndarray, angles: np.ndarray, seed: int
+    ) -> CircuitTask:
+        return CircuitTask(
+            encode_task(self.layout, parameters, angles), self.layout.demand, seed
+        )

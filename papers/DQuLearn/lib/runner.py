@@ -14,6 +14,10 @@
   validation and test splits (claim accuracy-parity);
 - ``classical``: logistic regression on the same features (context baseline).
 
+``model.workload`` selects the circuits: ``qiskit`` (QuClassi's swap-test
+circuits, the reproduction) or ``merlin`` (the photonic counterpart of the
+MerLin adaptation, :mod:`lib.photonic_merlin`; accuracy runs only).
+
 Artifacts written to the run directory (paths relative to it): ``metrics.json``,
 ``run_status.json`` and, with the manager backend, ``worker-<i>.log`` and
 ``worker-<i>.stderr.log``. The shared runtime writes ``run.log`` and
@@ -45,7 +49,8 @@ from .execution import (
     quiet_qiskit_logging,
 )
 from .experiment_logging import git_state, sha256, utc_now, write_json
-from .quclassi import QuClassiModel, resolve_circuit_budget
+from .photonic_merlin import PhotonicLayout, hardware_record
+from .quclassi import PhotonicQuClassiModel, QuClassiModel, resolve_circuit_budget
 
 logger = logging.getLogger(__name__)
 
@@ -83,12 +88,27 @@ SELECTION = {
 }
 
 
-def _execution_settings(execution: dict) -> ExecutionSettings:
+def _execution_settings(execution: dict, workload: str = "qiskit") -> ExecutionSettings:
     return ExecutionSettings(
         shots=int(execution["shots"]),
         exact=bool(execution["exact"]),
         compile_mode=execution["compile_mode"],
+        workload=workload,
     )
+
+
+def _require_qiskit_workload(cfg: dict, kind: str) -> None:
+    """Runtime and multi-tenant runs keep QuClassi's circuits and the two-point rule."""
+    if cfg["model"]["workload"] != "qiskit":
+        raise ValueError(
+            f"{kind} runs use QuClassi's qubit circuits only; the MerLin adaptation "
+            "covers accuracy runs (model.workload must be 'qiskit')"
+        )
+    if cfg["training"]["gradient_rule"] != "two_point":
+        raise ValueError(
+            f"{kind} runs use the two-point rule of Algorithm 1 "
+            "(training.gradient_rule must be 'two_point')"
+        )
 
 
 def _timing_summary(timings: list[CircuitTiming]) -> dict:
@@ -127,7 +147,7 @@ def _manager(
     ]
     with LocalCluster(
         specs,
-        _execution_settings(execution),
+        _execution_settings(execution, cfg["model"]["workload"]),
         run_dir,
         connections_per_worker=connections,
     ) as cluster:
@@ -146,21 +166,25 @@ def _manager(
 
 
 @contextmanager
-def _single_client_executor(cfg: dict, run_dir: Path, layout: QuClassiLayout):
-    """Executor of one client, and the resources behind it (cluster, manager)."""
+def _single_client_executor(cfg: dict, run_dir: Path, layout):
+    """Executor of one client, and the resources behind it (cluster, manager).
+
+    ``layout`` is a ``QuClassiLayout`` or a ``PhotonicLayout``; workers default
+    to the circuit's demand (qubits, or modes for the MerLin workload).
+    """
     execution = cfg["execution"]
     backend = execution["backend"]
     if backend not in BACKENDS:
         raise ValueError(
             f"execution.backend must be one of {BACKENDS}, got {backend!r}"
         )
-    settings = _execution_settings(execution)
+    settings = _execution_settings(execution, cfg["model"]["workload"])
     if backend == "manager":
-        worker_qubits = execution["worker_qubits"] or [layout.n_qubits] * int(
+        worker_qubits = execution["worker_qubits"] or [layout.demand] * int(
             execution["workers"]
         )
         specs = [_worker_spec(q, execution) for q in worker_qubits]
-        with _manager(cfg, run_dir, specs, layout.n_qubits, execution["tenancy"]) as (
+        with _manager(cfg, run_dir, specs, layout.demand, execution["tenancy"]) as (
             cluster,
             manager,
         ):
@@ -238,6 +262,7 @@ def _manager_state(resources: dict) -> dict:
 
 
 def _run_runtime(cfg: dict, run_dir: Path, status: dict) -> dict:
+    _require_qiskit_workload(cfg, "runtime")
     layout = QuClassiLayout(int(cfg["model"]["qubits"]), int(cfg["model"]["layers"]))
     training, execution = cfg["training"], cfg["execution"]
     dataset = _prepare_data(cfg, {layout.n_features}, status, run_dir)[
@@ -339,6 +364,7 @@ def _run_runtime(cfg: dict, run_dir: Path, status: dict) -> dict:
 
 
 def _run_multi_tenant(cfg: dict, run_dir: Path, status: dict) -> dict:
+    _require_qiskit_workload(cfg, "multi_tenant")
     tenant_cfg, training, execution = (
         cfg["multi_tenant"],
         cfg["training"],
@@ -493,7 +519,15 @@ def _evaluation_key(epoch_index: int, split_name: str) -> int:
 
 
 def _run_accuracy(cfg: dict, run_dir: Path, status: dict) -> dict:
-    layout = QuClassiLayout(int(cfg["model"]["qubits"]), int(cfg["model"]["layers"]))
+    workload = cfg["model"]["workload"]
+    qubits, layers = int(cfg["model"]["qubits"]), int(cfg["model"]["layers"])
+    if workload == "merlin":
+        layout = PhotonicLayout(qubits, layers)
+        model_class = PhotonicQuClassiModel
+    else:
+        layout = QuClassiLayout(qubits, layers)
+        model_class = QuClassiModel
+    gradient_rule = cfg["training"]["gradient_rule"]
     training, execution, evaluation = (
         cfg["training"],
         cfg["execution"],
@@ -505,7 +539,8 @@ def _run_accuracy(cfg: dict, run_dir: Path, status: dict) -> dict:
     budget = resolve_circuit_budget(training["circuits_per_epoch"], layout)
     _check_budget(dataset.train, layout, budget)
     seed = int(cfg["seed"])
-    model = QuClassiModel(layout, N_CLASSES, cfg["model"]["init_range"], seed)
+    model = model_class(layout, N_CLASSES, cfg["model"]["init_range"], seed)
+    model.circuits_per_sample(gradient_rule)  # fails early for an unknown rule
     epochs = int(training["epochs"])
 
     def evaluate(split_name: str, epoch_index: int, executor) -> dict | None:
@@ -531,13 +566,17 @@ def _run_accuracy(cfg: dict, run_dir: Path, status: dict) -> dict:
 
     with _single_client_executor(cfg, run_dir, layout) as (executor, resources):
         logger.info(
-            "TRAINING_STARTED | kind=accuracy | backend=%s | workers=%s | exact=%s | update=%s "
-            "| shift=%s | lr=%g | epochs=%d",
+            "TRAINING_STARTED | kind=accuracy | workload=%s | backend=%s | workers=%s "
+            "| exact=%s | update=%s | shift=%s | gradient=%s | circuits_per_sample=%d "
+            "| lr=%g | epochs=%d",
+            workload,
             execution["backend"],
             execution["workers"],
             execution["exact"],
             training["update_rule"],
             training["shift_schedule"],
+            gradient_rule,
+            model.circuits_per_sample(gradient_rule),
             float(training["lr"]),
             epochs,
         )
@@ -554,6 +593,7 @@ def _run_accuracy(cfg: dict, run_dir: Path, status: dict) -> dict:
                 dispatch_unit=training["dispatch_unit"],
                 circuit_budget=budget,
                 run_seed=seed,
+                gradient_rule=gradient_rule,
             )
             record = {
                 "epoch": epoch_index + 1,
@@ -582,6 +622,7 @@ def _run_accuracy(cfg: dict, run_dir: Path, status: dict) -> dict:
                 final[split_name] = result
         metrics = {
             "experiment": "accuracy",
+            "workload": workload,
             "backend": execution["backend"],
             "workers": int(execution["workers"]),
             "exact": bool(execution["exact"]),
@@ -591,6 +632,9 @@ def _run_accuracy(cfg: dict, run_dir: Path, status: dict) -> dict:
             "layers": layout.n_layers,
             "update_rule": training["update_rule"],
             "shift_schedule": training["shift_schedule"],
+            "gradient_rule": gradient_rule,
+            "circuits_per_sample": model.circuits_per_sample(gradient_rule),
+            "n_parameters": layout.n_parameters,
             "init_range": cfg["model"]["init_range"],
             "lr": float(training["lr"]),
             "epochs": epochs,
@@ -602,6 +646,8 @@ def _run_accuracy(cfg: dict, run_dir: Path, status: dict) -> dict:
             "manager": _manager_state(resources),
             "dataset": dataset.meta,
         }
+        if workload == "merlin":
+            metrics["photonic"] = hardware_record(layout)
     return metrics
 
 
@@ -660,6 +706,8 @@ def _candidate(cfg: dict, kind: str) -> dict:
         }
     if kind == "accuracy":
         return {
+            "workload": cfg["model"]["workload"],
+            "gradient_rule": training["gradient_rule"],
             "backend": execution["backend"],
             "workers": execution["workers"],
             "exact": execution["exact"],

@@ -120,6 +120,11 @@ class QuClassiLayout:
     def n_parameters(self) -> int:
         return len(self.parameter_slots)
 
+    @property
+    def demand(self) -> int:
+        """Resource a worker must have free to hold the circuit: its qubits."""
+        return self.n_qubits
+
 
 def build_fidelity_circuit(
     layout: QuClassiLayout,

@@ -234,6 +234,8 @@ class LocalCluster:
             self.settings.compile_mode,
             "--latency-seconds",
             str(spec.latency_seconds),
+            "--workload",
+            self.settings.workload,
             "--log-file",
             str(self.log_dir / f"{name}.log"),
         ]
