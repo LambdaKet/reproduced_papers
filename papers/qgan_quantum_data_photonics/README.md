@@ -91,8 +91,9 @@ Deviations, because the paper does not state these details:
   as ρ (`lib/qgan.py`); the MerLin chip prepares τ with the generator meshes
   (`lib/qgan_merlin.py`).
 - **Random choices** (not stated): Haar-random targets, uniform discriminator
-  starts and stuck values, equal stuck counts per circuit, new phase noise at
-  every execution (`lib/data.py`). Measuring tr[Mτ] exactly or drawing the
+  starts and stuck values, equal stuck counts per circuit, phase noise on
+  every phase shifter (stuck ones included), new at every execution
+  (`lib/data.py`). Measuring tr[Mτ] exactly or drawing the
   noise once per round moves the means by at most 0.006
   ([results/sweep_tables.md](results/sweep_tables.md), `phase_noise_variants`).
 

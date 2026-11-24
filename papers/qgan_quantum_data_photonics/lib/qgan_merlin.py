@@ -224,6 +224,12 @@ class MerlinHardware(_Hardware):
     noise : str
         ``injected`` (the numpy simulator's noise draws) or ``phase_error``
         (MerLin's).
+
+    Notes
+    -----
+    In ``phase_error`` mode, MerLin draws the noise for the whole batch from
+    torch's global generator, so a run is reproducible only with the same
+    batch of targets.
     """
 
     def __init__(self, inputs: SeedInputs, settings: QganSettings, noise: str) -> None:
