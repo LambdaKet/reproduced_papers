@@ -91,20 +91,20 @@ def plot_phase_noise(outdir: Path, out: Path) -> None:
     right.errorbar(
         sigmas, [f["mean"] for f in final], yerr=[f["std"] for f in final],
         color=OURS, marker="o", markersize=6, linewidth=2, capsize=3,
-        label="Ours, intended phases (mean ± std)",
+        label="Ours, intended phases (mean ± std, rounds 381–400)",
     )  # fmt: skip
     right.plot(
         sigmas, [runs[f"sigma_{s}pi"]["noise_averaged_final_fidelity"]["mean"] for s in sigmas],
-        color=OURS_NOISY, marker="s", markersize=6, linewidth=2, label="Ours, noise-averaged",
+        color=OURS_NOISY, marker="s", markersize=6, linewidth=2, label="Ours, noise-averaged (round 400)",
     )  # fmt: skip
     right.plot(
         sigmas, [paper.PHASE_NOISE_FINAL[s] for s in sigmas], color=PAPER, marker="D",
-        markersize=6, linewidth=2, linestyle="--", label="Paper, round 400 (read)",
+        markersize=6, linewidth=2, linestyle="--", label="Paper (read from Fig. 2c at round 400)",
     )  # fmt: skip
     right.plot(
         sigmas, [ceiling["noise_averaged_best_fidelity"][str(s)]["mean"] for s in sigmas],
         color=CEILING, marker="^", markersize=6, linewidth=2, linestyle=":",
-        label="Ceiling under the same noise (ours)",
+        label="Best noise-free phases, same noise (ours, no training rounds)",
     )  # fmt: skip
     right.axhline(0.9, color=MUTED, linewidth=1, linestyle="-")
     right.annotate("0.9", (0.0505, 0.9), xytext=(2, 2), textcoords="offset points",
@@ -137,29 +137,35 @@ def plot_defect_rate(outdir: Path, out: Path) -> None:
     ceiling = _metrics(outdir, "oracle_ceiling")
     stuck = paper.DEFECT_STUCK
     mean = np.array([runs[f"stuck_{k}_of_30"]["final_fidelity"]["mean"] for k in stuck])
-    std = np.array([runs[f"stuck_{k}_of_30"]["final_fidelity"]["std"] for k in stuck])
-    fig, ax = plt.subplots(figsize=(7, 4.2), facecolor="#fcfcfb")
-    ax.fill_between(stuck, mean - std, np.minimum(mean + std, 1.0), color=OURS, alpha=0.15,
-                    linewidth=0)  # fmt: skip
+    fig, ax = plt.subplots(figsize=(7, 4.9), facecolor="#fcfcfb")
+    fig.subplots_adjust(bottom=0.27)
+    for k in stuck:
+        # One dot per target, spread horizontally so they do not overlap: the
+        # spread is skewed (most targets near 1, a tail of failures), which a
+        # symmetric band around the mean would hide.
+        values = np.array(runs[f"stuck_{k}_of_30"]["final_fidelity_per_seed"])
+        offsets = np.random.default_rng(k).uniform(-0.5, 0.5, values.size)
+        ax.scatter(k + offsets, values, s=5, color=OURS, alpha=0.3, linewidth=0)
     ax.plot(stuck, mean, color=OURS, marker="o", markersize=6, linewidth=2,
-            label="Ours (mean, band = ± std)")  # fmt: skip
+            label="Ours (mean, rounds 1981–2000; dots: one per target)")  # fmt: skip
     ax.plot(stuck, paper.DEFECT_FIDELITY, color=PAPER, marker="D", markersize=6, linewidth=2,
-            linestyle="--", label="Paper (read)")  # fmt: skip
+            linestyle="--", label="Paper (read from Fig. 3b, after convergence)")  # fmt: skip
     ax.plot(
         stuck, [ceiling[f"ceiling_stuck_{k}_of_30"]["best_fidelity"]["mean"] for k in stuck],
         color=CEILING, marker="^", markersize=6, linewidth=2, linestyle=":",
-        label="Ceiling: best fidelity the circuit can reach (ours)",
+        label="Ceiling: best fidelity the circuit can reach (ours, no training rounds)",
     )  # fmt: skip
     ax.axhline(0.9, color=MUTED, linewidth=1)
     ax.axvline(15, color=MUTED, linewidth=1, linestyle="--")
-    ax.annotate("half of the 30", (15, 0.32), xytext=(4, 0), textcoords="offset points",
+    ax.annotate("half of the 30", (15, 0.02), xytext=(4, 0), textcoords="offset points",
                 fontsize=8, color=MUTED)  # fmt: skip
     ax.set(xlabel="Stuck generator phase shifters (out of 30)", ylabel="Final fidelity",
-           ylim=(0.3, 1.02))  # fmt: skip
+           ylim=(0.0, 1.02))  # fmt: skip
     ax.set_xticks(stuck)
     ax.set_title("Final fidelity against defects (Fig. 3b), σ = 0.02π, 1500 counts",
                  fontsize=10, color=INK, loc="left")  # fmt: skip
-    ax.legend(frameon=False, fontsize=8, loc="lower left")
+    # Below the axes: inside, the long labels would hide the dots.
+    fig.legend(frameon=False, fontsize=8, loc="lower left", bbox_to_anchor=(0.1, 0.03))
     _style(ax)
     fig.suptitle(SCOPE, fontsize=8, color=MUTED, y=0.0)
     _save(fig, "defect_rate", out, outdir / "sweep_defect_rate_sweep_mid")

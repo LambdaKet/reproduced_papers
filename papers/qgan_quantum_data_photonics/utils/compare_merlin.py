@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import paper_values as paper  # noqa: E402
 
-NUMPY_COLOR, MERLIN_COLOR, PAPER_COLOR = "#2a78d6", "#eb6834", "#1baf7a"
+NUMPY_COLOR, MERLIN_COLOR = "#2a78d6", "#eb6834"
 INK, MUTED, GRID, BAND = "#0b0b0b", "#52514e", "#e4e3df", "#d9d8d3"
 SIGMAS = (0.01, 0.02, 0.03, 0.04, 0.05)
 NATIVE_STUCK = (0, 8, 14, 16, 20)
@@ -282,8 +282,6 @@ def plot(result: dict, out: Path) -> None:
         top.plot(x, [r["merlin_mean"] for r in rows], color=MERLIN_COLOR, marker="s",
                  markersize=6, linewidth=2, linestyle="--",
                  label="MerLin chip, MerLin phase noise")  # fmt: skip
-        top.plot(x, [r["paper"] for r in rows], color=PAPER_COLOR, marker="D", markersize=6,
-                 linewidth=2, linestyle=":", label="Paper (read)")  # fmt: skip
         top.axhline(0.9, color=MUTED, linewidth=1)
         top.annotate("claim threshold 0.9", (x[0], 0.9), xytext=(2, 3),
                      textcoords="offset points", fontsize=8, color=MUTED)  # fmt: skip
@@ -303,15 +301,17 @@ def plot(result: dict, out: Path) -> None:
                         linewidth=0, elinewidth=2, capsize=3,
                         label="Mean over the same 100 targets (95 % CI)")  # fmt: skip
         bottom.set(
-            xlabel=xlabel, ylabel="MerLin − numpy", ylim=(-0.07, 0.07), xlim=span
+            xlabel=xlabel,
+            ylabel="MerLin − numpy,\nsame 100 targets",
+            ylim=(-0.07, 0.07),
+            xlim=span,
         )
         bottom.set_xticks(x)
+        bottom.legend(frameon=False, fontsize=8, loc="lower left")
         _style(bottom)
-    axes[1, 1].legend(frameon=False, fontsize=8, loc="lower left")
     fig.suptitle(
         "Simulation, 100 targets per point. The MerLin runs draw their own phase noise "
-        "(uniform, same standard deviation), so single trajectories differ from numpy. "
-        "Paper values read from its figures.",
+        "(uniform, same standard deviation), so single trajectories differ from numpy.",
         fontsize=8, color=MUTED, y=0.0,
     )  # fmt: skip
     fig.tight_layout()

@@ -10,9 +10,11 @@ states on defective chips instead of reducing their scale".
 
 **Reproduction.** In simulation, the robustness reproduces: the mean fidelity
 over 100 random targets stays above 90 % up to σ = 0.04π and up to 14 of 30
-stuck phase shifters (Fig. 2c, Fig. 3b). Up to 10 stuck, the QGAN stays within
-0.02 of the best fidelity the defective circuit allows; beyond, the gap widens
-(−0.099 at 16 stuck): the training, not the circuit, limits it.
+stuck phase shifters (Fig. 2c, Fig. 3b). Beyond 10 stuck, the training, not the
+circuit, limits the fidelity: our ceiling, the best fidelity each defective
+circuit can reach (found by optimizing with the target known), is still 0.975 at
+16 stuck where the QGAN reaches 0.877; up to 10 stuck, the QGAN stays within
+0.02 of it.
 
 **MerLin.** Built as one MerLin layer (8 modes, 2 photons), the chip gives
 identical results with the same noise draws, and both robustness claims still
@@ -52,12 +54,15 @@ on defective chips instead of reducing their scale".
 - **Game (Eqs. 1–2):** the discriminator maximizes and the generator minimizes
   d = |tr[Mρ] − tr[Mτ]|, with parameter-shift gradients; the fidelity is never
   used in training.
-- **Metric:** the fidelity F = |⟨g|τ⟩|, the paper's F (the square root of the
-  overlap |⟨g|τ⟩|²).
-- **Evidence:** two chip runs (Fig. 2a–b: 16.96 % → 96.02 % in 150 rounds;
-  Fig. 3a: 92.11 % with 16 of 30 phase shifters stuck) and simulations with 100
-  random targets per point (Fig. 2c phase noise, Fig. 3b stuck phase shifters,
-  Suppl. Fig. 9 counts, Suppl. Sec. 6 one stuck phase shifter).
+- **Metric:** the fidelity F = √⟨g|τ̂|g⟩ (Suppl. Eq. 12), which equals |⟨g|τ⟩|
+  since the target is a pure state.
+- **Evidence:**
+  - on the chip, two runs (values from the text): intact circuits, fidelity
+    16.96 % → 96.02 % in 150 rounds (Fig. 2b); 8 of the 15 phase shifters stuck
+    in each generator mesh (16 of 30), 92.11 % after about 160 rounds (Fig. 3a);
+  - in simulation, 100 simulations per point: phase noise σ (Fig. 2c), number
+    of stuck phase shifters (Fig. 3b), total counts per measurement from 100 to
+    10 000 (Suppl. Fig. 9), one stuck phase shifter (Suppl. Sec. 6).
 
 ## Reproduction Scope (including Updates and Deviations)
 
@@ -100,7 +105,8 @@ Deviations, because the paper does not state these details:
 ## Install and How to Run
 
 ```bash
-pip install -r requirements.txt
+# From the repo root
+pip install -r papers/qgan_quantum_data_photonics/requirements.txt
 ```
 
 Quick smoke run (2 targets, 10 rounds, σ = 0.01π, 1500 counts):
@@ -148,16 +154,11 @@ Regenerate `results/` once every sweep has run (`outdir/` is not committed):
 
 ```bash
 # From the repo root
-P=papers/qgan_quantum_data_photonics
-python $P/utils/compare_with_paper.py $P/outdir --out $P/results  # comparison_with_paper.*
-python $P/utils/plot_results.py $P/outdir --out $P/results        # phase_noise, defect_rate, shot_noise .png
-python $P/utils/compare_merlin.py $P/outdir --out $P/results      # merlin_comparison.*
-python $P/utils/compare_baselines.py $P/outdir --out $P/results   # baseline_comparison.*
-python $P/utils/write_sweep_tables.py $P/outdir --out $P/results/sweep_tables.md
-python $P/utils/export_per_target.py $P/outdir --out $P/results/per_target_results.json
-# Check the Fig. 3b values in utils/paper_values.py against the paper's vector figure
-python $P/utils/read_figure_3b.py data/qgan_quantum_data_photonics/sources/arxiv_2310.00585v1_src/fig3.pdf --check
+python papers/qgan_quantum_data_photonics/utils/regenerate_results.py
 ```
+
+It rebuilds every file in `results/` from `outdir/` and checks the Fig. 3b
+values in `utils/paper_values.py` against the paper's vector figure.
 
 Each run writes `outdir/run_YYYYMMDD-HHMMSS/` with `config_snapshot.json`,
 `run.log`, `run_status.json` (status, code commit, seeds, artifact hashes),
@@ -198,7 +199,14 @@ from its figures: Fig. 3b to 0.001 from the vector source
 
 ![Fig. 2c reproduced: fidelity against phase noise](results/phase_noise.png)
 
+The paper's Fig. 2c plots fidelity against round (left panel here); the right
+panel takes the end of each curve, at round 400.
+
 ![Fig. 3b reproduced: final fidelity against stuck phase shifters](results/defect_rate.png)
+
+Each blue dot is one of the 100 random targets, each with its own random set
+of stuck phase shifters, at its final fidelity (mean over rounds 1981–2000);
+dots are spread sideways around their stuck count so they do not overlap.
 
 **Look at:** ours against the paper and the 0.9 line in Fig. 2c and Fig. 3b,
 and ours against the ceiling in Fig. 3b.
@@ -207,18 +215,32 @@ stuck (0.913; paper 0.918), and falls more than 0.02 below the ceiling from 12
 stuck (−0.028; −0.099 at 16), while the ceiling stays at 0.975 or more up to
 16.
 
-- Fig. 2c: up to σ = 0.03π, ours is within 0.01 of the paper (0.993, 0.984,
-  0.980); above, it is higher (second limit).
-- In Fig. 2c, the orange and yellow curves average F over the phase noise
-  instead (ours 0.896, ceiling 0.933 at 0.05π); the paper does not say which of
-  the two it plots.
-- Fig. 3b: the paper's curve crosses 0.9 between 14 (0.918) and 16 stuck
-  (0.872); its claim of above 90 % with half stuck rests on the single chip run
-  (92.11 %).
-- Beyond the claim's range, ours is 0.067 and 0.117 below the paper at 20 and
-  22 stuck, where targets spread widely (std ≈ 0.2).
+**Fig. 2c (phase noise)**
+
+- Blue curve (intended phases) against the paper: within 0.01 up to
+  σ = 0.03π (0.993, 0.984, 0.980 against 1.00, 0.99, 0.97); above, ours stays
+  high where the paper drops (0.969 and 0.962 against 0.92 and 0.78 at 0.04π
+  and 0.05π; second limit).
+- Orange curve (the same phases, averaged over the phase noise): the paper does
+  not say whether it plots this or the blue one. Orange is lower (0.926 and
+  0.896 at 0.04π and 0.05π) but still well above the paper at 0.05π, so this
+  choice does not explain the paper's drop. The yellow curve shows what the
+  best noise-free phases give under the same noise (0.933 at 0.05π).
+
+**Fig. 3b (stuck phase shifters)**
+
+- The paper's curve crosses 0.9 between 14 (0.918) and 16 stuck (0.872): its
+  claim of above 90 % with half stuck rests on the single chip run (92.11 %).
+- Beyond the claim's range, ours is below the paper at 20 and 22 stuck (0.645
+  against 0.712, 0.534 against 0.651), where targets spread widely
+  (std ≈ 0.2).
 
 ### MerLin: the chip as one MerLin layer gives identical results
+
+With the same noise draws, MerLin and numpy give the same final fidelity on
+every target (difference exactly 0, not plotted). The figure uses MerLin's own
+noise: top, the mean fidelity of both chips against the 0.9 line; bottom, their
+difference over the same 100 targets.
 
 ![MerLin chip against numpy chip, Fig. 2c and Fig. 3b conditions](results/merlin_comparison.png)
 
@@ -296,6 +318,17 @@ the ceiling, the CLI, and the MerLin layer against the numpy chip.
   pages   = {5197--5200},
   year    = {2023},
   doi     = {10.1364/OL.505084}
+}
+
+@misc{wang2023quantumgenerativeadversariallearning,
+      title={Quantum generative adversarial learning in photonics},
+      author={Yizhi Wang and Shichuan Xue and Yaxuan Wang and Yong Liu and Jiangfang Ding and Weixu Shi and Dongyang Wang and Yingwen Liu and Xiang Fu and Guangyao Huang and Anqi Huang and Mingtang Deng and Junjie Wu},
+      year={2023},
+      eprint={2310.00585},
+      archivePrefix={arXiv},
+      primaryClass={quant-ph},
+      doi={https://doi.org/10.1364/OL.505084},
+      url={https://arxiv.org/abs/2310.00585},
 }
 ```
 
