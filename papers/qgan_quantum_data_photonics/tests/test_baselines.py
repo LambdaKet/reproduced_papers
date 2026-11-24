@@ -1,4 +1,4 @@
-"""Phase-05 baselines: matched with the reproduced experiments they are compared with."""
+"""Baselines: matched with the reproduced experiments they are compared with."""
 
 from __future__ import annotations
 

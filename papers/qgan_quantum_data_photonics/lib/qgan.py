@@ -115,7 +115,7 @@ class QganResult:
     Attributes
     ----------
     fidelity : numpy.ndarray
-        Shape ``(rounds + 1, S)``: root fidelity of the state prepared with the
+        Shape ``(rounds + 1, S)``: fidelity of the state prepared with the
         intended generator phases, before round 1 and after each round.
     d_measured : numpy.ndarray
         Shape ``(rounds, S)``: the last d measured in the generator's turn
@@ -352,7 +352,7 @@ def noise_averaged_fidelity(
     draws: int,
     rngs: list[np.random.Generator],
 ) -> np.ndarray:
-    """Average root fidelity when every generator phase gets N(0, sigma^2) noise.
+    """Average fidelity when every generator phase gets N(0, sigma^2) noise.
 
     Parameters
     ----------

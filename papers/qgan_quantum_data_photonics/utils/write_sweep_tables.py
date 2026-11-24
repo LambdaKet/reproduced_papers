@@ -20,6 +20,8 @@ from pathlib import Path
 
 import sweep_table
 
+SPECS_DIR = Path(__file__).resolve().parent / "sweep_specs"
+
 # In reading order: calibration, paper figures, controls, diagnostics, MerLin.
 SWEEPS = [
     "calibration",
@@ -45,7 +47,7 @@ HEADER = """\
 Every candidate of every sweep, generated from the stored run metrics. Common
 rules:
 
-- Metric: root fidelity |⟨g|τ⟩| with the phases the generator intends to set,
+- Metric: fidelity |⟨g|τ⟩| with the phases the generator intends to set,
   averaged over the last 20 rounds of a run (10 for the chip replays);
   higher is better. The oracle ceiling reports the best fidelity over 20
   restarts and its average over phase-noise draws.
@@ -73,7 +75,9 @@ def main() -> None:
         table = sweep_table.build(sweep_dir)
         if table["coverage"] != "COMPLETE SWEEP":
             raise ValueError(f"{sweep}: {table['problems']}")
-        spec = json.loads((sweep_dir / "sweep_spec.json").read_text())
+        # Description from the tracked spec (the run settings come from the
+        # copy recorded in the sweep folder, read by sweep_table.build).
+        spec = json.loads((SPECS_DIR / f"{sweep}.json").read_text())
         sections += [f"## {sweep}", "", spec["description"], ""]
         sections.append(sweep_table.markdown(table))
         if sweep == "calibration":

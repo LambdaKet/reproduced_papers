@@ -1,6 +1,6 @@
 """MerLin adaptation: the paper's chip as a ``merlin.QuantumLayer``.
 
-Phase-04 adaptation, not part of the reproduction itself. The chip of Suppl.
+Our addition, not part of the reproduction itself. The chip of Suppl.
 Fig. 1 is one 8-mode circuit (signal modes 0-3, idler modes 4-7) carrying two
 photons in the entangled input state 1/2 sum_k |k>_s |k>_i:
 
@@ -18,7 +18,7 @@ numpy simulator; ``MerlinHardware`` only replaces the probability computation.
 Two noise modes:
 
 - ``injected``: phase noise drawn by ``lib.qgan`` from the per-seed streams, as
-  in phase 03 (equivalence check);
+  in the numpy simulator (equivalence check);
 - ``phase_error``: MerLin's own noise model, ``pcvl.NoiseModel(phase_error=w)``,
   which adds Uniform(-w, w) to every phase shifter of every execution; w =
   sqrt(3) sigma gives the same standard deviation as the paper's Gaussian.
@@ -222,7 +222,8 @@ class MerlinHardware(_Hardware):
     settings : QganSettings
         The run's settings; ``phase_sigma`` is the paper's sigma in radians.
     noise : str
-        ``injected`` (phase-03 noise model) or ``phase_error`` (MerLin's).
+        ``injected`` (the numpy simulator's noise draws) or ``phase_error``
+        (MerLin's).
     """
 
     def __init__(self, inputs: SeedInputs, settings: QganSettings, noise: str) -> None:
@@ -260,7 +261,7 @@ class MerlinHardware(_Hardware):
         )
 
     def hardware_fields(self, counts: int | None) -> dict:
-        """Hardware-aware description of the runs (Phase-4 reporting contract)."""
+        """Hardware-aware description of the runs, stored in their records."""
         return {
             # merlinquantum 0.4.2 still reports merlin.__version__ == "0.4.1", so
             # record the installed distribution as well.

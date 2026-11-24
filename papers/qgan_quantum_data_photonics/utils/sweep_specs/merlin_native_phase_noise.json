@@ -1,6 +1,6 @@
 {
   "sweep_id": "merlin_native_phase_noise",
-  "description": "Phase 04: Fig. 2c with MerLin's phase_error noise model (Uniform, same std as the paper's sigma).",
+  "description": "Fig. 2c with MerLin's phase_error noise model (Uniform, same std as the paper's sigma).",
   "candidates": [
     {
       "name": "merlin_phase_error_sigma_0.01pi",

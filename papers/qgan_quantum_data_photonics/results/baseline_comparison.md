@@ -1,17 +1,17 @@
-Phase-05 comparison: the QGAN against its matched baselines. Simulation, 100 targets per run (seeds 0-99), paired by target. Decision rule, set before these comparisons: tied when the mean paired difference is at most 0.02; clearly higher or lower when it exceeds 0.02 and its 95 % interval excludes 0; otherwise no clear separation. Paper values are read from its figures.
+Comparison: the QGAN against its matched baselines. Simulation, 100 targets per run (seeds 0-99), paired by target. Decision rule, set before these comparisons: tied when the mean paired difference is at most 0.02; clearly higher or lower when it exceeds 0.02 and its 95 % interval excludes 0; otherwise no clear separation. Paper values are read from its figures.
 
 ### Systems
 
 | System | Role | Provenance | Runs (successful / expected) | Resources | Wall-clock per run (min) | Status |
 |---|---|---|---:|---|---|---|
-| QGAN, our reproduction | reproduced method (numpy chip simulator) | local runs, phase 03 | 27 / 27 | 30 generator + 12 discriminator phases; parameter shift; 1500 counts per setting (Suppl. Fig. 9b: 100-2000) | 400 rounds: 2.1–2.5; 2000 rounds: 6.9–15.5; 2500 rounds: 6.7–13.3 (up to 10 runs at once) | reference |
-| Noise-free QGAN | baseline: cost of noise (phase-01 plan) | local runs, phase 05 | 2 / 2 | same phases and settings; sigma = 0, exact probabilities | 400 rounds: 0.7–0.7; 2500 rounds: 4.2–4.2 (1 run at a time) | COMMENSURABLE |
-| Oracle ceiling | control: best fidelity the chip can reach (knows the target) | local runs, phase 03 | 13 / 13 | 30 generator phases minus stuck ones; exact gradients; 20 restarts x 2000 Adam iterations; 1000 noise draws per sigma | optimization: 0.5–0.6 (up to 10 runs at once) | COMMENSURABLE (upper bound by design) |
-| Fixed discriminator | ablation: random projectors redrawn every round | local run, phase 03 | 1 / 1 | 30 generator phases; no discriminator training | 400 rounds: 0.3–0.3 (up to 10 runs at once) | COMMENSURABLE |
-| MerLin adaptation, MerLin noise | photonic adaptation (MerLin QuantumLayer, 8 modes, 2 photons) | local runs, phase 04 (simulation) | 10 / 10 | same as the QGAN; MerLin phase_error noise (uniform, same standard deviation) | 400 rounds: 4.0–4.1; 2000 rounds: 18.0–28.6 (3 runs at once) | PARTIALLY_COMMENSURABLE (noise distribution; target prepared on the chip) |
+| QGAN, our reproduction | reproduced method (numpy chip simulator) | local runs (reproduction) | 27 / 27 | 30 generator + 12 discriminator phases; parameter shift; 1500 counts per setting (Suppl. Fig. 9b: 100-2000) | 400 rounds: 2.1–2.5; 2000 rounds: 6.9–15.5; 2500 rounds: 6.7–13.3 (up to 10 runs at once) | reference |
+| Noise-free QGAN | baseline: cost of noise (planned before the runs) | local runs (baseline) | 2 / 2 | same phases and settings; sigma = 0, exact probabilities | 400 rounds: 0.7–0.7; 2500 rounds: 4.2–4.2 (1 run at a time) | comparable |
+| Oracle ceiling | control: best fidelity the chip can reach (knows the target) | local runs (reproduction) | 13 / 13 | 30 generator phases minus stuck ones; exact gradients; 20 restarts x 2000 Adam iterations; 1000 noise draws per sigma | optimization: 0.5–0.6 (up to 10 runs at once) | comparable (upper bound by design) |
+| Fixed discriminator | ablation: random projectors redrawn every round | local run (reproduction) | 1 / 1 | 30 generator phases; no discriminator training | 400 rounds: 0.3–0.3 (up to 10 runs at once) | comparable |
+| MerLin adaptation, MerLin noise | photonic adaptation (MerLin QuantumLayer, 8 modes, 2 photons) | local runs (MerLin adaptation, simulation) | 10 / 10 | same as the QGAN; MerLin phase_error noise (uniform, same standard deviation) | 400 rounds: 4.0–4.1; 2000 rounds: 18.0–28.6 (3 runs at once) | partly comparable (noise distribution; target prepared on the chip) |
 | Paper QGAN | method as published | paper-reported (Figs. 2c, 3b, Suppl. Fig. 9b, Suppl. Sec. 6) | — | 1500 counts; training settings not stated | — | values read from figures |
 
-Wall-clock: one run = 100 targets; laptop CPU (Apple M5, 10 cores), one thread per run. Runs that shared the machine are slower, so times compare workloads only roughly. MerLin with the phase-03 noise draws gives the numpy results exactly (`merlin_comparison.md`).
+Wall-clock: one run = 100 targets; one Apple M5 CPU (10 cores), one thread per run. Runs that shared the machine are slower, so times compare workloads only roughly. MerLin with the numpy simulator's noise draws gives the numpy results exactly (`merlin_comparison.md`).
 
 ### Phase noise (Fig. 2c): 1500 counts, 400 rounds
 

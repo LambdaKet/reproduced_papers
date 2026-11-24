@@ -1,5 +1,5 @@
 {
-  "description": "Noise-free QGAN, the phase-01 baseline: the Fig. 2c protocol (100 targets, 400 rounds) without phase noise and with exact probabilities; run length set per sweep candidate (utils/sweep_specs/noise_free_reference.json).",
+  "description": "Noise-free QGAN baseline: the Fig. 2c protocol (100 targets, 400 rounds) without phase noise and with exact probabilities; run length set per sweep candidate (utils/sweep_specs/noise_free_reference.json).",
   "experiment": {
     "name": "noise_free_reference",
     "kind": "qgan"

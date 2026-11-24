@@ -1,5 +1,5 @@
 {
-  "description": "MerLin adaptation of Fig. 2c (phase 04): the chip simulated by a MerLin layer; noise mode set per sweep candidate (--merlin-noise).",
+  "description": "MerLin adaptation of Fig. 2c: the chip simulated by a MerLin layer; noise mode set per sweep candidate (--merlin-noise).",
   "experiment": {
     "name": "phase_noise_sweep_merlin",
     "kind": "qgan"

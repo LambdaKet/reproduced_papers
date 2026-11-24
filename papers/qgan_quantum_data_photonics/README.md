@@ -1,7 +1,22 @@
 # Quantum Generative Adversarial Learning in Photonics - Reproduction
 
-Status: experiments, MerLin adaptation, comparison with baselines and notebook
-done (simulation); comparison with the paper below.
+**Paper.** Wang et al. report the first quantum generative adversarial network
+(QGAN) run in photonics: on a programmable silicon chip, it learns a random
+two-photon entangled state with a fidelity above 90 %, even with up to half of
+the generator's phase shifters stuck (one chip run, then simulations) or with
+phase noise up to 0.04π on every phase shifter (simulations). The target state
+is known: the paper shows that learning can "prepare high-fidelity quantum
+states on defective chips instead of reducing their scale".
+
+**Reproduction.** In simulation, the robustness reproduces: the mean fidelity
+over 100 random targets stays above 90 % up to σ = 0.04π and up to 14 of 30
+stuck phase shifters (Fig. 2c, Fig. 3b). Up to 10 stuck, the QGAN stays within
+0.02 of the best fidelity the defective circuit allows; beyond, the gap widens
+(−0.099 at 16 stuck): the training, not the circuit, limits it.
+
+**MerLin.** Built as one MerLin layer (8 modes, 2 photons), the chip gives
+identical results with the same noise draws, and both robustness claims still
+hold with MerLin's own noise model (5 noise levels, 5 of the 13 defect rates).
 
 ## Reference and Attribution
 
@@ -15,119 +30,94 @@ done (simulation); comparison with the paper below.
 - Original repository: none released. The paper states that data are available
   from the authors upon reasonable request.
 - License and attribution notes: cite the paper above when using this
-  reproduction. This folder contains independent code; no code or data from the
-  authors is included.
+  reproduction; see [Citation and License](#citation-and-license).
 
 ## Original Paper
 
-The paper trains a quantum generative adversarial network (QGAN) on a photonic
-chip to learn quantum data: a random maximally entangled state of two
-four-level systems (ququarts), path-encoded on 4 + 4 optical modes. The
-generator is a pair of universal 4-mode Mach-Zehnder interferometer meshes; the
-discriminator is a quantum projective measurement made of two 4-mode networks.
-The paper reports the fidelity of the generated state, and studies robustness to
-defective phase shifters and to phase noise.
+Wang et al. report the first quantum generative adversarial network (QGAN) run
+in photonics: on a programmable silicon chip, it learns a random two-photon
+entangled state with a fidelity above 90 %, even with up to half of the
+generator's phase shifters stuck (one chip run, then simulations) or with phase
+noise up to 0.04π on every phase shifter (simulations). The target state is
+known: the paper shows that learning can "prepare high-fidelity quantum states
+on defective chips instead of reducing their scale".
 
-## Reproduction Scope, Claims, and Deviations
+- **Target τ:** a random maximally entangled state of two ququarts
+  (four-level systems), path-encoded on 4 + 4 optical modes.
+- **Players:** the generator's two 15-phase-shifter meshes (Suppl. Fig. 2(d))
+  prepare |g⟩ = (U_s ⊗ U_i) ½ Σ_k |k⟩_s|k⟩_i (Eq. 3); the discriminator's two
+  6-phase-shifter circuits (Suppl. Fig. 3) set the projector M (Eq. 4), read as
+  the coincidence of both photons at the second ports, so tr[Mρ] is a
+  coincidence probability from counts.
+- **Game (Eqs. 1–2):** the discriminator maximizes and the generator minimizes
+  d = |tr[Mρ] − tr[Mτ]|, with parameter-shift gradients; the fidelity is never
+  used in training.
+- **Metric:** the fidelity F = |⟨g|τ⟩|, the paper's F (the square root of the
+  overlap |⟨g|τ⟩|²).
+- **Evidence:** two chip runs (Fig. 2a–b: 16.96 % → 96.02 % in 150 rounds;
+  Fig. 3a: 92.11 % with 16 of 30 phase shifters stuck) and simulations with 100
+  random targets per point (Fig. 2c phase noise, Fig. 3b stuck phase shifters,
+  Suppl. Fig. 9 counts, Suppl. Sec. 6 one stuck phase shifter).
 
-Everything is simulated: no photonic chip is available. The simulator follows
-the chip's circuits as drawn in the supplementary document (Suppl. Figs. 2(d)
-and 3):
-- two 15-phase-shifter meshes for the generator;
-- two 6-phase-shifter projection circuits for the discriminator;
-- the cost d of Eq. 1 and parameter-shift gradients (shift pi/4);
-- Gaussian phase noise on every phase shifter, Poisson coincidence counts (1500
-  per measurement setting) and stuck phase shifters.
+## Reproduction Scope (including Updates and Deviations)
 
-Experiments run:
-- the phase-noise sweep (Fig. 2c);
-- the defect-rate sweep (Fig. 3b);
-- the shot-noise study (Suppl. Fig. 9);
-- the single-defect study (Suppl. Sec. 6);
-- the two chip runs replayed in simulation (Figs. 2a-b, 3a);
-- our controls, described under [Fair Baselines](#fair-baselines): the best
-  fidelity each circuit can reach, a noise-free QGAN, and random projectors in
-  place of the trained discriminator.
+Everything is simulated, with the circuits of Suppl. Figs. 2(d) and 3,
+Gaussian phase noise on every phase shifter, 1500 Poisson counts per
+measurement setting, and stuck phase shifters.
 
-Claims of the paper, and how they are tested:
+- **Reproduced:** Fig. 2c and Fig. 3b at the paper's scale (100 targets per
+  point), and the two chip runs replayed in simulation. Suppl. Fig. 9 and
+  Suppl. Sec. 6 were also run; their tables are in
+  [results/comparison_with_paper.md](results/comparison_with_paper.md).
+- **Our control, the ceiling:** the best fidelity the defective circuit can
+  reach, found by direct optimization knowing τ. The paper compares the QGAN
+  with no other method and no classical model outputs a two-photon state; the
+  ceiling separates training limits from circuit limits.
+- **MerLin adaptation (our addition):** the same chip as one MerLin layer
+  (`lib/qgan_merlin.py`) inside the unchanged training game.
 
-- Learning on the chip: the root fidelity rises from 16.96 % to 96.02 % in 150
-  rounds (Fig. 2a-b). Tested by replaying the chip run in simulation.
-- Phase-noise robustness: above 90 % for σ < 0.04π and below 80 % at 0.05π
-  (Fig. 2c, 100 simulations per level).
-- Defect tolerance: above 90 % with up to about half of the 30 generator phase
-  shifters stuck (Fig. 3b); 92.11 % on the chip with 16 stuck (Fig. 3a).
-- Shot noise: fewer counts degrade the learning (Suppl. Fig. 9).
-- No crucial phase shifter: one stuck phase shifter has no significant effect
-  (Suppl. Sec. 6).
-- Not tested:
-  - learning without tomography holds by construction (the generator uses only
-    measured differences);
-  - the first photonic QGAN is a hardware claim and needs the chip.
+Deviations, because the paper does not state these details:
 
-Deviations and choices, stated because the paper does not give them:
-
-- Training settings: the paper gives no learning rate, number of steps per
-  turn or end-of-turn rule. With a fixed number of steps per turn, the game
-  oscillates and does not learn: the cost |a - b| has a kink at a = b, where
-  the generator keeps taking full-size steps. We let the generator end its turn
-  once the measured d falls below a threshold, as the turns of Fig. 2a suggest
-  (2-6 steps, ending with a gap of about 0.02-0.04); the step size, steps per
-  turn and threshold are calibrated on one condition of Fig. 2c.
-- Random choices not stated in the paper: Haar-random targets; uniform
-  discriminator starting phases and stuck values; the same number of stuck
-  phase shifters in each circuit; new phase noise at every circuit execution.
-
-MerLin adaptation (our addition): the same chip built as a MerLin layer
-(`lib/qgan_merlin.py`) replaces the numpy simulator inside the unchanged
-training game; see
-[Photonic Assessment and MerLin Extension](#photonic-assessment-and-merlin-extension).
-
-## Project Layout
-
-```
-papers/qgan_quantum_data_photonics/
-├── notebook.ipynb  # walkthrough of the claims and the evidence
-├── lib/        # circuits.py (numpy chip), data.py (per-seed inputs), qgan.py (game),
-│               # ceiling.py, metrics.py, qgan_merlin.py (MerLin chip), runner.py
-├── configs/    # defaults.json and one overlay per experiment
-├── utils/      # sweep launcher and specs, comparison and figure scripts
-├── tests/
-├── results/    # generated tables and figures used in this README
-└── outdir/     # raw runs (not committed)
-```
+- **Training settings.**
+  - Why: the paper gives none; with a fixed number of steps per turn the game
+    oscillates (the cost |a − b| has a kink at a = b).
+  - What: the generator ends its turn once the measured d ≤ 0.05; step 0.3π,
+    up to 20 steps per turn; calibrated at σ = 0.01π on 20 separate targets.
+  - How: `training` in `configs/defaults.json`; rule in
+    `utils/select_calibration.py`; grid in
+    [results/sweep_tables.md](results/sweep_tables.md).
+- **How tr[Mτ] is measured** (not described in the paper): the numpy
+  simulator measures the known τ with the same noisy discriminator and counts
+  as ρ (`lib/qgan.py`); the MerLin chip prepares τ with the generator meshes
+  (`lib/qgan_merlin.py`).
+- **Random choices** (not stated): Haar-random targets, uniform discriminator
+  starts and stuck values, equal stuck counts per circuit, new phase noise at
+  every execution (`lib/data.py`). Measuring tr[Mτ] exactly or drawing the
+  noise once per round moves the means by at most 0.006
+  ([results/sweep_tables.md](results/sweep_tables.md), `phase_noise_variants`).
 
 ## Install and How to Run
-
-### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Quick smoke run
+Quick smoke run (2 targets, 10 rounds, σ = 0.01π, 1500 counts):
 
 ```bash
-# From the repo root: 2 targets, 10 rounds, sigma = 0.01 pi, 1500 counts
+# From the repo root
 python implementation.py --paper qgan_quantum_data_photonics
 ```
 
-### Notebook
-
-`notebook.ipynb` walks through the claims, reruns one full point of Fig. 2c
-live, and reads the paper-scale results from `results/per_target_results.json`.
-It runs in about 1.5 minutes on a CPU.
+Notebook (about 1.5 minutes on a CPU):
 
 ```bash
 cd papers/qgan_quantum_data_photonics
 jupyter execute --inplace --timeout=1200 notebook.ipynb
 ```
 
-### One experiment
-
-Each config in `configs/` runs one condition on a block of target seeds (one
-target per seed). Paper-specific flags are listed in `cli.json`; angles are in
-units of pi.
+One experiment: each config in `configs/` runs one condition on a block of
+target seeds; angles are in units of π.
 
 ```bash
 # From the repo root
@@ -141,299 +131,154 @@ python implementation.py --paper qgan_quantum_data_photonics \
     --merlin-noise phase_error
 ```
 
-### Sweeps
-
-`utils/run_sweep.py` runs every candidate of a spec in `utils/sweep_specs/`
-one after the other, checks each run's evidence files with the logging
-validator given by `--validator`, and writes `sweep_status.json`, `sweep.log`
-and `sweep_summary.json` in the sweep folder.
+Full sweeps: one spec per sweep in `utils/sweep_specs/`; `utils/run_sweep.py`
+runs every candidate of a spec into `outdir/sweep_<name>/`. With
+`--validator <path to validate_logging.py>` it also checks each run's evidence
+files; without it, the sweep log states that the runs are not validated.
 
 ```bash
 # From the repo root
 python papers/qgan_quantum_data_photonics/utils/run_sweep.py \
     papers/qgan_quantum_data_photonics/utils/sweep_specs/phase_noise_sweep.json \
-    --sweep-dir papers/qgan_quantum_data_photonics/outdir/sweep_phase_noise_sweep \
-    --validator <path to validate_logging.py>
+    --sweep-dir papers/qgan_quantum_data_photonics/outdir/sweep_phase_noise_sweep
 ```
 
-### Output directory
+Regenerate `results/` once every sweep has run (`outdir/` is not committed):
 
-Each run writes a timestamped folder under the base `outdir` (default:
-`outdir/`):
+```bash
+# From the repo root
+P=papers/qgan_quantum_data_photonics
+python $P/utils/compare_with_paper.py $P/outdir --out $P/results  # comparison_with_paper.*
+python $P/utils/plot_results.py $P/outdir --out $P/results        # phase_noise, defect_rate, shot_noise .png
+python $P/utils/compare_merlin.py $P/outdir --out $P/results      # merlin_comparison.*
+python $P/utils/compare_baselines.py $P/outdir --out $P/results   # baseline_comparison.*
+python $P/utils/write_sweep_tables.py $P/outdir --out $P/results/sweep_tables.md
+python $P/utils/export_per_target.py $P/outdir --out $P/results/per_target_results.json
+# Check the Fig. 3b values in utils/paper_values.py against the paper's vector figure
+python $P/utils/read_figure_3b.py data/qgan_quantum_data_photonics/sources/arxiv_2310.00585v1_src/fig3.pdf --check
+```
 
-```
-outdir/run_YYYYMMDD-HHMMSS/
-├── config_snapshot.json   # Resolved configuration
-├── run.log                # Run log
-├── run_status.json        # Status, code commit, dataset identity, artifact hashes
-├── metrics.json           # Summary metrics (root fidelity, convergence round, d)
-└── trajectories.npz       # Per-round, per-seed fidelity and d (ceiling.npz for the ceiling)
-```
+Each run writes `outdir/run_YYYYMMDD-HHMMSS/` with `config_snapshot.json`,
+`run.log`, `run_status.json` (status, code commit, seeds, artifact hashes),
+`metrics.json` (final fidelity per target) and `trajectories.npz` (per-round
+fidelity and d).
 
 ## Configuration
 
-- `configs/defaults.json`: smoke settings and every key, with the calibrated
-  training settings (step 0.3π, up to 20 steps per turn, generator stop at
-  d ≤ 0.05) and the numpy chip simulator.
-- `configs/<experiment>_original.json`: one overlay per planned experiment
-  (`phase_noise_sweep`, `defect_rate_sweep`, `shot_noise_sweep`,
-  `single_defect`, `single_defect_position`, `intact_chip_emulation`,
-  `defective_chip_emulation`, `oracle_ceiling`, `oracle_ceiling_chip`,
-  `fixed_discriminator`, `noise_free_reference`, `calibration`,
-  `minimal_learning`, `minimal_learning_noisy`, `shot_noise_tvd`).
-- `configs/<experiment>_merlin.json` (`smoke`, `phase_noise_sweep`,
-  `defect_rate_sweep`): the chip as a MerLin layer (`--backend merlin`);
-  `--merlin-noise injected` reuses the numpy simulator's noise draws,
-  `phase_error` uses MerLin's phase-noise model.
-- `cli.json`: paper-specific CLI arguments and the config keys they change.
-- The simulator runs on CPU only (`--device cpu`).
+- `configs/defaults.json`: smoke settings, every key, and the calibrated
+  training settings.
+- `configs/<experiment>_original.json`: one overlay per experiment (e.g.
+  `phase_noise_sweep`, `defect_rate_sweep`, `oracle_ceiling`).
+- `configs/<experiment>_merlin.json`: the chip as a MerLin layer
+  (`--backend merlin`); `--merlin-noise injected` reuses the numpy simulator's
+  noise draws, `phase_error` uses MerLin's phase-noise model.
+- `cli.json`: the authoritative list of paper-specific flags.
+- The simulator runs on CPU only.
 
 ## Data
 
-Nothing is downloaded. As in the paper, the learning targets are random
-maximally entangled two-ququart states generated numerically. Each run draws its
-target, the discriminator's initial phases, the stuck phase-shifter values and
-the noise from its seed, so no data file is stored. The paper does not state the
-target distribution; we draw targets from the Haar measure (our choice), which
-covers every maximally entangled two-ququart state.
-
-Generation (`lib/data.py`):
-- Each target seed gets its own `numpy.random.SeedSequence`, with independent
-  streams for the target, the discriminator start, the stuck set, the phase
-  noise and the counts.
-- A seed therefore gives the same target and stuck set at every noise level and
-  count budget, so conditions are compared on the same targets.
-- Seeds:
-  - 0–99 for every sweep point;
-  - 0–19 for the chip replays and for each single-position defect check;
-  - 1000–1019 for the calibration.
-- Each run records its seeds and a SHA-256 of its targets and stuck sets in
-  `run_status.json`.
-
-The authors' measured chip data are not public (available from the authors on
-request) and are not used: the chip runs (Fig. 2a-b, Fig. 3a) are emulated in
-simulation and compared with the values the paper reports. If these data are
-obtained later, they go under
-`data/qgan_quantum_data_photonics/authors_measured_data/`.
+Nothing is downloaded: targets are generated numerically, as in the paper. Each
+target seed has its own streams for the target, the discriminator start, the
+stuck set, the noise and the counts (`lib/data.py`), so every condition sees
+the same targets. Seeds: 0–99 for every sweep point, 0–19 for the chip replays
+and the training-settings diagnosis, 1000–1019 for the calibration. The
+authors' chip data are not public and are not used.
 
 ## Results Obtained and Comparison with the Paper
 
-**Verdict: partially reproduced in simulation.** The QGAN keeps the paper's
-robustness at its 90 % thresholds (phase noise σ < 0.04π, up to 14 of 30 stuck
-phase shifters), but it does not show the paper's drop to 0.78 at σ = 0.05π,
-which depends on the unpublished training protocol.
+Metric throughout: final fidelity F of the state prepared with the intended
+phases (the paper's ρ(θ_G); mean over the last 20 rounds, 10 for the chip
+replays), mean over 100 random targets unless stated. Paper values are read
+from its figures: Fig. 3b to 0.001 from the vector source
+(`utils/read_figure_3b.py`), the others by eye to about ±0.01–0.02. All tables:
+[results/comparison_with_paper.md](results/comparison_with_paper.md).
 
-Scope: simulation only. Each point averages 100 random targets (seeds 0–99) with
-1500 coincidence counts per measurement setting unless stated (the chip
-replays, the per-position defect check and the training-protocol diagnosis use
-20 targets). Metric: root
-fidelity |⟨g|τ⟩|, the paper's F, averaged over the last 20 rounds of a run;
-values are mean ± standard deviation over targets. Training settings (step
-0.3π, up to 20 steps per turn, generator stops at a measured d ≤ 0.05) were
-calibrated on one point of Fig. 2c (20 separate targets) because the paper
-gives none. Paper values
-are read from its figures (Fig. 3b to 0.001 by `utils/read_figure_3b.py`, the others by eye to about ±0.01–0.02) or quoted from its text.
-Generated tables: [results/comparison_with_paper.md](results/comparison_with_paper.md);
-every candidate of every sweep: [results/sweep_tables.md](results/sweep_tables.md);
-per-target values used by `notebook.ipynb`: `results/per_target_results.json`.
+### Reproduction: the robustness reproduces; beyond 10 stuck, training limits it
 
-Summary (final root fidelity; "within" means |difference| ≤ 0.03, the tolerance
-set before the runs for Fig. 2c and used here for every item):
+![Fig. 2c reproduced: fidelity against phase noise](results/phase_noise.png)
 
-| Paper item | Claim tested | Paper value | Reproduced value | Difference | Metric agreement | Trend agreement | Claim support | Targets | Comment |
-|---|---|---:|---:|---:|---|---|---|---:|---|
-| Fig. 2a–b (chip run) | Learning on the chip | 0.9602 | 0.989 ± 0.004 (σ = 0.01π); 0.982 ± 0.009 (0.02π) | +0.029; +0.022 | N/A: one chip run against a simulation | yes: above 0.9 within 150 rounds | supported in simulation | 20 | Chip noise level unknown, bracketed by two σ |
-| Fig. 2c, σ ≤ 0.03π | Phase-noise robustness | 1.00, 0.99, 0.97 | 0.993, 0.984, 0.980 | −0.007 to +0.010 | within | yes | supported | 100 per σ | The σ = 0.01π speed was used for the calibration |
-| Fig. 2c, σ = 0.04π, 0.05π | Phase-noise robustness | 0.92; 0.78 | 0.969 ± 0.014; 0.962 ± 0.018 | +0.049; +0.182 | no | partial: falls with σ but stays above 0.90 | partially supported | 100 per σ | The drop depends on the unpublished training protocol |
-| Fig. 3a (chip run, 16 / 30 stuck) | Defect tolerance | 0.9211 | 0.940 ± 0.091 (σ = 0.01π); 0.902 ± 0.127 (0.02π) | +0.019; −0.019 | N/A: one chip run against a simulation | yes | supported in simulation | 20 | Same stuck positions as Fig. 1(f) |
-| Fig. 3b, 0–18 / 30 stuck | Defect tolerance | 0.992 to 0.803 | 0.985 to 0.810 | −0.007 to +0.017 | within | yes | supported: ≥ 0.90 up to 14 / 30 | 100 per rate | 0.913 at 14 / 30 (paper 0.918) |
-| Fig. 3b, 20–24 / 30 stuck | Defect tolerance | 0.712, 0.651, 0.456 | 0.645, 0.534, 0.460 | −0.067, −0.117, +0.004 | no at 20 and 22 | yes: sharp drop beyond half | beyond the claim's range | 100 per rate | Large spread over targets (std ≈ 0.2) |
-| Suppl. Fig. 9a | Shot noise (sampling error) | 0.155; 0.016 | 0.1551; 0.0155 | +0.0001; −0.0005 | within | yes | supported | 1000 repeats | Total variation distance at 100 and 10,000 counts |
-| Suppl. Fig. 9b | Shot noise (learning) | 0.921 at 100 counts; 0.986–0.990 from 200 | 0.961 at 100; 0.980–0.998 from 200 | +0.040 at 100; −0.007 to +0.011 from 200 | no at 100 counts | yes: rises with counts | partially supported | 100 per budget | Convergence rounds not comparable (our rule) |
-| Suppl. Sec. 6 | No crucial phase shifter | 0.9833 ± 0.0700 | 0.987 ± 0.006 | +0.004 | within | yes: no effect | supported | 100 | 0.985 ± 0.007 without defect; each of the 15 positions gives 0.981–0.990 |
+![Fig. 3b reproduced: final fidelity against stuck phase shifters](results/defect_rate.png)
 
-### Defects: the fidelity stays above 90 % up to about half of the generator phase shifters stuck
+**Look at:** ours against the paper and the 0.9 line in Fig. 2c and Fig. 3b,
+and ours against the ceiling in Fig. 3b.
+**Result:** ours stays above 0.9 up to σ = 0.04π (0.969) and up to 14 of 30
+stuck (0.913; paper 0.918), and falls more than 0.02 below the ceiling from 12
+stuck (−0.028; −0.099 at 16), while the ceiling stays at 0.975 or more up to
+16.
 
-![Final fidelity against the number of stuck phase shifters](results/defect_rate.png)
+- Fig. 2c: up to σ = 0.03π, ours is within 0.01 of the paper (0.993, 0.984,
+  0.980); above, it is higher (second limit).
+- In Fig. 2c, the orange and yellow curves average F over the phase noise
+  instead (ours 0.896, ceiling 0.933 at 0.05π); the paper does not say which of
+  the two it plots.
+- Fig. 3b: the paper's curve crosses 0.9 between 14 (0.918) and 16 stuck
+  (0.872); its claim of above 90 % with half stuck rests on the single chip run
+  (92.11 %).
+- Beyond the claim's range, ours is 0.067 and 0.117 below the paper at 20 and
+  22 stuck, where targets spread widely (std ≈ 0.2).
 
-The reproduced curve follows Fig. 3b (σ = 0.02π) within 0.02, except at 20
-and 22 stuck phase shifters, where ours is 0.067 and 0.117 lower. The ceiling, the best
-fidelity the defective circuit can reach (our control, found by direct
-optimization with knowledge of τ), stays far above the QGAN beyond 12 stuck
-phase shifters: the decline comes from learning, not from what the circuit can
-express.
+### MerLin: the chip as one MerLin layer gives identical results
 
-| Stuck / 30 | Ours | Paper (read) | Ceiling |
-|---:|---:|---:|---:|
-| 0 | 0.985 ± 0.007 | 0.992 | 1.000 |
-| 2 | 0.987 ± 0.006 | 0.984 | 1.000 |
-| 4 | 0.988 ± 0.005 | 0.985 | 1.000 |
-| 6 | 0.988 ± 0.006 | 0.973 | 1.000 |
-| 8 | 0.989 ± 0.008 | 0.974 | 1.000 |
-| 10 | 0.982 ± 0.063 | 0.965 | 0.998 |
-| 12 | 0.965 ± 0.104 | 0.949 | 0.994 |
-| 14 | 0.913 ± 0.192 | 0.918 | 0.986 |
-| 16 | 0.877 ± 0.209 | 0.872 | 0.975 |
-| 18 | 0.810 ± 0.204 | 0.803 | 0.953 |
-| 20 | 0.645 ± 0.225 | 0.712 | 0.893 |
-| 22 | 0.534 ± 0.203 | 0.651 | 0.820 |
-| 24 | 0.460 ± 0.203 | 0.456 | 0.711 |
+![MerLin chip against numpy chip, Fig. 2c and Fig. 3b conditions](results/merlin_comparison.png)
 
-### Phase noise: above 90 % for σ < 0.04π, but our QGAN does not show the paper's drop at 0.05π
+**Look at:** MerLin minus numpy over the same 100 targets, with its 95 %
+interval, against the ±0.02 tolerance set before the runs.
+**Result:** with the same noise draws every target ends identical; with
+MerLin's own noise, 8 of the 10 conditions stay within 0.02 and the two others
+(+0.021 at 16 stuck, −0.022 at 20) leave the claims unchanged.
 
-![Fidelity against phase noise](results/phase_noise.png)
-
-Up to σ = 0.03π the final values match Fig. 2c within about 0.01, but our QGAN
-reaches 0.9 sooner (64 and 63 rounds against ≈79 and ≈159 at 0.02π and 0.03π).
-At 0.04π and 0.05π it is also more robust than the paper's. Neither computing tr[Mτ] exactly nor drawing
-the noise once per round changes this (≤ 0.006). Changing the unpublished
-training settings does (diagnosis on 20 targets, one run per setting): a
-generator that stops only at d ≤ 0.01 drops to 0.827 ± 0.069 at 0.05π (0.782
-averaged over noise draws, the paper's value) but is slower and lower at small
-σ. No tested setting reproduces the whole curve.
-
-| σ | Ours | Ours, noise-averaged | Paper (read) | Round the mean reaches 0.9 (ours / paper) |
-|---|---:|---:|---:|---:|
-| 0.01π | 0.993 ± 0.004 | 0.990 | 1.00 | 57 / 59 |
-| 0.02π | 0.984 ± 0.007 | 0.974 | 0.99 | 64 / 79 |
-| 0.03π | 0.980 ± 0.011 | 0.955 | 0.97 | 63 / 159 |
-| 0.04π | 0.969 ± 0.014 | 0.926 | 0.92 | 71 / 245 |
-| 0.05π | 0.962 ± 0.018 | 0.896 | 0.78 | 88 / never |
-
-The σ = 0.01π speed was used for the calibration, so it is not independent
-evidence. "Ours" uses the phases the generator intends to set; "noise-averaged"
-averages the fidelity over 100 phase-noise draws.
-
-### Shot noise and the other checks
-
-![Fidelity against counts, and sampling error](results/shot_noise.png)
-
-| Counts | 100 | 200 | 300 | 500 | 1000 | 2000 |
-|---|---:|---:|---:|---:|---:|---:|
-| Ours (σ = 0) | 0.961 | 0.980 | 0.986 | 0.992 | 0.997 | 0.998 |
-| Paper (read) | 0.921 | 0.987 | 0.990 | 0.989 | 0.986 | 0.990 |
-
-- Sampling error (Suppl. Fig. 9a): total variation distance 0.155 at 100 counts and 0.0155 at 10,000 (paper ≈0.155 and ≈0.016).
-- Chip runs replayed in simulation (20 targets): intact circuits 0.989 ± 0.004 (σ = 0.01π) and 0.982 ± 0.009 (0.02π) after 150 rounds, against 96.02 % on the chip; with the 16 stuck phase shifters of Fig. 1(f), 0.940 ± 0.091 and 0.902 ± 0.127 after 160 rounds, against 92.11 %.
-- One stuck phase shifter per circuit (Suppl. Sec. 6): 0.987 ± 0.006 (paper 98.33 ± 7.00 %); each of the 15 positions alone (20 targets per position) gives 0.981–0.990, so none is critical.
-
-## Fair Baselines
-
-Up to 10 stuck phase shifters and σ = 0.02π, the QGAN reaches what the chip
-allows.
-
-The paper claims robustness, not an advantage over another method, and it
-compares the QGAN only with itself under weaker noise. No classical generative
-model outputs a two-photon state. We therefore compare the QGAN with other ways
-of setting the same chip, on the same 100 targets. Two results count as tied
-when their mean paired difference is at most 0.02, the tolerance of our earlier
-rules.
-
-- **Ceiling** (the best fidelity the chip can reach, found knowing τ):
-  - The QGAN is tied with it up to 10 of 30 stuck phase shifters and, averaged
-    over the noise, up to σ = 0.02π.
-  - Beyond that, the QGAN is clearly lower: −0.028 at 12 stuck, −0.099 at 16,
-    and −0.021 to −0.037 from σ = 0.03π. Learning, not the circuit, sets the
-    limit.
-- **Noise-free QGAN** (σ = 0, exact probabilities):
-  - It reaches 0.990 ± 0.003 after 400 rounds.
-  - Phase noise costs at most 0.010 up to σ = 0.03π, then 0.021 at 0.04π and
-    0.028 at 0.05π.
-  - 100 counts cost 0.030; 200 counts or more cost at most 0.011.
-  - Without any noise, the game ends at d = 0.044, just under the generator's
-    stop threshold (0.05). This is why slightly noisy runs end higher, for
-    example 0.998 with 1500 counts and σ = 0.
-- **Random projectors** in place of the trained discriminator: the final
-  fidelity is 0.191 lower (95 % interval 0.152–0.232, σ = 0.02π).
-
-No quantum advantage is claimed or tested. Tables and run times:
-[results/baseline_comparison.md](results/baseline_comparison.md).
-
-## Photonic Assessment and MerLin Extension
-
-The chip as a MerLin layer gives the same results.
-
-![Final fidelity on the MerLin chip against the numpy chip](results/merlin_comparison.png)
-
-The paper is already linear optics, so MerLin carries its chip element for
-element (translation status: MerLin implementation, `MERLIN_IMPLEMENTATION`).
-One MerLin layer holds the 8 modes and the 2 photons of the entangled input
-state; the 42 phase shifters are inputs set at every execution; detection is
-threshold detection in MerLin's `UNBUNCHED` space, exact here because each
-4-mode block holds one photon. The training game, the parameter-shift
-gradients, the 1500 Poisson counts (drawn from MerLin's probabilities), the
-stuck phase shifters and the targets are unchanged, so the role the adaptation
-must preserve, the game on an imperfect chip and its robustness, can be tested
-directly.
-
-- Same noise draws as the numpy simulator (σ = 0.01π and 0.05π, and 16 of 30
-  stuck): every target ends with the identical fidelity.
-- MerLin's own phase noise (uniform, same standard deviation as the paper's
-  Gaussian, also on the chip's preparation of the target that the discriminator
-  measures): the fidelity stays above 90 % for σ < 0.04π and up to 14 of 30
-  stuck phase shifters, as with numpy (top panels). The bottom panels show
-  MerLin minus numpy over the same 100 targets with its 95 % interval; the grey
-  band is the ±0.02 tolerance set before the runs. MerLin is 0.015 lower at
-  0.05π. At 16 and 20 stuck the differences (+0.021 [+0.001, +0.042] and
-  −0.022 [−0.058, +0.013]) come mostly from targets whose runs end far apart:
-  15 and 50 targets differ by more than 0.1 and carry +0.017 and −0.022 of
-  them, where the spread over targets is large (std ≈ 0.2).
-
-Rejected mappings: a generic MerLin interferometer (it loses the paper's
-stuck-phase-shifter positions) and training by automatic differentiation (it
-removes the count and phase noise from the gradients that the robustness claims
-are about). Confidence: high for the equivalence; medium for MerLin's noise
-model (one run per point, and the noise distribution and the noisy target
-preparation change together). Tables:
-[results/merlin_comparison.md](results/merlin_comparison.md).
-
-## Hardware-Aware Settings
-
-Every MerLin run (simulation, no hardware execution):
-
-| Field | Value |
-|---|---|
-| Simulator | MerLin `QuantumLayer` (merlinquantum 0.4.2, which reports `merlin.__version__` 0.4.1, the label stored in the run records) built from a Perceval 1.3.1 circuit, CPU, float64 |
-| Computation space | `UNBUNCHED` |
-| Detector model | Threshold. Each 4-mode block holds one photon, so this equals number resolution |
-| Photons / modes | 2 / 8 (signal 0–3, idler 4–7) |
-| Input state | ½ (\|1000 1000⟩ + \|0100 0100⟩ + \|0010 0010⟩ + \|0001 0001⟩), main text Eq. 3 |
-| Encoding | 42 phase shifters set at every execution: 2 × 15 generator, 2 × 6 discriminator |
-| Measurement | Output probabilities; tr[Mρ] is the probability of port 2 on both sides, estimated from counts |
-| Postselection | Coincidences, one photon per block (no probability leaves the 16 patterns) |
-| Shot count | 1500 Poisson counts per setting, drawn from MerLin's exact probabilities (MerLin's own sampler: 15.6 s against 0.03 s per 6200 executions) |
-| Gradients | Parameter shift (±π/4); every shifted term is a separate noisy execution |
-| Losses and detectors | Lossless circuit, ideal detectors, pure input state (assumed) |
-| Seeds | Targets 0–99; torch seed 0 for MerLin's phase noise |
-| Wall-clock per run (100 targets) | 4.0–4.4 min for 400 rounds, 18.0–28.6 min for 2000 rounds (3 runs sharing a laptop CPU, one thread each) |
+- What: one `QuantumLayer` (from a Perceval circuit) with the entangled
+  two-photon input; the 42 phase shifters are inputs set at every execution;
+  threshold detection in the `UNBUNCHED` space is exact because each 4-mode
+  block holds one photon. The game, gradients, stuck phase shifters and targets
+  are unchanged.
+- Counts: 1500 Poisson counts from MerLin's exact probabilities; MerLin's own
+  sampler is far slower (15.6 s against 0.04 s per 6200 executions on one CPU
+  thread, `utils/time_merlin_sampler.py`).
+- MerLin's noise (`phase_error`) is uniform with the paper's standard
+  deviation, and also hits the chip's preparation of τ.
+- Versions: merlinquantum 0.4.2 (reports `merlin.__version__` 0.4.1), Perceval
+  1.3.1, CPU, float64. Tables:
+  [results/merlin_comparison.md](results/merlin_comparison.md).
 
 ## Limitations
 
-- Simulation only: the chip results (Figs. 2a–b, 3a) are replayed in simulation with an unknown chip noise level.
-- The training protocol is ours (calibrated): the paper gives no step size, steps per turn or end-of-turn rule, and the high-noise results depend on them.
-- The paper's "convergence round" is undefined; our rule is not comparable on long runs, so convergence speed is compared through the round at which the mean fidelity reaches 0.9.
-- The MerLin adaptation simulates the same ideal chip (lossless, ideal detectors, pure input state); it is not a hardware validation. It covers Fig. 2c and 5 of the 13 defect rates of Fig. 3b.
-- One run per condition: the intervals cover the spread over targets, not repeated noise draws on the same targets. The discriminator ablation covers one condition (σ = 0.02π, intact circuits).
+1. Simulation only: the paper's two chip runs (Fig. 2a–b, Fig. 3a) are replayed
+   in simulation on 20 random targets; nothing ran on hardware.
+   - Replays at σ = 0.01π and 0.02π (the chip's noise level is not given):
+     0.989 and 0.982 on intact circuits after 150 rounds (chip: 96.02 %),
+     0.940 and 0.902 with the 16 stuck phase shifters of Fig. 1(f) after 160
+     rounds (chip: 92.11 %).
+2. The paper does not give its training settings (step size, steps per turn,
+   end-of-turn rule). Ours are calibrated on one point of Fig. 2c; with them,
+   the QGAN is more robust than the paper's at σ = 0.04π and 0.05π (0.969 and
+   0.962 against ≈0.92 and ≈0.78). A stricter end-of-turn rule brings 0.05π
+   down to 0.827 (20 targets): the paper's drop depends on these settings.
+
+   | End-of-turn rule (targets 0–19) | σ = 0.01π | σ = 0.03π | σ = 0.05π |
+   |---|---:|---:|---:|
+   | d ≤ 0.05 (ours) | 0.993 | 0.980 | 0.965 |
+   | d ≤ 0.03 | 0.986 | 0.957 | 0.928 |
+   | d ≤ 0.01 | 0.956 | 0.898 | 0.827 |
+   | Paper (read, 100 targets) | 1.00 | 0.97 | 0.78 |
+
+   **Look at:** each rule's row against the paper's row.
+   **Result:** the stricter the end-of-turn rule, the lower the fidelity at
+   every σ: d ≤ 0.01 gives 0.827 at 0.05π, but also 0.956 at 0.01π, so no
+   tested setting reproduces the whole Fig. 2c curve.
+
+   Every tested setting: [results/sweep_tables.md](results/sweep_tables.md).
 
 ## Tests
-
-Run tests from inside the paper folder:
 
 ```bash
 cd papers/qgan_quantum_data_photonics
 pytest -q
 ```
 
-The 41 tests check:
-- the target and noise generation (normalization, entanglement, Haar moments,
-  per-seed streams, defects, counts);
-- the circuits against the supplement's equations, and the exact
-  parameter-shift gradients;
-- noise-free learning and the ceiling;
-- the CLI and the runtime wiring;
-- the MerLin layer against the numpy chip;
-- that the noise-free baseline config differs from the Fig. 2c protocol only
-  in its noise.
+They check the target and noise generation, the circuits against the
+supplement's equations, the parameter-shift gradients, noise-free learning,
+the ceiling, the CLI, and the MerLin layer against the numpy chip.
 
 ## Citation and License
 

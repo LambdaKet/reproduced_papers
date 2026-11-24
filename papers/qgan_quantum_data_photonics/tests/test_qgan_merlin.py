@@ -1,4 +1,4 @@
-"""MerLin adaptation (phase 04): the chip as a MerLin layer inside the same game."""
+"""MerLin adaptation: the chip as a MerLin layer inside the same game."""
 
 from __future__ import annotations
 

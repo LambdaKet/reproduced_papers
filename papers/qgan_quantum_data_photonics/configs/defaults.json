@@ -1,5 +1,5 @@
 {
-  "description": "Lightweight smoke run: QGAN on 2 targets, 10 rounds, sigma = 0.01 pi, 1500 counts. Training settings are provisional until the phase-03 calibration.",
+  "description": "Lightweight smoke run: QGAN on 2 targets, 10 rounds, sigma = 0.01 pi, 1500 counts, with the calibrated training settings.",
   "seed": 0,
   "device": "cpu",
   "outdir": "outdir",

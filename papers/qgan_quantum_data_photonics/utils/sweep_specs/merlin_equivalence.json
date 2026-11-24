@@ -1,6 +1,6 @@
 {
   "sweep_id": "merlin_equivalence",
-  "description": "Phase 04: MerLin chip with the phase-03 noise model, against the phase-03 numpy runs on the same 100 targets.",
+  "description": "MerLin chip with the numpy simulator's noise draws, against the numpy runs on the same 100 targets.",
   "candidates": [
     {
       "name": "merlin_injected_sigma_0.01pi",

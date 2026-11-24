@@ -1,7 +1,7 @@
 """Oracle ceiling: the best fidelity the (possibly defective) generator can reach.
 
 Not in the paper (our control, planned before the experiments). It
-maximizes the true root fidelity |<g|tau>| directly over the free generator
+maximizes the true fidelity |<g|tau>| directly over the free generator
 phases, with full knowledge of tau, from random restarts. Stuck phase shifters
 keep their fixed values. It bounds what any learner could reach with the same
 circuit, so the QGAN's gap to it separates circuit expressivity from learning.
@@ -61,7 +61,7 @@ def _torch_unitaries(phases: torch.Tensor) -> torch.Tensor:
 
 
 def torch_root_fidelity(phases: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
-    """Root fidelity for generator phases ``(B, 30)`` and targets ``(B, 4, 4)``."""
+    """Fidelity for generator phases ``(B, 30)`` and targets ``(B, 4, 4)``."""
     signal = _torch_unitaries(phases[:, :GENERATOR_NUM_PHASES])
     idler = _torch_unitaries(phases[:, GENERATOR_NUM_PHASES:])
     amplitudes = 0.5 * signal @ idler.transpose(-1, -2)

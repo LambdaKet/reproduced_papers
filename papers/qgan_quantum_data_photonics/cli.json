@@ -173,7 +173,7 @@
       "flags": [
         "--backend"
       ],
-      "help": "Chip simulator: numpy (reproduction) or merlin (phase-04 adaptation)",
+      "help": "Chip simulator: numpy (reproduction) or merlin (MerLin adaptation)",
       "type": "str",
       "default": null,
       "choices": [
@@ -189,7 +189,7 @@
       "flags": [
         "--merlin-noise"
       ],
-      "help": "MerLin backend noise: injected (phase-03 model) or phase_error (MerLin's uniform model, same std)",
+      "help": "MerLin backend noise: injected (the numpy simulator's noise draws) or phase_error (MerLin's uniform model, same std)",
       "type": "str",
       "default": null,
       "choices": [

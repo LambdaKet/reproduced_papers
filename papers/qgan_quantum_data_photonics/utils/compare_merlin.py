@@ -1,4 +1,4 @@
-"""Compare the MerLin adaptation (phase 04) with the numpy reproduction (phase 03).
+"""Compare the MerLin adaptation with the numpy reproduction.
 
 Usage (from the repository root)::
 
@@ -7,12 +7,12 @@ Usage (from the repository root)::
         --out papers/qgan_quantum_data_photonics/results
 
 Reads the ``metrics.json`` and ``trajectories.npz`` files listed by the
-``sweep_status.json`` of the phase-03 sweeps and of the three MerLin sweeps,
+``sweep_status.json`` of the numpy sweeps and of the three MerLin sweeps,
 never logs. Applies the tolerances set before the MerLin runs:
 
 - equivalence: >= 90 % of targets with a final fidelity within 1e-6 of
-  phase 03 and condition means within 0.005;
-- MerLin-native noise: condition means within 0.02 of phase 03 and the same
+  the numpy run and condition means within 0.005;
+- MerLin-native noise: condition means within 0.02 of the numpy runs and the same
   predeclared claim outcomes (>= 0.90 for sigma <= 0.03 pi; >= 0.90 up to
   14/30 stuck).
 
@@ -101,7 +101,7 @@ def compare(outdir: Path) -> dict:
     for name, (ref_metrics, ref_dir) in pairs.items():
         merlin_metrics, merlin_dir = equivalence[name]
         if ref_metrics["seeds"] != merlin_metrics["seeds"]:
-            raise ValueError(f"{name}: targets differ from phase 03")
+            raise ValueError(f"{name}: targets differ from the numpy run")
         a, b = _final(ref_metrics), _final(merlin_metrics)
         ta = np.load(ref_dir / "trajectories.npz")["fidelity"]
         tb = np.load(merlin_dir / "trajectories.npz")["fidelity"]
@@ -120,7 +120,7 @@ def compare(outdir: Path) -> dict:
     def native_row(label, ref_metrics, merlin_metrics):
         a, b = _final(ref_metrics), _final(merlin_metrics)
         if ref_metrics["seeds"] != merlin_metrics["seeds"]:
-            raise ValueError(f"{label}: targets differ from phase 03")
+            raise ValueError(f"{label}: targets differ from the numpy run")
         return {
             "condition": label,
             "numpy_mean": float(a.mean()),
@@ -194,9 +194,9 @@ def compare(outdir: Path) -> dict:
 
 def markdown(result: dict) -> str:
     lines = [
-        "### Equivalence: MerLin chip with the phase-03 noise draws (100 targets each)",
+        "### Equivalence: MerLin chip with the numpy simulator's noise draws (100 targets each)",
         "",
-        "Final root fidelity per target, MerLin against numpy.",
+        "Final fidelity per target, MerLin against numpy.",
         "",
         "| Condition | Targets identical (within 1e-6) | Mean difference "
         "| Largest per-round difference | Holds |",
@@ -227,7 +227,7 @@ def markdown(result: dict) -> str:
             "",
             f"### {title}",
             "",
-            "Final root fidelity, mean ± std over the same 100 targets.",
+            "Final fidelity, mean ± std over the same 100 targets.",
             "",
             f"| {header} | Numpy chip | MerLin chip | MerLin − numpy [95 % CI] | Paper (read) |",
             "|---|---:|---:|---:|---:|",
@@ -287,7 +287,7 @@ def plot(result: dict, out: Path) -> None:
         top.axhline(0.9, color=MUTED, linewidth=1)
         top.annotate("claim threshold 0.9", (x[0], 0.9), xytext=(2, 3),
                      textcoords="offset points", fontsize=8, color=MUTED)  # fmt: skip
-        top.set(ylabel="Final root fidelity (mean)", ylim=ylim)
+        top.set(ylabel="Final fidelity (mean)", ylim=ylim)
         top.set_title(title, fontsize=10, color=INK, loc="left")
         top.legend(frameon=False, fontsize=8, loc="lower left")
         _style(top)

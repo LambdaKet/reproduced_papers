@@ -234,7 +234,7 @@ def markdown(result: dict) -> str:
         result["chip_and_single"],
     )
     lines = [
-        "### Phase noise (Fig. 2c): final root fidelity, 100 targets, 1500 counts",
+        "### Phase noise (Fig. 2c): final fidelity, 100 targets, 1500 counts",
         "",
         "| σ | Ours (mean ± std) | Paper (read) | Ours − paper | Round to 0.9 (ours / paper) | Exact tr[Mτ] | Ours, noise-averaged | Ceiling, noise-averaged |",
         "|---|---:|---:|---:|---:|---:|---:|---:|",
@@ -247,7 +247,7 @@ def markdown(result: dict) -> str:
         )
     lines += ["", f"Rules: {pn['rules']}. Verdict: **{pn['verdict']}**.", ""]
     lines += [
-        "### Defect rate (Fig. 3b): final root fidelity, 100 targets, σ = 0.02π, 1500 counts",
+        "### Defect rate (Fig. 3b): final fidelity, 100 targets, σ = 0.02π, 1500 counts",
         "",
         "| Stuck / 30 | Ours (mean ± std) | Targets ≥ 0.9 | Paper (read) | Ours − paper | Ceiling | QGAN − ceiling [95 % CI] |",
         "|---:|---:|---:|---:|---:|---:|---:|",
@@ -264,7 +264,7 @@ def markdown(result: dict) -> str:
         "",
         f"Rules: {dr['rules']}. Verdict: **{dr['verdict']}**; mechanism: {dr['mechanism']}.",
         "",
-        "### Shot noise (Suppl. Fig. 9): final root fidelity, 100 targets, σ = 0",
+        "### Shot noise (Suppl. Fig. 9): final fidelity, 100 targets, σ = 0",
         "",
         "| Counts | Ours (mean ± std) | Paper (read) |",
         "|---:|---:|---:|",

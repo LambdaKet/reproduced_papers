@@ -1,5 +1,5 @@
 {
-  "description": "MerLin adaptation of Fig. 3b (phase 04): the chip simulated by a MerLin layer; stuck phase shifters and noise mode set per sweep candidate.",
+  "description": "MerLin adaptation of Fig. 3b: the chip simulated by a MerLin layer; stuck phase shifters and noise mode set per sweep candidate.",
   "experiment": {
     "name": "defect_rate_sweep_merlin",
     "kind": "qgan"

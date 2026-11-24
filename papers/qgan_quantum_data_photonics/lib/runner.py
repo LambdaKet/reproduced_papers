@@ -140,7 +140,7 @@ def _run_qgan(cfg: dict, inputs: SeedInputs, run_dir: Path) -> dict:
         },
         "backend": backend,
         "hardware": hardware_fields,
-        "fidelity_metric": "root fidelity |<g|tau>| with the intended generator phases",
+        "fidelity_metric": "fidelity |<g|tau>| with the intended generator phases",
         "initial_fidelity": summarize(fidelity[0]),
         "final_fidelity": summarize(final),
         "final_fidelity_per_seed": final.tolist(),
@@ -202,7 +202,7 @@ def _run_ceiling(cfg: dict, inputs: SeedInputs, run_dir: Path) -> dict:
     )
     logger.info("ARTIFACT_WRITTEN | path=%s", arrays_path.name)
     return {
-        "fidelity_metric": "root fidelity |<g|tau>|, best over restarts",
+        "fidelity_metric": "fidelity |<g|tau>|, best over restarts",
         "best_fidelity": summarize(best),
         "best_fidelity_per_seed": best.tolist(),
         "noise_averaged_best_fidelity": {k: summarize(v) for k, v in averaged.items()},
@@ -282,7 +282,7 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
         "code": git_state(PROJECT_DIR),
         "dataset": _dataset_block(cfg),
         "selection": {
-            "name": "root fidelity; no selection (fixed settings, all rounds kept)",
+            "name": "fidelity; no selection (fixed settings, all rounds kept)",
             "direction": "maximize",
             "split": "not applicable: one target per seed, no held-out data",
             "checkpoint": "final rounds (mean over evaluation.final_window)",

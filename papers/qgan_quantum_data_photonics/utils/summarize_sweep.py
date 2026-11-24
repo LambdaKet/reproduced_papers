@@ -6,7 +6,7 @@ Usage::
 
 One row per completed candidate, read from the run's structured metrics only
 (never from logs), in the order of the spec. Ranks nothing: selections such as
-the calibration rule are applied by the analysis scripts of phase 03.
+the calibration rule are applied by the analysis scripts.
 """
 
 from __future__ import annotations

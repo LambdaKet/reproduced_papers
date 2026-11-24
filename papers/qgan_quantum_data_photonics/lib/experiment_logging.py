@@ -83,9 +83,10 @@ def sha256(path: str | Path) -> str:
 def git_state(root: str | Path) -> dict[str, Any]:
     """Return the current Git commit and dirty-worktree state.
 
-    On a remote GPU machine the code arrives without ``.git``. The
-    ``remote-gpu`` runner then sets ``ALPS_CODE_COMMIT`` and
-    ``ALPS_CODE_DIRTY`` to the laptop's state, and those are returned.
+    When the code runs without ``.git`` (for example copied to another
+    machine), set ``REPRO_CODE_COMMIT`` and ``REPRO_CODE_DIRTY`` (``"1"`` if
+    the source checkout had uncommitted changes) to the source checkout's
+    state; they are returned instead.
 
     Args:
         root: Repository containing the experiment code.
@@ -94,9 +95,9 @@ def git_state(root: str | Path) -> dict[str, Any]:
         Mapping with ``commit`` and ``dirty`` fields.
     """
 
-    commit = os.environ.get("ALPS_CODE_COMMIT")
+    commit = os.environ.get("REPRO_CODE_COMMIT")
     if commit:
-        return {"commit": commit, "dirty": os.environ.get("ALPS_CODE_DIRTY") == "1"}
+        return {"commit": commit, "dirty": os.environ.get("REPRO_CODE_DIRTY") == "1"}
     command = ["git", "-C", str(Path(root).resolve())]
     commit = subprocess.check_output(
         [*command, "rev-parse", "HEAD"],

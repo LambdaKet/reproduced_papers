@@ -1,4 +1,4 @@
-"""Compare the QGAN with its matched baselines (phase 05).
+"""Compare the QGAN with its matched baselines.
 
 Usage (from the repository root)::
 
@@ -11,7 +11,7 @@ listed by the ``sweep_status.json`` of the sweeps below, never logs. Every sweep
 must be COMPLETED with every expected run, and every run must cover target
 seeds 0-99 with finite per-target values. Applies the decision rule set before
 these comparisons, with the 0.02 tolerance of the earlier ceiling and MerLin
-rules (root fidelity):
+rules (fidelity):
 
 - tied: |mean paired difference| <= 0.02;
 - clearly higher or lower: |mean| > 0.02 and the 95 % interval excludes 0;
@@ -69,49 +69,48 @@ SYSTEMS = {
             ("single_runs", "single_defect"),
         ],
         "role": "reproduced method (numpy chip simulator)",
-        "provenance": "local runs, phase 03",
+        "provenance": "local runs (reproduction)",
         "resources": "30 generator + 12 discriminator phases; parameter shift; "
         "1500 counts per setting (Suppl. Fig. 9b: 100-2000)",
         "status": "reference",
     },
     "Noise-free QGAN": {
         "runs": [("noise_free_reference", None)],
-        "role": "baseline: cost of noise (phase-01 plan)",
-        "provenance": "local runs, phase 05",
+        "role": "baseline: cost of noise (planned before the runs)",
+        "provenance": "local runs (baseline)",
         "resources": "same phases and settings; sigma = 0, exact probabilities",
-        "status": "COMMENSURABLE",
+        "status": "comparable",
     },
     "Oracle ceiling": {
         "runs": [("oracle_ceiling", None)],
         "role": "control: best fidelity the chip can reach (knows the target)",
-        "provenance": "local runs, phase 03",
+        "provenance": "local runs (reproduction)",
         "resources": "30 generator phases minus stuck ones; exact gradients; "
         "20 restarts x 2000 Adam iterations; 1000 noise draws per sigma",
-        "status": "COMMENSURABLE (upper bound by design)",
+        "status": "comparable (upper bound by design)",
     },
     "Fixed discriminator": {
         "runs": [("single_runs", "fixed_discriminator")],
         "role": "ablation: random projectors redrawn every round",
-        "provenance": "local run, phase 03",
+        "provenance": "local run (reproduction)",
         "resources": "30 generator phases; no discriminator training",
-        "status": "COMMENSURABLE",
+        "status": "comparable",
     },
     "MerLin adaptation, MerLin noise": {
         "runs": [("merlin_native_phase_noise", None), ("merlin_native_defects", None)],
         "role": "photonic adaptation (MerLin QuantumLayer, 8 modes, 2 photons)",
-        "provenance": "local runs, phase 04 (simulation)",
+        "provenance": "local runs (MerLin adaptation, simulation)",
         "resources": "same as the QGAN; MerLin phase_error noise "
         "(uniform, same standard deviation)",
-        "status": "PARTIALLY_COMMENSURABLE (noise distribution; target "
-        "prepared on the chip)",
+        "status": "partly comparable (noise distribution; target prepared on the chip)",
     },
 }
-# Runs sharing the laptop CPU at the same time, one thread each.
+# Runs sharing the CPU at the same time, one thread each.
 CONCURRENCY = {
-    "local runs, phase 03": "up to 10 runs at once",
-    "local run, phase 03": "up to 10 runs at once",
-    "local runs, phase 04 (simulation)": "3 runs at once",
-    "local runs, phase 05": "1 run at a time",
+    "local runs (reproduction)": "up to 10 runs at once",
+    "local run (reproduction)": "up to 10 runs at once",
+    "local runs (MerLin adaptation, simulation)": "3 runs at once",
+    "local runs (baseline)": "1 run at a time",
 }
 
 
@@ -206,8 +205,8 @@ def comparisons(runs) -> list[dict]:
                 condition=condition,
                 system="QGAN",
                 control="Noise-free QGAN",
-                metric="final root fidelity, intended phases",
-                status="COMMENSURABLE",
+                metric="final fidelity, intended phases",
+                status="comparable",
                 paper=paper.PHASE_NOISE_FINAL[sigma],
             )
         )
@@ -223,9 +222,9 @@ def comparisons(runs) -> list[dict]:
                 condition=condition,
                 system="QGAN",
                 control="Oracle ceiling",
-                metric="noise-averaged root fidelity (QGAN at round 400, "
+                metric="noise-averaged fidelity (QGAN at round 400, "
                 "100 draws; ceiling at its optimum, 1000 draws)",
-                status="COMMENSURABLE",
+                status="comparable",
             )
         )
         rows.append(
@@ -240,8 +239,8 @@ def comparisons(runs) -> list[dict]:
                 condition=condition,
                 system="MerLin adaptation, MerLin noise",
                 control="QGAN",
-                metric="final root fidelity, intended phases",
-                status="PARTIALLY_COMMENSURABLE",
+                metric="final fidelity, intended phases",
+                status="partly comparable",
             )
         )
     for stuck, paper_value in zip(
@@ -261,8 +260,8 @@ def comparisons(runs) -> list[dict]:
                 condition=condition,
                 system="QGAN",
                 control="Oracle ceiling",
-                metric="final root fidelity, intended phases (ceiling: best)",
-                status="COMMENSURABLE",
+                metric="final fidelity, intended phases (ceiling: best)",
+                status="comparable",
                 paper=paper_value,
             )
         )
@@ -279,8 +278,8 @@ def comparisons(runs) -> list[dict]:
                     condition=condition,
                     system="MerLin adaptation, MerLin noise",
                     control="Oracle ceiling",
-                    metric="final root fidelity, intended phases (ceiling: best)",
-                    status="PARTIALLY_COMMENSURABLE",
+                    metric="final fidelity, intended phases (ceiling: best)",
+                    status="partly comparable",
                 )
             )
     rows.append(
@@ -291,8 +290,8 @@ def comparisons(runs) -> list[dict]:
             condition="one stuck per circuit against none, sigma = 0.02pi",
             system="QGAN, one defect",
             control="QGAN, intact",
-            metric="final root fidelity, intended phases",
-            status="COMMENSURABLE",
+            metric="final fidelity, intended phases",
+            status="comparable",
             paper={"one defect": paper.SINGLE_DEFECT, "none": paper.NO_DEFECT},
         )
     )
@@ -306,8 +305,8 @@ def comparisons(runs) -> list[dict]:
                 condition=f"{counts} counts",
                 system="QGAN",
                 control="Noise-free QGAN",
-                metric="final root fidelity, intended phases",
-                status="COMMENSURABLE",
+                metric="final fidelity, intended phases",
+                status="comparable",
                 paper=paper_value,
             )
         )
@@ -319,8 +318,8 @@ def comparisons(runs) -> list[dict]:
             condition="sigma = 0.02pi, intact, 400 rounds",
             system="Fixed discriminator",
             control="QGAN",
-            metric="final root fidelity, intended phases",
-            status="COMMENSURABLE",
+            metric="final fidelity, intended phases",
+            status="comparable",
         )
     )
     return rows
@@ -396,7 +395,7 @@ def _find(rows, claim, condition, system, control) -> dict | None:
 def markdown(result: dict) -> str:
     rows = result["comparisons"]
     out = [
-        "Phase-05 comparison: the QGAN against its matched baselines. Simulation, "
+        "Comparison: the QGAN against its matched baselines. Simulation, "
         "100 targets per run (seeds 0-99), paired by target. Decision rule, "
         "set before these comparisons: tied when the mean paired difference is at "
         "most 0.02; clearly higher or lower when it exceeds 0.02 and its 95 % "
@@ -424,9 +423,9 @@ def markdown(result: dict) -> str:
         "Suppl. Fig. 9b, Suppl. Sec. 6) | — | 1500 counts; training settings "
         "not stated | — | values read from figures |",
         "",
-        "Wall-clock: one run = 100 targets; laptop CPU (Apple M5, 10 cores), "
+        "Wall-clock: one run = 100 targets; one Apple M5 CPU (10 cores), "
         "one thread per run. Runs that shared the machine are slower, so times "
-        "compare workloads only roughly. MerLin with the phase-03 noise draws "
+        "compare workloads only roughly. MerLin with the numpy simulator's noise draws "
         "gives the numpy results exactly (`merlin_comparison.md`).",
         "",
         "### Phase noise (Fig. 2c): 1500 counts, 400 rounds",

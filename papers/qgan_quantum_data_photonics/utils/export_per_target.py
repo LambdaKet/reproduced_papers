@@ -8,7 +8,7 @@ Usage (from the repository root)::
 
 The raw runs under ``outdir/`` are not published; this file keeps, for every
 run of the listed sweeps, its seeds, settings, wall-clock and per-target values
-(final root fidelity; for the QGAN, the noise-averaged fidelity at the last
+(final fidelity; for the QGAN, the noise-averaged fidelity at the last
 round; for the ceiling, the best fidelity and its noise averages) and, for the
 Fig. 2c and noise-free runs, the mean learning curve, so the
 notebook can recompute every paired comparison. Reads only the files listed by

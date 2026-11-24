@@ -1,6 +1,6 @@
 {
   "sweep_id": "merlin_native_defects",
-  "description": "Phase 04: Fig. 3b at 5 predeclared rates with MerLin's phase_error noise model, sigma = 0.02 pi.",
+  "description": "Fig. 3b at 5 predeclared rates with MerLin's phase_error noise model, sigma = 0.02 pi.",
   "candidates": [
     {
       "name": "merlin_phase_error_stuck_0_of_30",

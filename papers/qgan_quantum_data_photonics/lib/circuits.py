@@ -194,7 +194,7 @@ def output_distribution(
 
 
 def root_fidelity(amplitudes: np.ndarray, target: np.ndarray) -> np.ndarray:
-    """Return |<g|tau>|, the root fidelity of two pure states (Suppl. Eq. 12).
+    """Return |<g|tau>|, the fidelity of two pure states (Suppl. Eq. 12).
 
     Parameters
     ----------

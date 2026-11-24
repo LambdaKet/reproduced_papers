@@ -74,7 +74,7 @@ def plot_phase_noise(outdir: Path, out: Path) -> None:
     for color, sigma in zip(SIGMA_RAMP, sigmas, strict=True):
         curve = np.asarray(runs[f"sigma_{sigma}pi"]["mean_fidelity_by_round"])
         left.plot(curve, color=color, linewidth=2, label=f"σ = {sigma}π")
-    left.set(xlabel="Round", ylabel="Mean root fidelity", ylim=(0, 1.02), xlim=(0, 400))
+    left.set(xlabel="Round", ylabel="Mean fidelity", ylim=(0, 1.02), xlim=(0, 400))
     left.legend(
         frameon=False,
         fontsize=8,
@@ -111,7 +111,7 @@ def plot_phase_noise(outdir: Path, out: Path) -> None:
                    fontsize=8, color=MUTED)  # fmt: skip
     right.set(
         xlabel="Phase noise σ (units of π)",
-        ylabel="Final root fidelity",
+        ylabel="Final fidelity",
         ylim=(0.7, 1.01),
     )
     right.set_xticks(sigmas)
@@ -154,7 +154,7 @@ def plot_defect_rate(outdir: Path, out: Path) -> None:
     ax.axvline(15, color=MUTED, linewidth=1, linestyle="--")
     ax.annotate("half of the 30", (15, 0.32), xytext=(4, 0), textcoords="offset points",
                 fontsize=8, color=MUTED)  # fmt: skip
-    ax.set(xlabel="Stuck generator phase shifters (out of 30)", ylabel="Final root fidelity",
+    ax.set(xlabel="Stuck generator phase shifters (out of 30)", ylabel="Final fidelity",
            ylim=(0.3, 1.02))  # fmt: skip
     ax.set_xticks(stuck)
     ax.set_title("Final fidelity against defects (Fig. 3b), σ = 0.02π, 1500 counts",
@@ -178,7 +178,7 @@ def plot_shot_noise(outdir: Path, out: Path) -> None:
                   label="Ours (mean ± std)")  # fmt: skip
     left.plot(counts, paper.SHOT_FIDELITY, color=PAPER, marker="D", markersize=6, linewidth=2,
               linestyle="--", label="Paper (read)")  # fmt: skip
-    left.set(xlabel="Coincidence counts per setting", ylabel="Final root fidelity",
+    left.set(xlabel="Coincidence counts per setting", ylabel="Final fidelity",
              ylim=(0.88, 1.005))  # fmt: skip
     left.set_title("Final fidelity against counts (Suppl. Fig. 9b), σ = 0", fontsize=10,
                    color=INK, loc="left")  # fmt: skip

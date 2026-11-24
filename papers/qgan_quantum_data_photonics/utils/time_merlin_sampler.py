@@ -6,7 +6,7 @@ Usage (from the repository root)::
 
 One batch of 6200 chip executions (random phases, seed 0), the order of the
 executions of a few training rounds. Prints both wall-clock times and any
-warning raised by MerLin. Supports the phase-04 choice of drawing the counts
+warning raised by MerLin. Supports the choice of drawing the counts
 with our Poisson model from MerLin's exact probabilities.
 """
 

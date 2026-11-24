@@ -1,6 +1,6 @@
-### Equivalence: MerLin chip with the phase-03 noise draws (100 targets each)
+### Equivalence: MerLin chip with the numpy simulator's noise draws (100 targets each)
 
-Final root fidelity per target, MerLin against numpy.
+Final fidelity per target, MerLin against numpy.
 
 | Condition | Targets identical (within 1e-6) | Mean difference | Largest per-round difference | Holds |
 |---|---:|---:|---:|---|
@@ -10,7 +10,7 @@ Final root fidelity per target, MerLin against numpy.
 
 ### MerLin phase noise, Fig. 2c conditions (1500 counts)
 
-Final root fidelity, mean ± std over the same 100 targets.
+Final fidelity, mean ± std over the same 100 targets.
 
 | Phase noise σ | Numpy chip | MerLin chip | MerLin − numpy [95 % CI] | Paper (read) |
 |---|---:|---:|---:|---:|
@@ -24,7 +24,7 @@ Claim rule (mean ≥ 0.90 for σ ≤ 0.03π): numpy holds, MerLin holds. Means w
 
 ### MerLin phase noise, Fig. 3b conditions (σ = 0.02π, 1500 counts)
 
-Final root fidelity, mean ± std over the same 100 targets.
+Final fidelity, mean ± std over the same 100 targets.
 
 | Stuck phase shifters | Numpy chip | MerLin chip | MerLin − numpy [95 % CI] | Paper (read) |
 |---|---:|---:|---:|---:|

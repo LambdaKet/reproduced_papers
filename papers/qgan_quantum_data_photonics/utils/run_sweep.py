@@ -5,12 +5,14 @@ Usage (from the repository root)::
     python papers/qgan_quantum_data_photonics/utils/run_sweep.py \\
         papers/qgan_quantum_data_photonics/utils/sweep_specs/<name>.json \\
         --sweep-dir papers/qgan_quantum_data_photonics/outdir/sweep_<name> \\
-        --validator <path to experiment-logging/scripts/validate_logging.py>
+        [--validator <path to validate_logging.py>]
 
 The spec lists candidates (a config plus CLI flags). Each candidate is one run
 of the shared runtime over its whole block of target seeds, in its own output
 folder with its own ``run.log``; only this coordinator writes ``sweep.log`` and
-``sweep_status.json``. A failed or invalid run gets one second attempt; after
+``sweep_status.json``. ``--validator`` (optional) checks each run's evidence
+files with an external logging validator; without it, runs are not validated
+and the sweep log says so. A failed or invalid run gets one second attempt; after
 that it stays ``FAILED`` and the sweep ends ``PARTIAL``. ``--resume`` continues
 a sweep whose coordinator stopped: completed runs are kept, a run left
 ``RUNNING`` is recorded as a failed attempt (coordinator stopped) and gets its
@@ -81,7 +83,10 @@ def main() -> int:
     parser.add_argument("spec", type=Path)
     parser.add_argument("--sweep-dir", type=Path, required=True)
     parser.add_argument(
-        "--validator", required=True, help="Path to validate_logging.py"
+        "--validator",
+        default=None,
+        help="Optional path to a logging validator (validate_logging.py); "
+        "without it, runs are not validated",
     )
     parser.add_argument(
         "--resume",
@@ -94,6 +99,8 @@ def main() -> int:
     sweep_dir = args.sweep_dir.resolve()
     sweep_dir.mkdir(parents=True, exist_ok=True)
     configure_logging(sweep_dir / "sweep.log")
+    if args.validator is None:
+        logger.warning("NO_VALIDATOR | runs are not validated (no --validator given)")
     require_training = bool(spec.get("require_training", True))
     seed = int(spec.get("seed", 0))
     first_attempt = {}
@@ -218,11 +225,12 @@ def main() -> int:
                 command, cwd=REPO_ROOT, capture_output=True, text=True
             )
             run_dir = _run_dir_of(base)
-            valid, report = (
-                (False, "no run directory")
-                if run_dir is None
-                else _validate(args.validator, run_dir, require_training)
-            )
+            if run_dir is None:
+                valid, report = False, "no run directory"
+            elif args.validator is None:
+                valid, report = True, "not validated (no --validator given)"
+            else:
+                valid, report = _validate(args.validator, run_dir, require_training)
             entry["attempts"].append(
                 {
                     "attempt": attempt,

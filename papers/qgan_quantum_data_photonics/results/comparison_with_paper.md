@@ -1,4 +1,4 @@
-### Phase noise (Fig. 2c): final root fidelity, 100 targets, 1500 counts
+### Phase noise (Fig. 2c): final fidelity, 100 targets, 1500 counts
 
 | σ | Ours (mean ± std) | Paper (read) | Ours − paper | Round to 0.9 (ours / paper) | Exact tr[Mτ] | Ours, noise-averaged | Ceiling, noise-averaged |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -10,7 +10,7 @@
 
 Rules: {'every level within 0.03 of the paper': False, 'mean falls monotonically with sigma': True, 'mean crosses 0.90 between 0.03 pi and 0.05 pi': False, 'mean below 0.90 at some sigma <= 0.03 pi': False}. Verdict: **partially supported**.
 
-### Defect rate (Fig. 3b): final root fidelity, 100 targets, σ = 0.02π, 1500 counts
+### Defect rate (Fig. 3b): final fidelity, 100 targets, σ = 0.02π, 1500 counts
 
 | Stuck / 30 | Ours (mean ± std) | Targets ≥ 0.9 | Paper (read) | Ours − paper | Ceiling | QGAN − ceiling [95 % CI] |
 |---:|---:|---:|---:|---:|---:|---:|
@@ -30,7 +30,7 @@ Rules: {'every level within 0.03 of the paper': False, 'mean falls monotonically
 
 Rules: {'mean >= 0.90 up to 14/30 stuck': True, 'mean < 0.90 at 10/30 or fewer': False, 'mean decreases with the defect rate (steps of at most +0.01)': True, 'QGAN within 0.02 of the ceiling at every rate': False}. Verdict: **supported**; mechanism: learning-limited at high defect rates (QGAN below the ceiling).
 
-### Shot noise (Suppl. Fig. 9): final root fidelity, 100 targets, σ = 0
+### Shot noise (Suppl. Fig. 9): final fidelity, 100 targets, σ = 0
 
 | Counts | Ours (mean ± std) | Paper (read) |
 |---:|---:|---:|

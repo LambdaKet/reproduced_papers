@@ -3,7 +3,7 @@
 Every candidate of every sweep, generated from the stored run metrics. Common
 rules:
 
-- Metric: root fidelity |⟨g|τ⟩| with the phases the generator intends to set,
+- Metric: fidelity |⟨g|τ⟩| with the phases the generator intends to set,
   averaged over the last 20 rounds of a run (10 for the chip replays);
   higher is better. The oracle ceiling reports the best fidelity over 20
   restarts and its average over phase-noise draws.
@@ -20,7 +20,7 @@ rules:
 
 ## calibration
 
-Calibration grid (revised in phase 02, before any calibration run): learning rate x steps per turn x generator stop threshold; sigma = 0.01 pi, 1500 counts, calibration seeds 1000-1019, 400 rounds.
+Calibration grid (fixed before any calibration run): learning rate x steps per turn x generator stop threshold; sigma = 0.01 pi, 1500 counts, calibration seeds 1000-1019, 400 rounds.
 
 calibration: COMPLETE SWEEP, 8/8 runs; code [('c9a60a4df29eb4be9a1249eaee836666a6c086ee', True)]
 
@@ -216,7 +216,7 @@ oracle_ceiling: COMPLETE SWEEP, 14/14 runs; code [('c9a60a4df29eb4be9a1249eaee83
 
 ## noise_free_reference
 
-Phase 05: noise-free QGAN at the run lengths of Fig. 2c (400 rounds) and Suppl. Fig. 9b (2500 rounds).
+Noise-free QGAN at the run lengths of Fig. 2c (400 rounds) and Suppl. Fig. 9b (2500 rounds).
 
 noise_free_reference: COMPLETE SWEEP, 2/2 runs; code [('3b8d6a3ca08ab9513e51a9664eaba8e0f5fe6146', True)]
 
@@ -227,7 +227,7 @@ noise_free_reference: COMPLETE SWEEP, 2/2 runs; code [('3b8d6a3ca08ab9513e51a966
 
 ## merlin_equivalence
 
-Phase 04: MerLin chip with the phase-03 noise model, against the phase-03 numpy runs on the same 100 targets.
+MerLin chip with the numpy simulator's noise draws, against the numpy runs on the same 100 targets.
 
 merlin_equivalence: COMPLETE SWEEP, 3/3 runs; code [('b6ed959628b1ae4218dc5613e4e433d3f665fed5', True)]
 
@@ -239,7 +239,7 @@ merlin_equivalence: COMPLETE SWEEP, 3/3 runs; code [('b6ed959628b1ae4218dc5613e4
 
 ## merlin_native_phase_noise
 
-Phase 04: Fig. 2c with MerLin's phase_error noise model (Uniform, same std as the paper's sigma).
+Fig. 2c with MerLin's phase_error noise model (Uniform, same std as the paper's sigma).
 
 merlin_native_phase_noise: COMPLETE SWEEP, 5/5 runs; code [('b6ed959628b1ae4218dc5613e4e433d3f665fed5', True)]
 
@@ -253,7 +253,7 @@ merlin_native_phase_noise: COMPLETE SWEEP, 5/5 runs; code [('b6ed959628b1ae4218d
 
 ## merlin_native_defects
 
-Phase 04: Fig. 3b at 5 predeclared rates with MerLin's phase_error noise model, sigma = 0.02 pi.
+Fig. 3b at 5 predeclared rates with MerLin's phase_error noise model, sigma = 0.02 pi.
 
 merlin_native_defects: COMPLETE SWEEP, 5/5 runs; code [('b6ed959628b1ae4218dc5613e4e433d3f665fed5', True)]
 
