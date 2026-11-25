@@ -1,6 +1,6 @@
 {
   "sweep_id": "phase_noise_diagnosis",
-  "description": "Gap diagnosis for Fig. 2c at high sigma: one training-protocol component changed at a time (generator stop threshold, step size, steps per turn) on targets 0-19.",
+  "description": "Gap diagnosis for Fig. 2c at high sigma: one training setting changed at a time (end-of-turn threshold on d, step size, steps per turn) on targets 0-19.",
   "candidates": [
     {
       "name": "stop_0.01_sigma_0.01pi",

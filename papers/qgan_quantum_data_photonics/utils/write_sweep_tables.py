@@ -49,8 +49,9 @@ rules:
 
 - Metric: fidelity |⟨g|τ⟩| with the phases the generator intends to set,
   averaged over the last 20 rounds of a run (10 for the chip replays);
-  higher is better. The oracle ceiling reports the best fidelity over 20
-  restarts and its average over phase-noise draws.
+  higher is better. The ceiling reports the best fidelity over 20
+  restarts and, at each σ, the fidelity of these best noise-free phases
+  averaged over phase-noise draws.
 - Aggregation: mean ± standard deviation over the targets of a run (one target
   per seed; no data split, since each run learns one state).
 - "Round mean reaches 0.9": first round at which the mean over targets reaches

@@ -129,7 +129,7 @@ def main() -> int:
                         "run_dir": None
                         if stopped is None
                         else str(stopped.relative_to(sweep_dir)),
-                        "validation": "interrupted: the coordinator stopped with the session",
+                        "validation": "interrupted: the coordinator stopped",
                     }
                 )
                 logger.error(

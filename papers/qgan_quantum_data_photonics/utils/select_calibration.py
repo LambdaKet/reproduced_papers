@@ -9,7 +9,7 @@ candidates whose mean final fidelity is at least 0.98; pick the one whose mean
 fidelity first reaches 0.9 closest to round 59 (the paper's Fig. 2c value at
 sigma = 0.01 pi); candidates within 5 rounds of the closest count as tied; among
 tied candidates prefer the smaller steps per turn, then the smaller step size,
-then the larger generator stop threshold. Writes ``calibration_selection.json``
+then the larger end-of-turn threshold on d. Writes ``calibration_selection.json``
 in the sweep folder and prints it. Exits 1 if the sweep is partial or no
 candidate is eligible (calibration gate).
 """

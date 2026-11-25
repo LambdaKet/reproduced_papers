@@ -1,6 +1,6 @@
 {
   "sweep_id": "calibration",
-  "description": "Calibration grid (fixed before any calibration run): learning rate x steps per turn x generator stop threshold; sigma = 0.01 pi, 1500 counts, calibration seeds 1000-1019, 400 rounds.",
+  "description": "Calibration grid (fixed before any calibration run): learning rate x steps per turn x end-of-turn threshold on d; sigma = 0.01 pi, 1500 counts, calibration seeds 1000-1019, 400 rounds.",
   "candidates": [
     {
       "name": "lr_0.3pi_steps_10_stop_0.03",

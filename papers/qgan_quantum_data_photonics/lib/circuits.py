@@ -193,7 +193,7 @@ def output_distribution(
     return np.abs(out) ** 2
 
 
-def root_fidelity(amplitudes: np.ndarray, target: np.ndarray) -> np.ndarray:
+def state_fidelity(amplitudes: np.ndarray, target: np.ndarray) -> np.ndarray:
     """Return |<g|tau>|, the fidelity of two pure states (Suppl. Eq. 12).
 
     Parameters

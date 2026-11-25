@@ -24,10 +24,14 @@ def configure_logging(
 ) -> None:
     """Configure UTF-8 file logging and optional console logging in UTC.
 
-    Args:
-        log_file: File that receives the experiment log.
-        level: Python logging level.
-        console: Whether to mirror records to stderr.
+    Parameters
+    ----------
+    log_file : str or pathlib.Path
+        File that receives the experiment log.
+    level : int
+        Python logging level. Default value is ``logging.INFO``.
+    console : bool
+        Whether to mirror records to stderr. Default value is True.
     """
 
     path = Path(log_file)
@@ -54,9 +58,12 @@ def utc_now() -> str:
 def write_json(path: str | Path, value: Mapping[str, Any]) -> None:
     """Atomically write a JSON object.
 
-    Args:
-        path: Destination file.
-        value: JSON-serializable mapping to write.
+    Parameters
+    ----------
+    path : str or pathlib.Path
+        Destination file.
+    value : collections.abc.Mapping
+        JSON-serializable mapping to write.
     """
 
     destination = Path(path)
@@ -88,10 +95,14 @@ def git_state(root: str | Path) -> dict[str, Any]:
     the source checkout had uncommitted changes) to the source checkout's
     state; they are returned instead.
 
-    Args:
-        root: Repository containing the experiment code.
+    Parameters
+    ----------
+    root : str or pathlib.Path
+        Repository containing the experiment code.
 
-    Returns:
+    Returns
+    -------
+    dict
         Mapping with ``commit`` and ``dirty`` fields.
     """
 
@@ -112,58 +123,38 @@ def git_state(root: str | Path) -> dict[str, Any]:
     return {"commit": commit, "dirty": dirty}
 
 
-def sweep_progress(status: Mapping[str, Any], *, now: float | None = None) -> str:
-    """Summarize how far a sweep has got, for a log line or the progress viewer.
+def sweep_progress(status: Mapping[str, Any]) -> str:
+    """Summarize how far a sweep has got, for a log line.
 
-    Each completed run counts as one. A running run adds the finished fraction
-    of its ``progress`` object. Planned, failed, invalid and superseded runs
-    add nothing, so a retried attempt is never counted twice.
+    Each completed run counts as one; planned, running and failed runs add
+    nothing, so a retried attempt is never counted twice.
 
-    Args:
-        status: Parsed ``sweep_status.json``.
-        now: Current Unix time, for tests. Defaults to ``time.time()``.
+    Parameters
+    ----------
+    status : collections.abc.Mapping
+        Parsed ``sweep_status.json``.
 
-    Returns:
+    Returns
+    -------
+    str
         Text such as ``7/12 runs completed · 58% done · about 1h 5m left``.
     """
 
-    expected = status.get("expected_runs")
-    runs = status.get("runs")
-    if not isinstance(expected, int) or expected <= 0 or not isinstance(runs, list):
-        return "progress unavailable"
-
-    completed = sum(
-        1 for run in runs if isinstance(run, dict) and run.get("status") == "COMPLETED"
-    )
-    done = float(completed)
-    for run in runs:
-        if not isinstance(run, dict) or run.get("status") != "RUNNING":
-            continue
-        progress = run.get("progress")
-        if not isinstance(progress, dict):
-            continue
-        current, total = progress.get("current"), progress.get("total")
-        if isinstance(current, (int, float)) and isinstance(total, (int, float)):
-            if total > 0 and current >= 0:
-                done += min(1.0, current / total)
-    done = min(float(expected), done)
+    expected = status["expected_runs"]
+    completed = sum(run["status"] == "COMPLETED" for run in status["runs"])
     text = (
-        f"{min(completed, expected)}/{expected} runs completed · "
-        f"{round(100 * done / expected)}% done"
+        f"{completed}/{expected} runs completed · "
+        f"{round(100 * completed / expected)}% done"
     )
-
-    if status.get("status") != "RUNNING":
-        return f"{text} · sweep {str(status.get('status', 'unknown')).lower()}"
-    try:
-        started = calendar.timegm(
-            time.strptime(status["started_at"], "%Y-%m-%dT%H:%M:%SZ")
-        )
-    except (KeyError, TypeError, ValueError):
+    if status["status"] != "RUNNING":
+        return f"{text} · sweep {status['status'].lower()}"
+    started = calendar.timegm(time.strptime(status["started_at"], "%Y-%m-%dT%H:%M:%SZ"))
+    elapsed = time.time() - started
+    if completed == 0 or elapsed <= 0:
         return f"{text} · time left unknown"
-    elapsed = (time.time() if now is None else now) - started
-    if done <= 0 or elapsed <= 0:
-        return f"{text} · time left unknown"
-    return f"{text} · about {_duration(elapsed / done * (expected - done))} left"
+    return (
+        f"{text} · about {_duration(elapsed / completed * (expected - completed))} left"
+    )
 
 
 def _duration(seconds: float) -> str:

@@ -20,11 +20,7 @@ _DEFAULTS_PATH = PROJECT_DIR / "configs" / "defaults.json"
 
 
 def build_project_cli_parser():
-    schema_path = _CLI_SCHEMA_PATH
-    if not schema_path.exists():
-        schema_path = PROJECT_DIR / "configs" / "cli.json"
-    schema = json.loads(schema_path.read_text())
-    schema.setdefault("arguments", [])
+    schema = json.loads(_CLI_SCHEMA_PATH.read_text())
     return build_cli_parser(schema)
 
 

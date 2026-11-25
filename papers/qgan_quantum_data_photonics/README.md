@@ -36,14 +36,6 @@ hold with MerLin's own noise model (5 noise levels, 5 of the 13 defect rates).
 
 ## Original Paper
 
-Wang et al. report the first quantum generative adversarial network (QGAN) run
-in photonics: on a programmable silicon chip, it learns a random two-photon
-entangled state with a fidelity above 90 %, even with up to half of the
-generator's phase shifters stuck (one chip run, then simulations) or with phase
-noise up to 0.04π on every phase shifter (simulations). The target state is
-known: the paper shows that learning can "prepare high-fidelity quantum states
-on defective chips instead of reducing their scale".
-
 - **Target τ:** a random maximally entangled state of two ququarts
   (four-level systems), path-encoded on 4 + 4 optical modes.
 - **Players:** the generator's two 15-phase-shifter meshes (Suppl. Fig. 2(d))
@@ -217,7 +209,7 @@ stuck (−0.028; −0.099 at 16), while the ceiling stays at 0.975 or more up to
 
 **Fig. 2c (phase noise)**
 
-- Blue curve (intended phases) against the paper: within 0.01 up to
+- Blue curve (intended phases) against the paper: within about 0.01 up to
   σ = 0.03π (0.993, 0.984, 0.980 against 1.00, 0.99, 0.97); above, ours stays
   high where the paper drops (0.969 and 0.962 against 0.92 and 0.78 at 0.04π
   and 0.05π; second limit).
@@ -256,8 +248,8 @@ MerLin's own noise, 8 of the 10 conditions stay within 0.02 and the two others
   block holds one photon. The game, gradients, stuck phase shifters and targets
   are unchanged.
 - Counts: 1500 Poisson counts from MerLin's exact probabilities; MerLin's own
-  sampler is far slower (15.6 s against 0.04 s per 6200 executions on one CPU
-  thread, `utils/time_merlin_sampler.py`).
+  sampler is far slower (about 16 s against 0.05 s per 6200 executions on one
+  CPU thread, `utils/time_merlin_sampler.py`).
 - MerLin's noise (`phase_error`) is uniform with the paper's standard
   deviation, and also hits the chip's preparation of τ.
 - Versions: merlinquantum 0.4.2 (reports `merlin.__version__` 0.4.1), Perceval

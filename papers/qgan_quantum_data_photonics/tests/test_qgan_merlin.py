@@ -15,7 +15,7 @@ from qgan_quantum_data_photonics.lib.circuits import (
     beam_splitter,
     generated_amplitudes,
     output_distribution,
-    root_fidelity,
+    state_fidelity,
 )
 from qgan_quantum_data_photonics.lib.data import generate_inputs
 from qgan_quantum_data_photonics.lib.qgan import QganSettings, _Hardware, train_qgan
@@ -76,7 +76,7 @@ def test_targets_are_prepared_on_the_chip():
     inputs = generate_inputs([0, 1, 2], {"mode": "none"})
     phases = target_preparation_phases(inputs)
     prepared = generated_amplitudes(phases[:, :15], phases[:, 15:])
-    assert (root_fidelity(prepared, inputs.target_amplitudes) > 1 - 1e-12).all()
+    assert (state_fidelity(prepared, inputs.target_amplitudes) > 1 - 1e-12).all()
 
 
 def test_injected_mode_reproduces_the_numpy_game_exactly():

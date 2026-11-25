@@ -6,7 +6,9 @@
   count budget and defect setting, on every seed of the block (one target per
   seed);
 - ``oracle_ceiling``: our control, direct maximization of the true fidelity
-  over the same generator circuits (``lib.ceiling``);
+  over the same generator circuits (``lib.ceiling``); the best noise-free
+  phases are then averaged over phase-noise draws at each
+  ``ceiling.phase_sigmas_pi`` (not a bound on what a noisy learner reaches);
 - ``shot_noise_tvd``: the Suppl. Fig. 9a sampling check (``lib.metrics``).
 
 Artifacts written to the run directory (paths relative to it):

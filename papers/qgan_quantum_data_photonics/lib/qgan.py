@@ -31,7 +31,7 @@ from .circuits import (
     generated_amplitudes,
     generator_identity_phases,
     output_distribution,
-    root_fidelity,
+    state_fidelity,
 )
 from .data import SeedInputs, seed_stream
 
@@ -63,13 +63,16 @@ class QganSettings:
     noise_redraw : str
         ``execution``: new phase noise at every execution (our default);
         ``round``: one draw per round, shared by all executions of the round.
+        Default value is ``"execution"``.
     tau_measurement : str
         ``noisy``: tr[M tau] is measured with the same discriminator noise and
         counts as tr[M rho] (our default); ``exact``: computed from the known
-        tau with the intended discriminator phases.
+        tau with the intended discriminator phases. Default value is
+        ``"noisy"``.
     discriminator : str
         ``adversarial`` (the paper) or ``random_fixed`` (our ablation: random
-        projectors redrawn each round, no discriminator updates).
+        projectors redrawn each round, no discriminator updates). Default
+        value is ``"adversarial"``.
     generator_stop_d : float or None
         If set, the generator ends its turn as soon as the measured d is at or
         below this value, so ``steps_per_turn`` is its maximum; the
@@ -77,9 +80,10 @@ class QganSettings:
         state the rule; in Fig. 2a the generator's turns last 2-6 steps and end
         with a gap of about 0.02-0.04. Default value is None.
     eval_every : int
-        Rounds between evaluations of the noise-averaged fidelity.
+        Rounds between evaluations of the noise-averaged fidelity; the last
+        round is always evaluated. Default value is 50.
     noise_draws : int
-        Phase-noise draws per noise-averaged fidelity.
+        Phase-noise draws per noise-averaged fidelity. Default value is 100.
     """
 
     rounds: int
@@ -292,7 +296,7 @@ def _exact_d(
     port = DETECTION_PORT
     a = output_distribution(amplitudes, ds, di)[:, port, port]
     b = output_distribution(targets, ds, di)[:, port, port]
-    return np.abs(a - b), root_fidelity(amplitudes, targets)
+    return np.abs(a - b), state_fidelity(amplitudes, targets)
 
 
 def _discriminator_turn(
@@ -377,7 +381,7 @@ def noise_averaged_fidelity(
         amplitudes = generated_amplitudes(
             g[:, :GENERATOR_NUM_PHASES], g[:, GENERATOR_NUM_PHASES:]
         )
-        return root_fidelity(amplitudes, targets)
+        return state_fidelity(amplitudes, targets)
     noisy = g[:, None, :] + np.stack(
         [rng.normal(0.0, sigma, (draws, G_SIZE)) for rng in rngs]
     )
@@ -385,7 +389,7 @@ def noise_averaged_fidelity(
     amplitudes = generated_amplitudes(
         flat[:, :GENERATOR_NUM_PHASES], flat[:, GENERATOR_NUM_PHASES:]
     ).reshape(s, draws, 4, 4)
-    return root_fidelity(amplitudes, targets[:, None]).mean(axis=1)
+    return state_fidelity(amplitudes, targets[:, None]).mean(axis=1)
 
 
 def train_qgan(

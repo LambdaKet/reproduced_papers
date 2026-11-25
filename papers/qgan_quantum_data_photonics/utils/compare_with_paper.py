@@ -80,9 +80,9 @@ def phase_noise(outdir: Path) -> dict:
                 "exact_tau_final_mean": variants[f"exact_tau_sigma_{sigma}pi"][
                     "final_fidelity"
                 ]["mean"],
-                "ceiling_noise_averaged": ceiling["noise_averaged_best_fidelity"][
-                    str(sigma)
-                ]["mean"],
+                "best_noise_free_phases_same_noise": ceiling[
+                    "noise_averaged_best_fidelity"
+                ][str(sigma)]["mean"],
             }
         )
     finals = [r["final_mean"] for r in rows]
@@ -236,14 +236,14 @@ def markdown(result: dict) -> str:
     lines = [
         "### Phase noise (Fig. 2c): final fidelity, 100 targets, 1500 counts",
         "",
-        "| σ | Ours (mean ± std) | Paper (read) | Ours − paper | Round to 0.9 (ours / paper) | Exact tr[Mτ] | Ours, noise-averaged | Ceiling, noise-averaged |",
+        "| σ | Ours (mean ± std) | Paper (read) | Ours − paper | Round to 0.9 (ours / paper) | Exact tr[Mτ] | Ours, noise-averaged | Best noise-free phases, same noise |",
         "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for r in pn["rows"]:
         lines.append(
             f"| {r['sigma_pi']}π | {r['final_mean']:.3f} ± {r['final_std']:.3f} | {r['paper_final']:.2f} "
             f"| {r['difference_to_paper']:+.3f} | {r['round_to_0p9']} / {r['paper_round_to_0p9']} "
-            f"| {r['exact_tau_final_mean']:.3f} | {r['noise_averaged_mean']:.3f} | {r['ceiling_noise_averaged']:.3f} |"
+            f"| {r['exact_tau_final_mean']:.3f} | {r['noise_averaged_mean']:.3f} | {r['best_noise_free_phases_same_noise']:.3f} |"
         )
     lines += ["", f"Rules: {pn['rules']}. Verdict: **{pn['verdict']}**.", ""]
     lines += [

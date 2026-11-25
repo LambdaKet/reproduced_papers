@@ -1,11 +1,11 @@
-"""Circuit conventions of the supplementary document and the derivations of the plan."""
+"""Circuit conventions of the supplementary document and properties derived from them."""
 
 from __future__ import annotations
 
 import common  # noqa: F401  (puts the repository root on sys.path)
 import numpy as np
 import torch
-from qgan_quantum_data_photonics.lib.ceiling import torch_root_fidelity
+from qgan_quantum_data_photonics.lib.ceiling import torch_state_fidelity
 from qgan_quantum_data_photonics.lib.circuits import (
     CHIP_DEFECT_POSITIONS,
     DISCRIMINATOR_LAYOUT,
@@ -16,7 +16,7 @@ from qgan_quantum_data_photonics.lib.circuits import (
     generator_identity_phases,
     mzi_matrices,
     output_distribution,
-    root_fidelity,
+    state_fidelity,
 )
 
 RNG = np.random.default_rng(7)
@@ -91,10 +91,10 @@ def test_chip_defect_set_has_eight_positions():
 def test_torch_fidelity_matches_numpy():
     phases = _random_phases(6, 30)
     targets = generated_amplitudes(_random_phases(6, 15), _random_phases(6, 15))
-    numpy_value = root_fidelity(
+    numpy_value = state_fidelity(
         generated_amplitudes(phases[:, :15], phases[:, 15:]), targets
     )
-    torch_value = torch_root_fidelity(
+    torch_value = torch_state_fidelity(
         torch.tensor(phases, dtype=torch.float64),
         torch.tensor(targets, dtype=torch.complex128),
     ).numpy()

@@ -3,10 +3,9 @@
 The paper has no external dataset: its learning target is a "randomly
 generated" maximally entangled two-ququart state (main text). Every input is
 drawn from ``numpy.random.SeedSequence(seed)`` with one independent stream per
-role, so
-the target, the discriminator start and the stuck set of a seed do not depend
-on the noise level, the count budget or the other seeds of the run (paired
-design across conditions).
+role, so the target, the discriminator start and the stuck set of a seed do not
+depend on the noise level, the count budget or the other seeds of the run
+(paired design across conditions).
 
 Our inferences (the paper does not state them): targets tau = (U x 1)|psi0>
 with U Haar-random; discriminator phases and stuck values uniform on

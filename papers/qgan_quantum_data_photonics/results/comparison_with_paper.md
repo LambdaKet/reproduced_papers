@@ -1,6 +1,6 @@
 ### Phase noise (Fig. 2c): final fidelity, 100 targets, 1500 counts
 
-| σ | Ours (mean ± std) | Paper (read) | Ours − paper | Round to 0.9 (ours / paper) | Exact tr[Mτ] | Ours, noise-averaged | Ceiling, noise-averaged |
+| σ | Ours (mean ± std) | Paper (read) | Ours − paper | Round to 0.9 (ours / paper) | Exact tr[Mτ] | Ours, noise-averaged | Best noise-free phases, same noise |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | 0.01π | 0.993 ± 0.004 | 1.00 | -0.007 | 57 / 59 | 0.994 | 0.990 | 0.997 |
 | 0.02π | 0.984 ± 0.007 | 0.99 | -0.006 | 64 / 79 | 0.986 | 0.974 | 0.989 |

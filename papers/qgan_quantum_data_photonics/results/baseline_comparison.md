@@ -6,7 +6,7 @@ Comparison: the QGAN against its matched baselines. Simulation, 100 targets per 
 |---|---|---|---:|---|---|---|
 | QGAN, our reproduction | reproduced method (numpy chip simulator) | local runs (reproduction) | 27 / 27 | 30 generator + 12 discriminator phases; parameter shift; 1500 counts per setting (Suppl. Fig. 9b: 100-2000) | 400 rounds: 2.1–2.5; 2000 rounds: 6.9–15.5; 2500 rounds: 6.7–13.3 (up to 10 runs at once) | reference |
 | Noise-free QGAN | baseline: cost of noise (planned before the runs) | local runs (baseline) | 2 / 2 | same phases and settings; sigma = 0, exact probabilities | 400 rounds: 0.7–0.7; 2500 rounds: 4.2–4.2 (1 run at a time) | comparable |
-| Oracle ceiling | control: best fidelity the chip can reach (knows the target) | local runs (reproduction) | 13 / 13 | 30 generator phases minus stuck ones; exact gradients; 20 restarts x 2000 Adam iterations; 1000 noise draws per sigma | optimization: 0.5–0.6 (up to 10 runs at once) | comparable (upper bound by design) |
+| Ceiling | control: best fidelity the chip can reach (knows the target) | local runs (reproduction) | 13 / 13 | 30 generator phases minus stuck ones; exact gradients; 20 restarts x 2000 Adam iterations; 1000 noise draws per sigma | optimization: 0.5–0.6 (up to 10 runs at once) | comparable: upper bound without noise (target known); under phase noise, the best noise-free phases evaluated with the same noise |
 | Fixed discriminator | ablation: random projectors redrawn every round | local run (reproduction) | 1 / 1 | 30 generator phases; no discriminator training | 400 rounds: 0.3–0.3 (up to 10 runs at once) | comparable |
 | MerLin adaptation, MerLin noise | photonic adaptation (MerLin QuantumLayer, 8 modes, 2 photons) | local runs (MerLin adaptation, simulation) | 10 / 10 | same as the QGAN; MerLin phase_error noise (uniform, same standard deviation) | 400 rounds: 4.0–4.1; 2000 rounds: 18.0–28.6 (3 runs at once) | partly comparable (noise distribution; target prepared on the chip) |
 | Paper QGAN | method as published | paper-reported (Figs. 2c, 3b, Suppl. Fig. 9b, Suppl. Sec. 6) | — | 1500 counts; training settings not stated | — | values read from figures |
@@ -15,7 +15,7 @@ Wall-clock: one run = 100 targets; one Apple M5 CPU (10 cores), one thread per r
 
 ### Phase noise (Fig. 2c): 1500 counts, 400 rounds
 
-| σ | QGAN | Paper | QGAN − noise-free [95 % CI] | QGAN − ceiling, noise-averaged [95 % CI] | MerLin noise − QGAN [95 % CI] |
+| σ | QGAN | Paper | QGAN − noise-free [95 % CI] | QGAN − best noise-free phases, same noise [95 % CI] | MerLin noise − QGAN [95 % CI] |
 |---|---:|---:|---|---|---|
 | 0.01π | 0.993 ± 0.004 | 1.00 | +0.002 [+0.001, +0.003], tied | -0.007 [-0.009, -0.006], tied | -0.001 [-0.002, +0.000], tied |
 | 0.02π | 0.984 ± 0.007 | 0.99 | -0.006 [-0.007, -0.004], tied | -0.015 [-0.017, -0.013], tied | +0.000 [-0.002, +0.002], tied |
@@ -23,7 +23,7 @@ Wall-clock: one run = 100 targets; one Apple M5 CPU (10 cores), one thread per r
 | 0.04π | 0.969 ± 0.014 | 0.92 | -0.021 [-0.024, -0.019], clearly lower | -0.030 [-0.033, -0.027], clearly lower | -0.003 [-0.007, +0.002], tied |
 | 0.05π | 0.962 ± 0.018 | 0.78 | -0.028 [-0.032, -0.025], clearly lower | -0.037 [-0.040, -0.033], clearly lower | -0.015 [-0.021, -0.009], tied |
 
-Noise-free QGAN, 400 rounds: 0.990 ± 0.003. Noise-averaged means, QGAN / ceiling: 0.01π 0.990 / 0.997; 0.02π 0.974 / 0.989; 0.03π 0.955 / 0.975; 0.04π 0.926 / 0.957; 0.05π 0.896 / 0.933.
+Noise-free QGAN, 400 rounds: 0.990 ± 0.003. Noise-averaged means, QGAN / best noise-free phases: 0.01π 0.990 / 0.997; 0.02π 0.974 / 0.989; 0.03π 0.955 / 0.975; 0.04π 0.926 / 0.957; 0.05π 0.896 / 0.933.
 
 ### Stuck phase shifters (Fig. 3b): σ = 0.02π, 1500 counts, 2000 rounds
 

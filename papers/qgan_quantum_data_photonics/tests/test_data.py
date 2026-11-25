@@ -1,4 +1,4 @@
-"""The 7 tests of the data-generation specification (targets, streams, defects, noise, counts)."""
+"""Generated inputs and noise models: targets, random streams, stuck phase shifters, phase noise, counts."""
 
 from __future__ import annotations
 

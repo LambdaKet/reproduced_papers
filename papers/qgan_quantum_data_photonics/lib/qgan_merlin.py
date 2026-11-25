@@ -174,6 +174,21 @@ def target_preparation_phases(
     (16 unknowns: 15 phases and the global phase) from seeded random starts;
     the idler mesh stays at the identity. Then (U_s x 1)|psi0> = |tau>.
 
+    Parameters
+    ----------
+    inputs : SeedInputs
+        Targets of the run, one per seed.
+    restarts : int
+        Maximum number of random starts per target. Default value is 20.
+    tolerance : float
+        Least-squares cost below which a start is accepted. Default value is
+        1e-24.
+
+    Returns
+    -------
+    numpy.ndarray
+        Shape ``(S, 30)``: signal-mesh phases, then the idler identity phases.
+
     Raises
     ------
     RuntimeError

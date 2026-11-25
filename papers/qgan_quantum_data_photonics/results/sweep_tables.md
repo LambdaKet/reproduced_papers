@@ -5,8 +5,9 @@ rules:
 
 - Metric: fidelity |⟨g|τ⟩| with the phases the generator intends to set,
   averaged over the last 20 rounds of a run (10 for the chip replays);
-  higher is better. The oracle ceiling reports the best fidelity over 20
-  restarts and its average over phase-noise draws.
+  higher is better. The ceiling reports the best fidelity over 20
+  restarts and, at each σ, the fidelity of these best noise-free phases
+  averaged over phase-noise draws.
 - Aggregation: mean ± standard deviation over the targets of a run (one target
   per seed; no data split, since each run learns one state).
 - "Round mean reaches 0.9": first round at which the mean over targets reaches
@@ -20,7 +21,7 @@ rules:
 
 ## calibration
 
-Calibration grid (fixed before any calibration run): learning rate x steps per turn x generator stop threshold; sigma = 0.01 pi, 1500 counts, calibration seeds 1000-1019, 400 rounds.
+Calibration grid (fixed before any calibration run): learning rate x steps per turn x end-of-turn threshold on d; sigma = 0.01 pi, 1500 counts, calibration seeds 1000-1019, 400 rounds.
 
 calibration: COMPLETE SWEEP, 8/8 runs; code [('c9a60a4df29eb4be9a1249eaee836666a6c086ee', True)]
 
@@ -69,7 +70,7 @@ phase_noise_variants: COMPLETE SWEEP, 7/7 runs; code [('c9a60a4df29eb4be9a1249ea
 
 ## phase_noise_diagnosis
 
-Gap diagnosis for Fig. 2c at high sigma: one training-protocol component changed at a time (generator stop threshold, step size, steps per turn) on targets 0-19.
+Gap diagnosis for Fig. 2c at high sigma: one training setting changed at a time (end-of-turn threshold on d, step size, steps per turn) on targets 0-19.
 
 phase_noise_diagnosis: COMPLETE SWEEP, 10/10 runs; code [('c9a60a4df29eb4be9a1249eaee836666a6c086ee', True)]
 

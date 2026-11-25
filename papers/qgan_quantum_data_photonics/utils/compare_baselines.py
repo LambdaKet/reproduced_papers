@@ -81,13 +81,14 @@ SYSTEMS = {
         "resources": "same phases and settings; sigma = 0, exact probabilities",
         "status": "comparable",
     },
-    "Oracle ceiling": {
+    "Ceiling": {
         "runs": [("oracle_ceiling", None)],
         "role": "control: best fidelity the chip can reach (knows the target)",
         "provenance": "local runs (reproduction)",
         "resources": "30 generator phases minus stuck ones; exact gradients; "
         "20 restarts x 2000 Adam iterations; 1000 noise draws per sigma",
-        "status": "comparable (upper bound by design)",
+        "status": "comparable: upper bound without noise (target known); under phase noise, "
+        "the best noise-free phases evaluated with the same noise",
     },
     "Fixed discriminator": {
         "runs": [("single_runs", "fixed_discriminator")],
@@ -221,9 +222,9 @@ def comparisons(runs) -> list[dict]:
                 claim="phase-noise-robustness",
                 condition=condition,
                 system="QGAN",
-                control="Oracle ceiling",
+                control="Best noise-free phases, same noise",
                 metric="noise-averaged fidelity (QGAN at round 400, "
-                "100 draws; ceiling at its optimum, 1000 draws)",
+                "100 draws; best noise-free phases, 1000 draws)",
                 status="comparable",
             )
         )
@@ -259,7 +260,7 @@ def comparisons(runs) -> list[dict]:
                 claim="defect-tolerance",
                 condition=condition,
                 system="QGAN",
-                control="Oracle ceiling",
+                control="Ceiling",
                 metric="final fidelity, intended phases (ceiling: best)",
                 status="comparable",
                 paper=paper_value,
@@ -277,7 +278,7 @@ def comparisons(runs) -> list[dict]:
                     claim="defect-tolerance",
                     condition=condition,
                     system="MerLin adaptation, MerLin noise",
-                    control="Oracle ceiling",
+                    control="Ceiling",
                     metric="final fidelity, intended phases (ceiling: best)",
                     status="partly comparable",
                 )
@@ -431,7 +432,7 @@ def markdown(result: dict) -> str:
         "### Phase noise (Fig. 2c): 1500 counts, 400 rounds",
         "",
         "| σ | QGAN | Paper | QGAN − noise-free [95 % CI] | "
-        "QGAN − ceiling, noise-averaged [95 % CI] | "
+        "QGAN − best noise-free phases, same noise [95 % CI] | "
         "MerLin noise − QGAN [95 % CI] |",
         "|---|---:|---:|---|---|---|",
     ]
@@ -439,23 +440,31 @@ def markdown(result: dict) -> str:
     for sigma in SIGMAS:
         condition = f"sigma = {sigma}pi"
         noise_free = _find(rows, claim, condition, "QGAN", "Noise-free QGAN")
-        ceiling = _find(rows, claim, condition, "QGAN", "Oracle ceiling")
+        best_phases = _find(
+            rows, claim, condition, "QGAN", "Best noise-free phases, same noise"
+        )
         merlin = _find(
             rows, claim, condition, "MerLin adaptation, MerLin noise", "QGAN"
         )
         out.append(
             f"| {sigma}π | {_pm(noise_free, 'system')} | {noise_free['paper']:.2f} | "
-            f"{_diff(noise_free)} | {_diff(ceiling)} | {_diff(merlin)} |"
+            f"{_diff(noise_free)} | {_diff(best_phases)} | {_diff(merlin)} |"
         )
     out += [
         "",
         f"Noise-free QGAN, 400 rounds: {_pm(noise_free, 'control')}. Noise-averaged "
-        "means, QGAN / ceiling: "
+        "means, QGAN / best noise-free phases: "
         + "; ".join(
             f"{sigma}π {row['system_mean']:.3f} / {row['control_mean']:.3f}"
             for sigma in SIGMAS
             for row in [
-                _find(rows, claim, f"sigma = {sigma}pi", "QGAN", "Oracle ceiling")
+                _find(
+                    rows,
+                    claim,
+                    f"sigma = {sigma}pi",
+                    "QGAN",
+                    "Best noise-free phases, same noise",
+                )
             ]
         )
         + ".",
@@ -469,9 +478,9 @@ def markdown(result: dict) -> str:
     claim = "defect-tolerance"
     for stuck in STUCK:
         condition = f"{stuck}/30 stuck"
-        qgan = _find(rows, claim, condition, "QGAN", "Oracle ceiling")
+        qgan = _find(rows, claim, condition, "QGAN", "Ceiling")
         merlin = _find(
-            rows, claim, condition, "MerLin adaptation, MerLin noise", "Oracle ceiling"
+            rows, claim, condition, "MerLin adaptation, MerLin noise", "Ceiling"
         )
         out.append(
             f"| {stuck} | {_pm(qgan, 'system')} | {qgan['paper']:.3f} | "

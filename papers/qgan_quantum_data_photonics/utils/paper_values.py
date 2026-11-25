@@ -33,6 +33,7 @@ SHOT_ROUNDS = [1873, 997, 429, 231, 152, 84, 68, 58]
 TVD_ENDS = {100: 0.155, 10000: 0.016}
 
 # Text values (main text and Suppl. Sec. 6).
+CHIP_START_FIDELITY = 0.1696  # Fig. 2b, chip run: fidelity rises "from 16.96%"
 CHIP_INTACT_FIDELITY = 0.9602  # Fig. 2b, after 150 rounds, one chip run
 CHIP_DEFECTIVE_FIDELITY = 0.9211  # Fig. 3a, after ~160 rounds, 16/30 stuck
 SINGLE_DEFECT = (0.9833, 0.0700)  # mean, std over 100 simulations

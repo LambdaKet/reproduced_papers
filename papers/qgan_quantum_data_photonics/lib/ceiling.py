@@ -1,4 +1,4 @@
-"""Oracle ceiling: the best fidelity the (possibly defective) generator can reach.
+"""Ceiling: the best fidelity the (possibly defective) generator can reach.
 
 Not in the paper (our control, planned before the experiments). It
 maximizes the true fidelity |<g|tau>| directly over the free generator
@@ -60,7 +60,7 @@ def _torch_unitaries(phases: torch.Tensor) -> torch.Tensor:
     return unitary
 
 
-def torch_root_fidelity(phases: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+def torch_state_fidelity(phases: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
     """Fidelity for generator phases ``(B, 30)`` and targets ``(B, 4, 4)``."""
     signal = _torch_unitaries(phases[:, :GENERATOR_NUM_PHASES])
     idler = _torch_unitaries(phases[:, GENERATOR_NUM_PHASES:])
@@ -125,7 +125,7 @@ def oracle_ceiling(
     )
     for iteration in range(1, iterations + 1):
         optimizer.zero_grad()
-        fidelity = torch_root_fidelity(torch.where(stuck_t, values_t, free), targets_t)
+        fidelity = torch_state_fidelity(torch.where(stuck_t, values_t, free), targets_t)
         (-fidelity.sum()).backward()
         optimizer.step()
         best = fidelity.detach().reshape(s, restarts).max(dim=1).values
@@ -139,7 +139,7 @@ def oracle_ceiling(
         )
     with torch.no_grad():
         phases = torch.where(stuck_t, values_t, free)
-        fidelity = torch_root_fidelity(phases, targets_t).reshape(s, restarts)
+        fidelity = torch_state_fidelity(phases, targets_t).reshape(s, restarts)
         best_index = fidelity.argmax(dim=1)
         best_phases = phases.reshape(s, restarts, size)[torch.arange(s), best_index]
     return (

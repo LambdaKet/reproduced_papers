@@ -9,9 +9,10 @@ Usage (from the repository root)::
 Reads the validated sweeps under ``outdir/sweep_*`` (``sweep_status.json`` and
 the ``metrics.json`` files it lists) and the TVD run, never logs. Writes each
 figure to ``--out`` and to its primary sweep folder. Paper values come from
-``paper_values.py`` (read from the paper's figures). Colors: validated
-categorical slots (ours blue, ours noise-averaged orange, paper aqua, ceiling
-yellow) and a validated one-hue ramp for the noise levels.
+``paper_values.py`` (read from the paper's figures). Colors: ours blue, ours
+noise-averaged orange, paper aqua, our noise-free optimum yellow (best
+noise-free phases under the same noise in Fig. 2c, ceiling in Fig. 3b), and a
+ordered viridis ramp for the noise levels.
 """
 
 from __future__ import annotations
@@ -28,7 +29,8 @@ import numpy as np  # noqa: E402
 import paper_values as paper  # noqa: E402
 
 OURS, OURS_NOISY, PAPER, CEILING = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
-SIGMA_RAMP = ["#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
+# Ordered viridis steps (dark = least noise), one distinct hue per noise level.
+SIGMA_RAMP = ["#440154", "#3f4788", "#277e8e", "#2cb17e", "#9bd93c"]
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e4e3df"
 SCOPE = (
     "Simulation, 100 targets per point; training settings calibrated (not given in the paper). "
